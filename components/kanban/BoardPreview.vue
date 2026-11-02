@@ -1,4 +1,4 @@
-<!-- SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev> -->
+<!-- SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>, AchimLindt -->
 <!-- -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!--
@@ -38,7 +38,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
         <div
           v-for="column in board.columns"
           :key="column.id"
-          class="bg-elevation-2 flex h-min w-10 shrink-0 flex-col gap-px rounded-sm p-0.5 text-[3px] font-bold"
+          :class="
+            column.backgroundColor
+              ? column.backgroundColor.startsWith('#')
+                ? ''
+                : column.backgroundColor
+              : 'bg-elevation-2'
+          "
+          :style="
+            column.backgroundColor?.startsWith('#')
+              ? { 'background-color': column.backgroundColor }
+              : {}
+          "
+          class="flex h-min w-10 shrink-0 flex-col gap-px rounded-sm p-0.5 text-[3px] font-bold"
         >
           {{ column.title }}
           <div

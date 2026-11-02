@@ -150,7 +150,8 @@
         "addCardTop": "Add card to the top",
         "deleteColumnAction": "Delete column",
         "deleteColumnConfirmation": "Are you sure you want to delete the column '{columnName}'? This action is irreversible.",
-        "addCardPlaceholder": "Enter a card name..."
+        "addCardPlaceholder": "Enter a card name...",
+        "colorsAction": "Column colors…"
       },
       "card": {
         "deleteCardAction": "Delete card",
@@ -167,6 +168,10 @@
         "increaseLevel": "Increase zoom level",
         "decreaseLevel": "Decrease zoom level"
       }
+    },
+    "colorSwatchPicker": {
+      "none": "None",
+      "custom": "Custom color"
     }
   },
   "modals": {
@@ -250,6 +255,14 @@
       "title": "Rename board",
       "name": "Board Name",
       "placeholder": "Enter a new name for the board"
+    },
+    "columnColors": {
+      "title": "Column colors",
+      "defaultCardColorTitle": "Default card color",
+      "defaultCardColorHint": "Cards moved into or created in this column get this color.",
+      "applyToAllCards": "Apply to all cards in this column",
+      "backgroundColorTitle": "Column background",
+      "done": "Done"
     }
   }
 }

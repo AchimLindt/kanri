@@ -39,6 +39,8 @@ export declare interface Column {
   cards: Array<Card>;
   id: string;
   title: string;
+  defaultCardColor?: string | null;
+  backgroundColor?: string | null;
 }
 
 export declare interface Task {

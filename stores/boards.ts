@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>, qunm00
+/* SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>, qunm00, AchimLindt
 
 SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -263,6 +263,39 @@ export const useBoardsStore = defineStore("boards", {
       col.title = title;
       b.lastEdited = new Date();
     },
+    setColumnDefaultCardColor(boardId: string, columnId: string, color: string | null) {
+      const b = this.boardById(boardId);
+      if (!b) return;
+      const col = b.columns.find(c => c.id === columnId);
+      if (!col) return;
+
+      col.defaultCardColor = color;
+      b.lastEdited = new Date();
+    },
+    setColumnBackgroundColor(boardId: string, columnId: string, color: string | null) {
+      const b = this.boardById(boardId);
+      if (!b) return;
+      const col = b.columns.find(c => c.id === columnId);
+      if (!col) return;
+
+      col.backgroundColor = color;
+      b.lastEdited = new Date();
+    },
+    applyColumnDefaultCardColorToAllCards(boardId: string, columnId: string) {
+      const b = this.boardById(boardId);
+      if (!b) return;
+      const col = b.columns.find(c => c.id === columnId);
+      if (!col || !col.defaultCardColor) return;
+
+      for (const card of col.cards) {
+        this._applyColumnDefaultCardColor(col, card);
+      }
+      b.lastEdited = new Date();
+    },
+    // Sets the column's default card color on a card that arrived in the column (no-op if unset)
+    _applyColumnDefaultCardColor(col: Column, card: Card) {
+      if (col.defaultCardColor) card.color = col.defaultCardColor;
+    },
     updateColumn(boardId: string, column: Column) {
       const b = this.boardById(boardId);
       if (!b) return;
@@ -282,6 +315,12 @@ export const useBoardsStore = defineStore("boards", {
         col.cards.unshift(card);
       } else {
         col.cards.push(card);
+      }
+
+      // apply the column's default card color to the inserted (reactive) card if it has no color yet
+      const inserted = addToTop ? col.cards[0] : col.cards[col.cards.length - 1];
+      if (inserted && !inserted.color) {
+        this._applyColumnDefaultCardColor(col, inserted);
       }
       b.lastEdited = new Date();
     },
@@ -347,6 +386,15 @@ export const useBoardsStore = defineStore("boards", {
       if (!b) return;
       const col = b.columns.find(c => c.id === columnId);
       if (!col) return;
+
+      // cards that were not in this column before arrived via drag & drop from another column
+      const prevIds = new Set(col.cards.map(c => c.id));
+      for (const card of nextCards) {
+        if (card.id && !prevIds.has(card.id)) {
+          this._applyColumnDefaultCardColor(col, card);
+        }
+      }
+
       col.cards = nextCards;
       b.lastEdited = new Date();
     },
@@ -362,10 +410,12 @@ export const useBoardsStore = defineStore("boards", {
       if (!sourceCol || !targetCol) return;
 
       const cardIndex = sourceCol.cards.findIndex(c => c.id === cardId);
+      if (cardIndex === -1) return;
 
       const [card] = sourceCol.cards.splice(cardIndex, 1);
       if (card === undefined) return;
       targetCol.cards.push(card);
+      this._applyColumnDefaultCardColor(targetCol, card);
       targetBoard.lastEdited = new Date();
       sourceBoard.lastEdited = new Date();
     },

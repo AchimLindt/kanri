@@ -144,7 +144,8 @@
         "addCardTop": "Karte oben hinzufügen",
         "deleteColumnAction": "Spalte löschen",
         "deleteColumnConfirmation": "Bist du sicher, dass du die Spalte '{columnName}' löschen möchtest? Diese Aktion ist irreversibel.",
-        "addCardPlaceholder": "Name der Karte..."
+        "addCardPlaceholder": "Name der Karte...",
+        "colorsAction": "Spaltenfarben…"
       },
       "card": {
         "deleteCardAction": "Karte löschen",
@@ -158,6 +159,10 @@
         "increaseLevel": "Vergrößern",
         "decreaseLevel": "Verkleinern"
       }
+    },
+    "colorSwatchPicker": {
+      "none": "Keine",
+      "custom": "Eigene Farbe"
     }
   },
   "modals": {
@@ -241,6 +246,14 @@
       "title": "Board umbenennen",
       "name": "Board-Name",
       "placeholder": "Gib den neuen Namen deines Boards ein"
+    },
+    "columnColors": {
+      "title": "Spaltenfarben",
+      "defaultCardColorTitle": "Standardfarbe für Karten",
+      "defaultCardColorHint": "Karten, die in diese Spalte verschoben oder hier erstellt werden, erhalten diese Farbe.",
+      "applyToAllCards": "Auf alle Karten dieser Spalte anwenden",
+      "backgroundColorTitle": "Spaltenhintergrund",
+      "done": "Fertig"
     }
   }
 }

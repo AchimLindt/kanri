@@ -65,6 +65,8 @@ const kanriColumnSchema = z.object({
   cards: z.array(kanriCardSchema),
   id: z.string(),
   title: z.string(),
+  defaultCardColor: z.string().optional().nullable(),
+  backgroundColor: z.string().optional().nullable(),
 });
 
 const kanriBoardBackgroundSchema = z

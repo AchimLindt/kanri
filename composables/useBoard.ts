@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>
+/* SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>, AchimLindt
 
 SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -83,6 +83,18 @@ export function useBoard(id: string | Ref<string>) {
   function setColumnTitle(columnId: string, title: string) {
     if (!board.value) return;
     store.setColumnTitle(board.value.id, columnId, title);
+  }
+  function setColumnDefaultCardColor(columnId: string, color: string | null) {
+    if (!board.value) return;
+    store.setColumnDefaultCardColor(board.value.id, columnId, color);
+  }
+  function setColumnBackgroundColor(columnId: string, color: string | null) {
+    if (!board.value) return;
+    store.setColumnBackgroundColor(board.value.id, columnId, color);
+  }
+  function applyColumnDefaultCardColorToAllCards(columnId: string) {
+    if (!board.value) return;
+    store.applyColumnDefaultCardColorToAllCards(board.value.id, columnId);
   }
 
   // Cards
@@ -243,6 +255,9 @@ export function useBoard(id: string | Ref<string>) {
     removeColumn,
     reorderColumns,
     setColumnTitle,
+    setColumnDefaultCardColor,
+    setColumnBackgroundColor,
+    applyColumnDefaultCardColorToAllCards,
 
     // card actions
     createCard,

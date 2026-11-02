@@ -1,4 +1,4 @@
-<!-- SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>, PwshLab, tareqdayya, alexlalves -->
+<!-- SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>, PwshLab, tareqdayya, alexlalves, AchimLindt -->
 <!-- -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!--
@@ -54,6 +54,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
       @setCardTags="board.setCardTags"
       @addGlobalTag="board.addGlobalTag"
       @openTagEdit="editTagModalVisible = true"
+    />
+    <ModalColumnColors
+      v-show="columnColorsModalVisible"
+      :column="currentlyColoredColumn"
+      @closeModal="closeColumnColorsModal"
+      @setDefaultCardColor="board.setColumnDefaultCardColor"
+      @setBackgroundColor="board.setColumnBackgroundColor"
+      @applyDefaultCardColorToAllCards="board.applyColumnDefaultCardColorToAllCards"
     />
     <ModalRenameBoard
       v-show="renameBoardModalVisible"
@@ -254,6 +262,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
                   :add-to-top-button-shown="addToTopOfColumnButtonEnabled"
                   :card-count-display-enabled="displayColumnCardCountEnabled"
                   :card-search-query="searchQuery"
+                  :default-card-color="column.defaultCardColor"
+                  :background-color="column.backgroundColor"
                   @disableDragging="draggingEnabled = false"
                   @enableDragging="draggingEnabled = true"
                   @openEditCardModal="openEditCardModal"
@@ -269,6 +279,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
                   @setCardName="board.setCardName"
                   @duplicateCard="board.duplicateCard"
                   @reorderCards="board.reorderCards"
+                  @openColumnColorsModal="openColumnColorsModal"
                 />
               </Draggable>
               <div class="pr-8">
@@ -349,12 +360,23 @@ const renameBoardModalVisible = ref(false);
 
 const editTagModalVisible = ref(false);
 
+const columnColorsModalVisible = ref(false);
+const currentlyColoredColumnId = ref("");
+
 const columnRemoveDialog = useConfirmDialog(removeColumnModalVisible);
 const cardRemoveDialog = useConfirmDialog(removeCardModalVisible);
 const allColumnCardsRemoveDialog = useConfirmDialog(removeAllColumnCardsModalVisible);
 
 const board = useBoard(computed(() => route.params.id as string));
 const { board: boardContent } = board;
+
+// computed from the store so the column colors modal stays reactive
+const currentlyColoredColumn = computed<Column | null>(
+  () =>
+    boardContent.value?.columns.find(
+      (c) => c.id === currentlyColoredColumnId.value
+    ) ?? null
+);
 const {
   bgCustom,
   showCustomBgModal,
@@ -447,6 +469,7 @@ const decreaseZoomLevel = () => {
 
 const keyDownListener = (e: KeyboardEvent) => {
   if (editCardModalVisible.value) return; // we don't want to trigger any shortcuts when editing cards
+  if (columnColorsModalVisible.value) return;
 
   const controlOrMetaPressed: boolean = e.ctrlKey || e.metaKey;
   const controlIsOnlyKeyPressed: boolean =
@@ -572,6 +595,22 @@ const openEditCardModal = (columnId: string, el: Card) => {
 
 const closeEditCardModal = () => {
   editCardModalVisible.value = false;
+  draggingEnabled.value = true;
+  emitter.emit("columnDraggingOn");
+};
+
+const openColumnColorsModal = (columnId: string) => {
+  currentlyColoredColumnId.value = columnId;
+  columnColorsModalVisible.value = true;
+  draggingEnabled.value = false;
+};
+
+const closeColumnColorsModal = () => {
+  // Modal listens to Escape globally, ignore it while this modal is hidden
+  if (!columnColorsModalVisible.value) return;
+
+  // keep currentlyColoredColumnId so the content stays visible during the fade-out
+  columnColorsModalVisible.value = false;
   draggingEnabled.value = true;
   emitter.emit("columnDraggingOn");
 };

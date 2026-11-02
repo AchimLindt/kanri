@@ -6,7 +6,7 @@ SPDX-License-Identifier: CC0-1.0
 
 # Spec: Spaltenfarben (Default-Kartenfarbe + Spaltenhintergrund)
 
-Status: in Umsetzung (Branch `feat/column-colors`). Architekturkontext: `docs/ARCHITECTURE.md`.
+Status: implementiert (Branch `feat/column-colors`, 2026-11-02), manueller UI-Test gemäß §9 noch offen. Architekturkontext: `docs/ARCHITECTURE.md`.
 
 ## 1. Ziel
 

@@ -1,4 +1,4 @@
-<!-- SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>, PwshLab, jynxbt, tareqdayya, qunm00 -->
+<!-- SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>, PwshLab, jynxbt, tareqdayya, qunm00, AchimLindt -->
 <!-- -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!--
@@ -22,10 +22,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
   <div
     ref="columnDOMElement"
     :class="[
-      'kanban-column bg-elevation-1 max-h-column flex flex-col rounded-lg p-2',
+      'kanban-column max-h-column flex flex-col rounded-lg p-2',
+      columnBackgroundClass,
       columnSizeClass,
       columnSpacingClass,
     ]"
+    :style="columnBackgroundStyle"
   >
     <div
       id="board-title"
@@ -36,14 +38,29 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
     >
       <div v-if="!titleEditing" class="flex flex-row items-center gap-1.5">
         <h1
-          class="stop-text-overflow ml-1 font-bold text-lg"
+          :class="['stop-text-overflow ml-1 text-lg font-bold', columnTextClass]"
           @click="enableTitleEditing()"
         >
           {{ props.title }}
         </h1>
         <span
+          v-if="defaultCardColor"
+          :class="[
+            'border-elevation-3 shrink-0 rounded-full border',
+            defaultCardColorDotClass,
+            defaultCardColorDotSizeClass,
+          ]"
+          :style="defaultCardColorDotStyle"
+          :title="$t('modals.columnColors.defaultCardColorTitle')"
+        />
+        <span
           v-if="cardCountDisplayEnabled"
-          :class="['bg-elevation-2 rounded-2xl px-2 py-0.5', badgeSizeClass]"
+          :class="[
+            'rounded-2xl px-2 py-0.5',
+            backgroundColor ? 'bg-black/20' : 'bg-elevation-2',
+            columnTextClass,
+            badgeSizeClass,
+          ]"
           >{{ cards.length }}</span
         >
       </div>
@@ -70,7 +87,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
       <Dropdown align="end">
         <template #trigger>
           <button
-          class="bg-elevation-1 bg-elevation-2-hover transition-button h-full rounded-md"
+          :class="[
+            'transition-button h-full rounded-md',
+            backgroundColor ? 'bg-transparent hover:bg-black/10' : 'bg-elevation-1 bg-elevation-2-hover',
+            columnTextClass,
+          ]"
           @click.prevent
           >
           <EllipsisHorizontalIcon class="size-6" />
@@ -82,6 +103,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
               @click="enableCardAddMode(true)"
             >
                 {{$t('components.kanban.column.addCardTop')}}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              class="bg-elevation-2-hover w-full cursor-pointer rounded-md px-4 py-1.5 pr-6 text-left flex items-center gap-2"
+              @click="$emit('openColumnColorsModal', id)"
+            >
+                {{$t('components.kanban.column.colorsAction')}}
             </DropdownMenuItem>
             <DropdownMenuItem
               class="bg-elevation-2-hover w-full cursor-pointer rounded-md px-4 py-1.5 pr-6 text-left flex items-center gap-2"
@@ -195,7 +222,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
     <div
       v-if="!cardAddMode"
       :class="[
-        'text-dim-1 bg-elevation-3-hover mt-2 flex cursor-pointer flex-row items-center gap-1 rounded-md py-1 font-medium',
+        'mt-2 flex cursor-pointer flex-row items-center gap-1 rounded-md py-1 font-medium',
+        backgroundColor ? 'hover:bg-black/10' : 'bg-elevation-3-hover',
+        columnTextClass || 'text-dim-1',
         addCardButtonSpacingClass,
       ]"
       @click="enableCardAddMode()"
@@ -217,7 +246,6 @@ import emitter from "@/utils/emitter";
 import { PlusIcon, EllipsisHorizontalIcon } from "@heroicons/vue/24/solid";
 //@ts-expect-error, sadly this library does not have ts typings
 import { Container, Draggable } from "vue3-smooth-dnd";
-import { useI18n } from "vue-i18n";
 
 const props = defineProps<{
   cardsList: Array<Card>;
@@ -228,6 +256,8 @@ const props = defineProps<{
   addToTopButtonShown?: boolean;
   cardCountDisplayEnabled?: boolean;
   cardSearchQuery?: string;
+  defaultCardColor?: string | null;
+  backgroundColor?: string | null;
 }>();
 
 const emit = defineEmits<{
@@ -261,9 +291,8 @@ const emit = defineEmits<{
   (e: "setCardName", columnId: string, cardId: string | undefined, name: string): void;
   (e: "duplicateCard", columnId: string, cardId: string | undefined): void;
   (e: "reorderCards", columnId: string, newCardsOrder: Array<Card>): void;
+  (e: "openColumnColorsModal", columnId: string): void;
 }>();
-
-const { t } = useI18n();
 
 const settings = useSettingsStore();
 
@@ -338,6 +367,54 @@ watch(
   }
 );
 
+// column colors (same class/hex distinction and contrast logic as Card.vue)
+const columnBackgroundClass = computed(() => {
+  if (!props.backgroundColor) return "bg-elevation-1";
+  if (props.backgroundColor.startsWith("#")) return "";
+  return props.backgroundColor;
+});
+
+const columnBackgroundStyle = computed(() => {
+  if (props.backgroundColor?.startsWith("#")) {
+    return { backgroundColor: props.backgroundColor };
+  }
+  return {};
+});
+
+// text class for elements on the column background; empty = default theme text
+const columnTextClass = computed(() => {
+  if (!props.backgroundColor || props.backgroundColor === "bg-elevation-2") return "";
+  if (props.backgroundColor.startsWith("#")) return getContrast(props.backgroundColor);
+  return "text-gray-50";
+});
+
+const defaultCardColorDotClass = computed(() => {
+  if (!props.defaultCardColor || props.defaultCardColor.startsWith("#")) return "";
+  return props.defaultCardColor;
+});
+
+const defaultCardColorDotStyle = computed(() => {
+  if (props.defaultCardColor?.startsWith("#")) {
+    return { backgroundColor: props.defaultCardColor };
+  }
+  return {};
+});
+
+const defaultCardColorDotSizeClass = computed(() => {
+  switch (props.zoomLevel) {
+    case -1:
+      return "size-2";
+    case 0:
+      return "size-2.5";
+    case 1:
+      return "size-3";
+    case 2:
+      return "size-3.5";
+    default:
+      return "size-2.5";
+  }
+});
+
 // enhanced scaling classes based on zoom level
 const titleTextClassZoom = computed(() => {
   switch (props.zoomLevel) {
@@ -397,21 +474,6 @@ const inputSizeClass = computed(() => {
       return "text-xl py-2";
     default:
       return "text-base py-1";
-  }
-});
-
-const iconSizeClass = computed(() => {
-  switch (props.zoomLevel) {
-    case -1:
-      return "size-4";
-    case 0:
-      return "size-4";
-    case 1:
-      return "size-5";
-    case 2:
-      return "size-6";
-    default:
-      return "size-4";
   }
 });
 
