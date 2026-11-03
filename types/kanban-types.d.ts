@@ -27,6 +27,7 @@ export declare interface Board {
   createdAt?: Date | string;
   title: string;
   globalTags?: Array<Tag> | null;
+  archivedCards?: Array<ArchivedCard>;
 }
 
 export declare interface BackgroundSettings {
@@ -42,6 +43,7 @@ export declare interface Column {
   defaultCardColor?: string | null;
   backgroundColor?: string | null;
   collapsed?: boolean;
+  isDoneColumn?: boolean; // at most one done column per board
 }
 
 export declare interface Task {
@@ -80,6 +82,14 @@ export declare interface Card {
   tags?: Array<Tag> | null;
   documents?: Array<CardDocument> | null;
   links?: Array<CardLink> | null;
+  completedAt?: string; // ISO timestamp, set while the card is in the board's done column
+}
+
+export declare interface ArchivedCard {
+  card: Card;
+  columnId: string; // column the card was archived from (restore target)
+  columnTitle: string; // title of that column at archive time (display)
+  archivedAt: string; // ISO timestamp
 }
 
 export declare interface Theme {

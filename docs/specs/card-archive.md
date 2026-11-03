@@ -153,7 +153,7 @@ Reine Helfer in `utils/cardArchive.ts` (ohne Store/DOM/Tauri, Node-Smoke-Test): 
 - `components.kanban.column.doneColumnTooltip`: "Done column: cards are archived automatically after {days} days" / "Erledigt-Spalte: Karten werden nach {days} Tagen automatisch archiviert"
 - `components.kanban.column.archiveAllCardsAction`: "Archive all cards" / "Alle Karten archivieren"
 - `components.kanban.column.archiveAllCardsConfirmationTitle`: "Archive all cards in this column" / "Alle Karten dieser Spalte archivieren"
-- `components.kanban.column.archiveAllCardsConfirmation`: "Archive {count} cards from the column '{columnName}'? They can be restored from the board archive." / "{count} Karten aus der Spalte '{columnName}' archivieren? Sie können im Archiv des Boards wiederhergestellt werden."
+- `components.kanban.column.archiveAllCardsConfirmation` (Plural, Singular | Plural): "Archive {count} card from the column '{columnName}'? It can be restored from the board archive. | Archive {count} cards …? They can be restored …" / "{count} Karte aus der Spalte '{columnName}' archivieren? Sie kann im Archiv des Boards wiederhergestellt werden. | {count} Karten …? Sie können …"
 - `components.kanban.column.archiveAllCardsConfirm`: "Archive" / "Archivieren"
 - `components.kanban.card.archiveAction`: "Archive" / "Archivieren"
 - `pages.kanban.archiveAction`: "Archive ({count})" / "Archiv ({count})"

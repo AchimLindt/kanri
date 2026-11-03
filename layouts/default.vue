@@ -1,4 +1,4 @@
-<!-- SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev> -->
+<!-- SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>, AchimLindt -->
 <!-- -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!--
@@ -66,6 +66,9 @@ onMounted(async () => {
 
   // fire and forget: removes orphaned/old document versions at most once a day, errors are logged inside
   runScheduledDocumentHistoryCleanup();
+
+  // archives cards that have been in a done column for too long, at most once a day, errors are logged inside
+  runScheduledCardArchive();
 });
 
 watch(systemTheme, async (newValue) => {

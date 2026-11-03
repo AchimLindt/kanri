@@ -100,6 +100,32 @@ export function useBoard(id: string | Ref<string>) {
     if (!board.value) return;
     store.applyColumnDefaultCardColorToAllCards(board.value.id, columnId);
   }
+  // done column (null = no done column)
+  function setDoneColumn(columnId: string | null) {
+    if (!board.value) return;
+    store.setDoneColumn(board.value.id, columnId);
+  }
+
+  // Card archive
+  function archiveCard(columnId: string, cardId: string | undefined) {
+    if (!board.value) return;
+    if (!cardId) return;
+    store.archiveCard(board.value.id, columnId, cardId);
+  }
+  function archiveAllColumnCards(columnId: string) {
+    if (!board.value) return;
+    store.archiveAllColumnCards(board.value.id, columnId);
+  }
+  function restoreArchivedCard(cardId: string | undefined): string | null {
+    if (!board.value) return null;
+    if (!cardId) return null;
+    return store.restoreArchivedCard(board.value.id, cardId);
+  }
+  function deleteArchivedCard(cardId: string | undefined) {
+    if (!board.value) return;
+    if (!cardId) return;
+    store.deleteArchivedCard(board.value.id, cardId);
+  }
 
   // Cards
   function createCard(columnId: string, card: Card, addToTop?: boolean) {
@@ -334,6 +360,13 @@ export function useBoard(id: string | Ref<string>) {
     setColumnBackgroundColor,
     setColumnCollapsed,
     applyColumnDefaultCardColorToAllCards,
+    setDoneColumn,
+
+    // card archive
+    archiveCard,
+    archiveAllColumnCards,
+    restoreArchivedCard,
+    deleteArchivedCard,
 
     // card actions
     createCard,

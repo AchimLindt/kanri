@@ -40,7 +40,8 @@
       "pinBoardAction": "Board anpinnen",
       "unpinBoardAction": "Board lösen",
       "deleteBoardAction": "Board löschen",
-      "deleteBoardConfirmation": "Bist du sicher, dass du das Board '{boardName}' löschen möchtest? Diese Aktion ist irreversibel."
+      "deleteBoardConfirmation": "Bist du sicher, dass du das Board '{boardName}' löschen möchtest? Diese Aktion ist irreversibel.",
+      "archiveAction": "Archiv ({count})"
     },
     "settings": {
       "deleteAllDataConfirmationAction": "Daten löschen",
@@ -83,7 +84,10 @@
       "preferencesMarkdownFolderSubtext": "Öffnen- und Speichern-Dialoge für Kartendokumente starten in diesem Ordner.",
       "preferencesMarkdownFolderNotSet": "Nicht gesetzt",
       "preferencesMarkdownFolderChoose": "Ordner wählen…",
-      "preferencesMarkdownFolderClear": "Zurücksetzen"
+      "preferencesMarkdownFolderClear": "Zurücksetzen",
+      "preferencesArchiveAfterDaysHeading": "Erledigte Karten archivieren nach",
+      "preferencesArchiveAfterDaysSubtext": "Karten in der Erledigt-Spalte eines Boards wandern nach so vielen Tagen ins Archiv des Boards. Archivierte Karten werden nie automatisch gelöscht.",
+      "preferencesArchiveAfterDaysUnit": "Tagen"
     },
     "import": {
       "importExportHeading": "Import & Export",
@@ -153,7 +157,25 @@
       "fieldTag": "Tag",
       "fieldLink": "Link",
       "fieldDocumentName": "Dokumentname {name}",
-      "fieldDocumentContent": "Dokument {name}"
+      "fieldDocumentContent": "Dokument {name}",
+      "archived": "Archiv"
+    },
+    "archive": {
+      "title": "Archiv",
+      "subtitle": "Archivierte Karten des Boards „{boardName}“",
+      "back": "Zurück zum Board",
+      "searchPlaceholder": "Titel und Beschreibung durchsuchen…",
+      "count": "{count} archivierte Karte | {count} archivierte Karten",
+      "emptyState": "Keine archivierten Karten. Karten in der Erledigt-Spalte werden nach {days} Tagen automatisch archiviert; einzelne Karten lassen sich über das Kontextmenü archivieren.",
+      "noResults": "Keine archivierte Karte passt zur Suche.",
+      "column": "Spalte: {columnName}",
+      "archivedAt": "Archiviert am {date}",
+      "restoreAction": "Wiederherstellen",
+      "restoreToOtherColumn": "Die ursprüngliche Spalte gibt es nicht mehr, die Karte wird in „{columnName}“ wiederhergestellt.",
+      "restoreNoColumn": "Das Board hat keine Spalte.",
+      "deleteAction": "Endgültig löschen",
+      "deleteConfirmationTitle": "Karte endgültig löschen",
+      "deleteConfirmation": "Die archivierte Karte '{cardName}' endgültig löschen? Diese Aktion ist irreversibel."
     }
   },
   "components": {
@@ -184,11 +206,19 @@
         "addCardPlaceholder": "Name der Karte...",
         "colorsAction": "Spaltenfarben…",
         "collapseAction": "Spalte einklappen",
-        "expandAction": "Spalte ausklappen"
+        "expandAction": "Spalte ausklappen",
+        "markDoneColumnAction": "Als Erledigt-Spalte markieren",
+        "unmarkDoneColumnAction": "Markierung aufheben",
+        "doneColumnTooltip": "Erledigt-Spalte: Karten werden nach {days} Tagen automatisch archiviert",
+        "archiveAllCardsAction": "Alle Karten archivieren",
+        "archiveAllCardsConfirmationTitle": "Alle Karten dieser Spalte archivieren",
+        "archiveAllCardsConfirmation": "{count} Karte aus der Spalte '{columnName}' archivieren? Sie kann im Archiv des Boards wiederhergestellt werden. | {count} Karten aus der Spalte '{columnName}' archivieren? Sie können im Archiv des Boards wiederhergestellt werden.",
+        "archiveAllCardsConfirm": "Archivieren"
       },
       "card": {
         "deleteCardAction": "Karte löschen",
-        "deleteCardConfirmation": "Bist du sicher, dass du die Karte '{cardName}' löschen möchtest? Diese Aktion ist irreversibel."
+        "deleteCardConfirmation": "Bist du sicher, dass du die Karte '{cardName}' löschen möchtest? Diese Aktion ist irreversibel.",
+        "archiveAction": "Archivieren"
       },
       "searchBar": {
         "placeholder": "Suche nach Karten..."

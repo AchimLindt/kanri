@@ -173,6 +173,13 @@ limitations under the License.
           {{ $t("general.duplicateAction") }}
         </ContextMenuItem>
         <ContextMenuItem
+          value="Archive"
+          class="bg-elevation-2-hover flex w-full cursor-pointer flex-row items-center rounded-md px-4 py-1.5"
+          @click="$emit('archiveCard', card.id)"
+        >
+          {{ $t("components.kanban.card.archiveAction") }}
+        </ContextMenuItem>
+        <ContextMenuItem
           value="Delete"
           class="bg-elevation-2-hover flex w-full cursor-pointer flex-row items-center rounded-md px-4 py-1.5"
           @click="deleteCardWithConfirmation(card.id)"
@@ -225,6 +232,7 @@ const emit = defineEmits<{
   (e: "setCardName", cardId: string | undefined, name: string): void;
   (e: "updateCardTags", cardId: string | undefined, tags: Array<Tag>): void;
   (e: "duplicateCard", cardId: string | undefined): void;
+  (e: "archiveCard", cardId: string | undefined): void;
 }>();
 
 const { locale } = useI18n();

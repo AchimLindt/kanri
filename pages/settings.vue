@@ -257,6 +257,28 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
           </button>
         </div>
       </div>
+
+      <div class="mt-4 flex w-[48rem] flex-row items-start justify-between gap-4">
+        <div>
+          <h3 class="text-lg">
+            {{ $t("pages.settings.preferencesArchiveAfterDaysHeading") }}
+          </h3>
+          <span class="text-dim-2">
+            {{ $t("pages.settings.preferencesArchiveAfterDaysSubtext") }}
+          </span>
+        </div>
+        <label class="flex shrink-0 flex-row items-center gap-2">
+          <input
+            :value="globalSettingsStore.archiveAfterDays"
+            class="bg-elevation-2 border-elevation-3 w-24 rounded-md border px-2 py-1"
+            type="number"
+            min="1"
+            step="1"
+            @change="onArchiveAfterDaysChanged"
+          >
+          <span>{{ $t("pages.settings.preferencesArchiveAfterDaysUnit") }}</span>
+        </label>
+      </div>
     </section>
 
     <section id="miscellaneous-settings">
@@ -434,6 +456,18 @@ const deleteAllData = async () => {
   router.go(0);
 
   await message("Successfully deleted data.", { title: "Kanri", kind: "info" });
+};
+
+// invalid input (empty, below 1, not a number) falls back to the saved value; decimals are cut off
+const onArchiveAfterDaysChanged = async (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  const value = Number(input.value);
+  if (input.value.trim() === "" || !Number.isFinite(value) || value < 1) {
+    input.value = String(globalSettingsStore.archiveAfterDays);
+    return;
+  }
+  await globalSettingsStore.setArchiveAfterDays(value);
+  input.value = String(globalSettingsStore.archiveAfterDays);
 };
 
 const chooseMarkdownDocumentsFolder = async () => {

@@ -110,6 +110,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
       @closeModal="allColumnCardsRemoveDialog.cancel()"
       @confirmAction="allColumnCardsRemoveDialog.confirm(true)"
     />
+    <ModalConfirmation
+      v-show="archiveAllColumnCardsModalVisible"
+      :close-button-text="$t('general.cancelAction')"
+      :confirm-button-text="$t('components.kanban.column.archiveAllCardsConfirm')"
+      :title="$t('components.kanban.column.archiveAllCardsConfirmationTitle') + '?'"
+      @closeModal="allColumnCardsArchiveDialog.cancel()"
+      @confirmAction="allColumnCardsArchiveDialog.confirm(true)"
+    />
 
     <div class="bg-custom pointer-events-none absolute inset-0" :style="cssVars" />
 
@@ -204,6 +212,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
                 <span class="text-dim-2"><PhExport class="size-5" /></span>
                 <span>{{ $t("pages.kanban.exportBoardAction") }}</span>
               </DropdownMenuItem>
+              <DropdownMenuItem
+                class="bg-elevation-2-hover flex w-full cursor-pointer items-center gap-2 rounded-md px-4 py-1.5 pr-6 text-left"
+                @click="openArchive"
+              >
+                <span class="text-dim-2"><PhArchive class="size-5" /></span>
+                <span>{{
+                  $t("pages.kanban.archiveAction", { count: boardContent?.archivedCards?.length ?? 0 })
+                }}</span>
+              </DropdownMenuItem>
               <div class="border-elevation-3 my-1 border-t"/>
               <!-- Group 2: Pin/unpin -->
               <DropdownMenuItem
@@ -272,6 +289,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
                   :default-card-color="column.defaultCardColor"
                   :background-color="column.backgroundColor"
                   :collapsed="column.collapsed"
+                  :is-done-column="column.isDoneColumn"
                   @disableDragging="draggingEnabled = false"
                   @enableDragging="draggingEnabled = true"
                   @openEditCardModal="openEditCardModal"
@@ -289,6 +307,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
                   @reorderCards="board.reorderCards"
                   @openColumnColorsModal="openColumnColorsModal"
                   @setColumnCollapsed="board.setColumnCollapsed"
+                  @setDoneColumn="(columnId: string, isDone: boolean) => board.setDoneColumn(isDone ? columnId : null)"
+                  @archiveCard="board.archiveCard"
+                  @archiveAllColumnCards="archiveAllColumnCards"
                 />
               </Draggable>
               <div class="pr-8">
@@ -320,7 +341,8 @@ import emitter from "@/utils/emitter";
 
 import { PhotoIcon } from "@heroicons/vue/24/outline";
 import { EllipsisHorizontalIcon, PlusIcon } from "@heroicons/vue/24/solid";
-import { PhHashStraight, PhTrash, PhCopy, PhPencil, PhExport, PhPushPin } from "@phosphor-icons/vue";
+import { PhHashStraight, PhTrash, PhCopy, PhPencil, PhExport, PhPushPin, PhArchive } from "@phosphor-icons/vue";
+import { isSeparatorCard } from "@/utils/cardArchive";
 
 import { save } from "@tauri-apps/plugin-dialog";
 import { writeTextFile } from "@tauri-apps/plugin-fs";
@@ -364,6 +386,7 @@ const currentlyActiveCardInfo: {
 const removeColumnModalVisible = ref(false);
 const removeCardModalVisible = ref(false);
 const removeAllColumnCardsModalVisible = ref(false);
+const archiveAllColumnCardsModalVisible = ref(false);
 const deleteBoardModalVisible = ref(false);
 const renameBoardModalVisible = ref(false);
 
@@ -375,6 +398,7 @@ const currentlyColoredColumnId = ref("");
 const columnRemoveDialog = useConfirmDialog(removeColumnModalVisible);
 const cardRemoveDialog = useConfirmDialog(removeCardModalVisible);
 const allColumnCardsRemoveDialog = useConfirmDialog(removeAllColumnCardsModalVisible);
+const allColumnCardsArchiveDialog = useConfirmDialog(archiveAllColumnCardsModalVisible);
 
 const board = useBoard(computed(() => route.params.id as string));
 const { board: boardContent } = board;
@@ -720,6 +744,32 @@ const removeAllColumnCards = async (
     }, 250);
   }
 }
+
+// "Archive all cards" of the done column, separator cards stay in the column
+const archiveAllColumnCards = async (columnID: string) => {
+  const column = boardContent.value?.columns.find((c: Column) => c.id === columnID);
+  if (!column) return;
+  const count = column.cards.filter((card) => !isSeparatorCard(card)).length;
+  if (count === 0) return;
+
+  emitter.emit("openModalWithCustomDescription", {
+    description: t(
+      "components.kanban.column.archiveAllCardsConfirmation",
+      { count, columnName: column.title },
+      count
+    ),
+  });
+
+  const { isCanceled } = await allColumnCardsArchiveDialog.reveal();
+  if (!isCanceled) {
+    board.archiveAllColumnCards(columnID);
+  }
+};
+
+const openArchive = () => {
+  if (!boardContent.value) return;
+  router.push(`/kanban/${boardContent.value.id}/archive`);
+};
 
 /**
  * Utility methods for creating, deleting and updating columns

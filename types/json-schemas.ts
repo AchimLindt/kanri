@@ -58,6 +58,9 @@ const kanriCardSchema = z.object({
     )
     .optional(),
   dueDate: z.string().optional().nullable(),
+  isDueDateCounterRelative: z.boolean().optional(),
+  isDueDateCompleted: z.boolean().optional(),
+  completedAt: z.string().optional(),
   tags: z.array(kanriTagSchema).optional().nullable(),
   documents: z
     .array(z.object({ id: z.string().optional(), path: z.string() }))
@@ -82,6 +85,7 @@ const kanriColumnSchema = z.object({
   defaultCardColor: z.string().optional().nullable(),
   backgroundColor: z.string().optional().nullable(),
   collapsed: z.boolean().optional(),
+  isDoneColumn: z.boolean().optional(),
 });
 
 const kanriBoardBackgroundSchema = z
@@ -100,6 +104,16 @@ export const kanriBoardSchema = z.object({
   id: z.string(),
   lastEdited: z.string().optional(),
   title: z.string(),
+  archivedCards: z
+    .array(
+      z.object({
+        card: kanriCardSchema,
+        columnId: z.string(),
+        columnTitle: z.string(),
+        archivedAt: z.string(),
+      })
+    )
+    .optional(),
 });
 
 export const kanbanElectronBoardSchema = z.object({

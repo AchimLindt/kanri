@@ -99,8 +99,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
               <span class="text-no-overflow min-w-0 font-semibold">{{
                 hit.cardName
               }}</span>
-              <span class="text-dim-3 shrink-0 text-sm">
-                {{ hit.columnTitle }} · {{ fieldLabel(hit) }}
+              <span class="text-dim-3 flex shrink-0 flex-row items-center gap-2 text-sm">
+                <span
+                  v-if="hit.archived"
+                  class="bg-elevation-3 text-dim-1 rounded px-1.5 text-xs"
+                >{{ $t("pages.search.archived") }}</span>
+                <span>{{ hit.columnTitle }} · {{ fieldLabel(hit) }}</span>
               </span>
             </span>
             <span class="text-dim-2 w-full break-words text-sm">
@@ -217,8 +221,13 @@ const fieldLabel = (hit: SearchHit) => {
   }
 };
 
-// always opens the card; a linked document is reachable from the card dialog
+// always opens the card; a linked document is reachable from the card dialog.
+// Archived cards open the archive page of their board instead (no card dialog there)
 const openHit = (hit: SearchHit) => {
+  if (hit.archived) {
+    router.push(`/kanban/${hit.boardId}/archive`);
+    return;
+  }
   router.push({
     path: `/kanban/${hit.boardId}`,
     query: hit.cardId ? { card: hit.cardId } : {},

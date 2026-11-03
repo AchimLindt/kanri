@@ -25,6 +25,7 @@ import type { Board, Column, Card, CardDocument, CardLink, Tag } from "@/types/k
 import { useTauriStore } from "@/stores/tauriStore";
 import { generateUniqueID } from "@/utils/idGenerator";
 import { normalizeDocumentPath } from "@/utils/documentPaths";
+import { hasValidCompletedAt, isCompletionExpired, isSeparatorCard, resolveRestoreColumn } from "@/utils/cardArchive";
 
 type Pin = { id: string; title: string; pinIcon?: string; pinIconText?: string };
 
@@ -318,6 +319,44 @@ export const useBoardsStore = defineStore("boards", {
     _applyColumnDefaultCardColor(col: Column, card: Card) {
       if (col.defaultCardColor) card.color = col.defaultCardColor;
     },
+    // Done column bookkeeping for a card that arrived in the column (same call sites as the color hook):
+    // entering the done column completes the card, entering any other column clears completedAt
+    _applyDoneColumnState(col: Column, card: Card, now = new Date()) {
+      if (col.isDoneColumn) {
+        card.completedAt = now.toISOString();
+        card.isDueDateCompleted = true;
+      } else if (card.completedAt !== undefined) {
+        delete card.completedAt;
+      }
+    },
+    // Marks one column of the board as the done column (null = none) and unmarks all others
+    setDoneColumn(boardId: string, columnId: string | null) {
+      const b = this.boardById(boardId);
+      if (!b) return;
+      const nowIso = new Date().toISOString();
+
+      for (const col of b.columns) {
+        const wasDone = !!col.isDoneColumn;
+        const isDone = columnId !== null && col.id === columnId;
+        if (wasDone === isDone) continue;
+
+        if (isDone) {
+          col.isDoneColumn = true;
+          // cards already in the column count as completed from now on
+          for (const card of col.cards) {
+            if (!hasValidCompletedAt(card)) card.completedAt = nowIso;
+            card.isDueDateCompleted = true;
+          }
+        } else {
+          delete col.isDoneColumn;
+          // the cards are no longer in a done column
+          for (const card of col.cards) {
+            if (card.completedAt !== undefined) delete card.completedAt;
+          }
+        }
+      }
+      b.lastEdited = new Date();
+    },
     updateColumn(boardId: string, column: Column) {
       const b = this.boardById(boardId);
       if (!b) return;
@@ -344,6 +383,7 @@ export const useBoardsStore = defineStore("boards", {
       if (inserted && !inserted.color) {
         this._applyColumnDefaultCardColor(col, inserted);
       }
+      if (inserted) this._applyDoneColumnState(col, inserted);
       b.lastEdited = new Date();
     },
     duplicateCard(boardId: string, columnId: string, cardId: string) {
@@ -530,6 +570,7 @@ export const useBoardsStore = defineStore("boards", {
       for (const card of nextCards) {
         if (card.id && !prevIds.has(card.id)) {
           this._applyColumnDefaultCardColor(col, card);
+          this._applyDoneColumnState(col, card);
         }
       }
 
@@ -554,8 +595,108 @@ export const useBoardsStore = defineStore("boards", {
       if (card === undefined) return;
       targetCol.cards.push(card);
       this._applyColumnDefaultCardColor(targetCol, card);
+      this._applyDoneColumnState(targetCol, card);
       targetBoard.lastEdited = new Date();
       sourceBoard.lastEdited = new Date();
+    },
+
+    // Card archive (spec docs/specs/card-archive.md); arrays are mutated in place
+    // Moves the cards at the given (ascending) indices of the column into the board archive,
+    // in column order (entries with the same timestamp keep this order on the archive page)
+    _archiveCardsAt(b: Board, col: Column, indices: Array<number>, now: Date) {
+      if (indices.length === 0) return;
+      const cards = indices.map(i => col.cards[i]).filter((c): c is Card => c !== undefined);
+      // splice from the back, so the remaining indices stay valid
+      for (let k = indices.length - 1; k >= 0; k--) col.cards.splice(indices[k]!, 1);
+
+      if (!b.archivedCards) b.archivedCards = [];
+      const archivedAt = now.toISOString();
+      for (const card of cards) {
+        // archive entries are addressed by card id, legacy cards may not have one yet
+        if (!card.id) card.id = generateUniqueID();
+        b.archivedCards.push({ card, columnId: col.id, columnTitle: col.title, archivedAt });
+      }
+    },
+    archiveCard(boardId: string, columnId: string, cardId: string) {
+      const b = this.boardById(boardId);
+      if (!b) return;
+      const col = b.columns.find(c => c.id === columnId);
+      if (!col) return;
+      const index = col.cards.findIndex(c => c.id === cardId);
+      if (index === -1) return;
+
+      this._archiveCardsAt(b, col, [index], new Date());
+      b.lastEdited = new Date();
+    },
+    // Archives every card of the column except separator cards
+    archiveAllColumnCards(boardId: string, columnId: string) {
+      const b = this.boardById(boardId);
+      if (!b) return;
+      const col = b.columns.find(c => c.id === columnId);
+      if (!col) return;
+
+      const indices: Array<number> = [];
+      col.cards.forEach((card, i) => {
+        if (card && !isSeparatorCard(card)) indices.push(i);
+      });
+      this._archiveCardsAt(b, col, indices, new Date());
+      if (indices.length > 0) b.lastEdited = new Date();
+    },
+    // Puts an archived card back into its original column (or the first column); returns the target column id
+    restoreArchivedCard(boardId: string, cardId: string): string | null {
+      const b = this.boardById(boardId);
+      if (!b || !b.archivedCards) return null;
+      const index = b.archivedCards.findIndex(e => e.card.id === cardId);
+      if (index === -1) return null;
+      const entry = b.archivedCards[index]!;
+      const target = resolveRestoreColumn(b, entry);
+      if (!target) return null;
+
+      b.archivedCards.splice(index, 1);
+      const card = entry.card;
+      delete card.completedAt;
+      target.cards.push(card);
+      // restoring into the done column counts as entering it (fresh completedAt)
+      const inserted = target.cards[target.cards.length - 1];
+      if (inserted) this._applyDoneColumnState(target, inserted);
+      b.lastEdited = new Date();
+      return target.id;
+    },
+    deleteArchivedCard(boardId: string, cardId: string) {
+      const b = this.boardById(boardId);
+      if (!b || !b.archivedCards) return;
+      const index = b.archivedCards.findIndex(e => e.card.id === cardId);
+      if (index === -1) return;
+      b.archivedCards.splice(index, 1);
+      b.lastEdited = new Date();
+    },
+    // Automatic run: archives cards that have been in a done column for at least archiveAfterDays days.
+    // Cards in a done column without a valid completedAt start counting now. Returns the number of archived cards.
+    archiveExpiredCards(archiveAfterDays: number, now = new Date()): number {
+      let archived = 0;
+      for (const b of this.boards) {
+        let changed = false;
+        for (const col of b.columns ?? []) {
+          if (!col.isDoneColumn) continue;
+          const expired: Array<number> = [];
+          col.cards.forEach((card, i) => {
+            if (!card || isSeparatorCard(card)) return;
+            if (!hasValidCompletedAt(card)) {
+              card.completedAt = now.toISOString();
+              changed = true;
+            } else if (isCompletionExpired(card.completedAt, archiveAfterDays, now)) {
+              expired.push(i);
+            }
+          });
+          if (expired.length > 0) {
+            this._archiveCardsAt(b, col, expired, now);
+            archived += expired.length;
+            changed = true;
+          }
+        }
+        if (changed) b.lastEdited = new Date();
+      }
+      return archived;
     },
 
     // Debounced auto-save of board properties

@@ -20,6 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 import { disable, enable, isEnabled } from "@tauri-apps/plugin-autostart";
+import { DEFAULT_ARCHIVE_AFTER_DAYS, normalizeArchiveAfterDays } from "@/utils/cardArchive";
 
 export const useSettingsStore = defineStore("settings", {
   state: () => {
@@ -48,6 +49,11 @@ export const useSettingsStore = defineStore("settings", {
     /* Full-text search */
     const searchDocumentContentsEnabled = ref(true);
 
+    /* Card archive (done column) */
+    const archiveAfterDays = ref(DEFAULT_ARCHIVE_AFTER_DAYS);
+    // epoch milliseconds of the last automatic card archive run, 0 = never
+    const cardArchiveLastRun = ref(0);
+
     return {
   locale,
   animationsEnabled,
@@ -64,6 +70,9 @@ export const useSettingsStore = defineStore("settings", {
   documentHistoryLastCleanup,
 
   searchDocumentContentsEnabled,
+
+  archiveAfterDays,
+  cardArchiveLastRun,
 
   boardSortingOption,
   reverseSorting,
@@ -89,6 +98,10 @@ export const useSettingsStore = defineStore("settings", {
       const documentHistoryLastCleanupSaved: number =
         typeof documentHistoryLastCleanupRaw === "number" ? documentHistoryLastCleanupRaw : 0;
       const searchDocumentContentsEnabledSaved: boolean = await store.get("searchDocumentContentsEnabled") ?? true;
+      const archiveAfterDaysSaved = normalizeArchiveAfterDays(await store.get("archiveAfterDays"));
+      const cardArchiveLastRunRaw: unknown = await store.get("cardArchiveLastRun");
+      const cardArchiveLastRunSaved: number =
+        typeof cardArchiveLastRunRaw === "number" ? cardArchiveLastRunRaw : 0;
 
       const boardSortingOptionSaved: string = (await store.get("boardSortingOption")) ?? "createdAt";
       const reverseSortingSavedRaw: unknown = await store.get("reverseSorting");
@@ -107,6 +120,8 @@ export const useSettingsStore = defineStore("settings", {
       this.markdownPreviewEnabled = markdownPreviewEnabledSaved;
       this.documentHistoryLastCleanup = documentHistoryLastCleanupSaved;
       this.searchDocumentContentsEnabled = searchDocumentContentsEnabledSaved;
+      this.archiveAfterDays = archiveAfterDaysSaved;
+      this.cardArchiveLastRun = cardArchiveLastRunSaved;
       this.boardSortingOption =
         boardSortingOptionSaved === "alphabetical" ||
         boardSortingOptionSaved === "lastEdited" ||
@@ -201,6 +216,17 @@ export const useSettingsStore = defineStore("settings", {
     async setSearchDocumentContentsEnabled(value: boolean) {
       this.searchDocumentContentsEnabled = value;
       await useTauriStore().store.set("searchDocumentContentsEnabled", value);
+    },
+
+    async setArchiveAfterDays(value: number) {
+      const days = normalizeArchiveAfterDays(value);
+      this.archiveAfterDays = days;
+      await useTauriStore().store.set("archiveAfterDays", days);
+    },
+
+    async setCardArchiveLastRun(value: number) {
+      this.cardArchiveLastRun = value;
+      await useTauriStore().store.set("cardArchiveLastRun", value);
     },
 
     async setBoardSortingOption(option: "alphabetical" | "lastEdited" | "createdAt") {

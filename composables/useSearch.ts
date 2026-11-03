@@ -21,7 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import { ref } from "vue";
 import { readTextFile } from "@tauri-apps/plugin-fs";
-import type { Board } from "@/types/kanban-types";
+import type { Board, Card } from "@/types/kanban-types";
 import { normalizeDocumentPath } from "@/utils/documentPaths";
 
 /**
@@ -44,16 +44,19 @@ let pendingLoad: Promise<void> = Promise.resolve();
 
 function collectDocumentPaths(boards: Array<Board>): Map<string, string> {
   const paths = new Map<string, string>();
+  const addCard = (card: Card | undefined) => {
+    for (const doc of card?.documents ?? []) {
+      if (!doc?.path) continue;
+      const key = normalizeDocumentPath(doc.path);
+      if (!paths.has(key)) paths.set(key, doc.path);
+    }
+  };
   for (const board of boards) {
     for (const column of board.columns ?? []) {
-      for (const card of column.cards ?? []) {
-        for (const doc of card?.documents ?? []) {
-          if (!doc?.path) continue;
-          const key = normalizeDocumentPath(doc.path);
-          if (!paths.has(key)) paths.set(key, doc.path);
-        }
-      }
+      for (const card of column.cards ?? []) addCard(card);
     }
+    // archived cards are searchable too
+    for (const entry of board.archivedCards ?? []) addCard(entry?.card);
   }
   return paths;
 }

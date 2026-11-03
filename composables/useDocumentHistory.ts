@@ -216,11 +216,15 @@ export async function runScheduledDocumentHistoryCleanup(): Promise<void> {
     const now = Date.now();
     if (now - settings.documentHistoryLastCleanup < CLEANUP_INTERVAL_MS) return;
 
-    const referencedPaths = boards.boards.flatMap((board) =>
-      board.columns.flatMap((column) =>
+    // documents of archived cards count as referenced, their history must survive
+    const referencedPaths = boards.boards.flatMap((board) => [
+      ...board.columns.flatMap((column) =>
         column.cards.flatMap((card) => (card.documents ?? []).map((doc) => doc.path))
-      )
-    );
+      ),
+      ...(board.archivedCards ?? []).flatMap((entry) =>
+        (entry.card?.documents ?? []).map((doc) => doc.path)
+      ),
+    ]);
 
     const result = await cleanupDocumentHistory(referencedPaths, new Date(now));
     await settings.setDocumentHistoryLastCleanup(now);

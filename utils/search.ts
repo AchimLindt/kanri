@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import type { Board } from "@/types/kanban-types";
+import type { Board, Card } from "@/types/kanban-types";
 import { documentDisplayName, documentFileName, normalizeDocumentPath } from "@/utils/documentPaths";
 
 /**
@@ -73,6 +73,8 @@ export interface SearchIndexCard {
   // undefined for legacy cards without id (the result then opens the board only)
   cardId?: string;
   cardName: string;
+  // card lives in the board archive (columnId/columnTitle = column it was archived from)
+  archived?: boolean;
   fields: Array<SearchIndexField>;
 }
 
@@ -88,6 +90,7 @@ export interface SearchHit {
   columnTitle: string;
   cardId?: string;
   cardName: string;
+  archived?: boolean;
   field: SearchField;
   detail?: string;
   snippet: Array<SnippetSegment>;
@@ -140,8 +143,46 @@ function makeField(field: SearchField, text: string, detail?: string): SearchInd
   return { field, detail, text: collapsed, lower: collapsed.toLowerCase() };
 }
 
+function indexCard(
+  board: Board,
+  columnId: string,
+  columnTitle: string,
+  card: Card,
+  documentTexts: ReadonlyMap<string, string>,
+  archived: boolean
+): SearchIndexCard {
+  const fields: Array<SearchIndexField | null> = [makeField("title", card.name ?? "")];
+  if (card.description) fields.push(makeField("description", stripHtml(card.description)));
+  for (const task of card.tasks ?? []) fields.push(makeField("task", task?.name ?? ""));
+  for (const tag of card.tags ?? []) fields.push(makeField("tag", tag?.text ?? ""));
+  for (const link of card.links ?? []) {
+    if (!link?.url) continue;
+    fields.push(makeField("link", link.title ? `${link.title} ${link.url}` : link.url));
+  }
+  for (const doc of card.documents ?? []) {
+    if (!doc?.path) continue;
+    const name = documentDisplayName(doc.path);
+    fields.push(makeField("documentName", documentFileName(doc.path), name));
+    const content = documentTexts.get(normalizeDocumentPath(doc.path));
+    if (content) fields.push(makeField("documentContent", content, name));
+  }
+
+  const entry: SearchIndexCard = {
+    boardId: board.id,
+    boardTitle: board.title,
+    columnId,
+    columnTitle,
+    cardId: card.id,
+    cardName: card.name ?? "",
+    fields: fields.filter((f): f is SearchIndexField => f !== null),
+  };
+  if (archived) entry.archived = true;
+  return entry;
+}
+
 /**
- * Builds the searchable entries of all cards.
+ * Builds the searchable entries of all cards, including the archived cards of each board
+ * (after the active ones, flagged with archived = true).
  * documentTexts maps normalizeDocumentPath(path) to the file content; paths without entry are skipped.
  */
 export function buildSearchIndex(
@@ -155,33 +196,13 @@ export function buildSearchIndex(
       for (const card of column.cards ?? []) {
         // separator cards have no content worth finding
         if (!card || card.name === "---") continue;
-
-        const fields: Array<SearchIndexField | null> = [makeField("title", card.name ?? "")];
-        if (card.description) fields.push(makeField("description", stripHtml(card.description)));
-        for (const task of card.tasks ?? []) fields.push(makeField("task", task?.name ?? ""));
-        for (const tag of card.tags ?? []) fields.push(makeField("tag", tag?.text ?? ""));
-        for (const link of card.links ?? []) {
-          if (!link?.url) continue;
-          fields.push(makeField("link", link.title ? `${link.title} ${link.url}` : link.url));
-        }
-        for (const doc of card.documents ?? []) {
-          if (!doc?.path) continue;
-          const name = documentDisplayName(doc.path);
-          fields.push(makeField("documentName", documentFileName(doc.path), name));
-          const content = documentTexts.get(normalizeDocumentPath(doc.path));
-          if (content) fields.push(makeField("documentContent", content, name));
-        }
-
-        index.push({
-          boardId: board.id,
-          boardTitle: board.title,
-          columnId: column.id,
-          columnTitle: column.title,
-          cardId: card.id,
-          cardName: card.name ?? "",
-          fields: fields.filter((f): f is SearchIndexField => f !== null),
-        });
+        index.push(indexCard(board, column.id, column.title, card, documentTexts, false));
       }
+    }
+    for (const entry of board.archivedCards ?? []) {
+      const card = entry?.card;
+      if (!card || card.name === "---") continue;
+      index.push(indexCard(board, entry.columnId, entry.columnTitle, card, documentTexts, true));
     }
   }
 
@@ -297,6 +318,7 @@ export function searchIndex(index: Array<SearchIndexCard>, terms: Array<string>)
       columnTitle: card.columnTitle,
       cardId: card.cardId,
       cardName: card.cardName,
+      archived: card.archived,
       field: best.field,
       detail: best.detail,
       snippet: buildSnippet(best.text, terms),

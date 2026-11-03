@@ -41,7 +41,8 @@
       "pinBoardAction": "Pin Board",
       "unpinBoardAction": "Unpin Board",
       "deleteBoardAction": "Delete Board",
-      "deleteBoardConfirmation": "Are you sure you want to delete the board '{boardName}'? This action is irreversible."
+      "deleteBoardConfirmation": "Are you sure you want to delete the board '{boardName}'? This action is irreversible.",
+      "archiveAction": "Archive ({count})"
     },
     "settings": {
       "deleteAllDataConfirmationAction": "Delete Data",
@@ -89,7 +90,10 @@
       "preferencesMarkdownFolderSubtext": "Open and save dialogs for card documents start in this folder.",
       "preferencesMarkdownFolderNotSet": "Not set",
       "preferencesMarkdownFolderChoose": "Choose folder…",
-      "preferencesMarkdownFolderClear": "Reset"
+      "preferencesMarkdownFolderClear": "Reset",
+      "preferencesArchiveAfterDaysHeading": "Archive done cards after",
+      "preferencesArchiveAfterDaysSubtext": "Cards in a board's done column move to the board archive after this many days. Archived cards are never deleted automatically.",
+      "preferencesArchiveAfterDaysUnit": "days"
     },
     "import": {
       "importExportHeading": "Import & Export",
@@ -159,7 +163,25 @@
       "fieldTag": "Tag",
       "fieldLink": "Link",
       "fieldDocumentName": "Document name {name}",
-      "fieldDocumentContent": "Document {name}"
+      "fieldDocumentContent": "Document {name}",
+      "archived": "Archive"
+    },
+    "archive": {
+      "title": "Archive",
+      "subtitle": "Archived cards of the board “{boardName}”",
+      "back": "Back to board",
+      "searchPlaceholder": "Search title and description…",
+      "count": "{count} archived card | {count} archived cards",
+      "emptyState": "No archived cards. Cards in the done column are archived automatically after {days} days; single cards can be archived from their context menu.",
+      "noResults": "No archived card matches the search.",
+      "column": "Column: {columnName}",
+      "archivedAt": "Archived {date}",
+      "restoreAction": "Restore",
+      "restoreToOtherColumn": "The original column no longer exists, the card is restored to “{columnName}”.",
+      "restoreNoColumn": "The board has no column.",
+      "deleteAction": "Delete permanently",
+      "deleteConfirmationTitle": "Delete card permanently",
+      "deleteConfirmation": "Permanently delete the archived card '{cardName}'? This action is irreversible."
     }
   },
   "components": {
@@ -190,14 +212,22 @@
         "addCardPlaceholder": "Enter a card name...",
         "colorsAction": "Column colors…",
         "collapseAction": "Collapse column",
-        "expandAction": "Expand column"
+        "expandAction": "Expand column",
+        "markDoneColumnAction": "Mark as done column",
+        "unmarkDoneColumnAction": "Remove done column mark",
+        "doneColumnTooltip": "Done column: cards are archived automatically after {days} days",
+        "archiveAllCardsAction": "Archive all cards",
+        "archiveAllCardsConfirmationTitle": "Archive all cards in this column",
+        "archiveAllCardsConfirmation": "Archive {count} card from the column '{columnName}'? It can be restored from the board archive. | Archive {count} cards from the column '{columnName}'? They can be restored from the board archive.",
+        "archiveAllCardsConfirm": "Archive"
       },
       "card": {
         "deleteCardAction": "Delete card",
         "deleteCardConfirmation": "Are you sure you want to delete the card '{cardName}'? This action is irreversible.",
         "deleteAllColumnCardsAction": "Delete all cards",
         "deleteAllColumnCardsConfirmation": "Are you sure you want to delete all the cards in column '{columnName}'? This action is irreversible.",
-        "deleteAllColumnCardsConfirmationTitle": "Delete all cards in this column"
+        "deleteAllColumnCardsConfirmationTitle": "Delete all cards in this column",
+        "archiveAction": "Archive"
       },
       "searchBar": {
         "placeholder": "Search for cards..."

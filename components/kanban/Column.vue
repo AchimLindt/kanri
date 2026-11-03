@@ -43,6 +43,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
         >
           {{ props.title }}
         </h1>
+        <!-- svg ignores the title attribute, so the tooltip sits on a wrapper -->
+        <span
+          v-if="isDoneColumn"
+          class="flex shrink-0 items-center"
+          :title="$t('components.kanban.column.doneColumnTooltip', { days: settings.archiveAfterDays })"
+        >
+          <CheckCircleIcon
+            :class="[columnTextClass || 'text-accent', doneColumnIconSizeClass]"
+          />
+        </span>
         <span
           v-if="defaultCardColor"
           :class="[
@@ -120,9 +130,26 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
             </DropdownMenuItem>
             <DropdownMenuItem
               class="bg-elevation-2-hover flex w-full cursor-pointer items-center gap-2 rounded-md px-4 py-1.5 pr-6 text-left"
+              @click="$emit('setDoneColumn', id, !isDoneColumn)"
+            >
+                {{
+                  isDoneColumn
+                    ? $t('components.kanban.column.unmarkDoneColumnAction')
+                    : $t('components.kanban.column.markDoneColumnAction')
+                }}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              class="bg-elevation-2-hover flex w-full cursor-pointer items-center gap-2 rounded-md px-4 py-1.5 pr-6 text-left"
               @click="toggleCollapsed"
             >
                 {{ collapseToggleLabel }}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              v-if="isDoneColumn"
+              class="bg-elevation-2-hover flex w-full cursor-pointer items-center gap-2 rounded-md px-4 py-1.5 pr-6 text-left"
+              @click="$emit('archiveAllColumnCards', id)"
+            >
+                {{ $t('components.kanban.column.archiveAllCardsAction') }}
             </DropdownMenuItem>
             <DropdownMenuItem
               class="bg-elevation-2-hover w-full cursor-pointer rounded-md px-4 py-1.5 pr-6 text-left flex items-center gap-2"
@@ -177,6 +204,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
             @set-card-name="setCardName"
             @update-card-tags="updateCardTags"
             @duplicate-card="duplicateCard"
+            @archive-card="archiveCard"
           />
         </Draggable>
       </Container>
@@ -266,6 +294,7 @@ import {
   EllipsisHorizontalIcon,
   ChevronUpIcon,
   ChevronDownIcon,
+  CheckCircleIcon,
 } from "@heroicons/vue/24/solid";
 //@ts-expect-error, sadly this library does not have ts typings
 import { Container, Draggable } from "vue3-smooth-dnd";
@@ -282,6 +311,7 @@ const props = defineProps<{
   defaultCardColor?: string | null;
   backgroundColor?: string | null;
   collapsed?: boolean;
+  isDoneColumn?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -317,6 +347,9 @@ const emit = defineEmits<{
   (e: "reorderCards", columnId: string, newCardsOrder: Array<Card>): void;
   (e: "openColumnColorsModal", columnId: string): void;
   (e: "setColumnCollapsed", columnId: string, collapsed: boolean): void;
+  (e: "setDoneColumn", columnId: string, isDone: boolean): void;
+  (e: "archiveCard", columnId: string, cardId: string | undefined): void;
+  (e: "archiveAllColumnCards", columnId: string): void;
 }>();
 
 const settings = useSettingsStore();
@@ -466,6 +499,21 @@ const defaultCardColorDotSizeClass = computed(() => {
       return "size-3.5";
     default:
       return "size-2.5";
+  }
+});
+
+const doneColumnIconSizeClass = computed(() => {
+  switch (props.zoomLevel) {
+    case -1:
+      return "size-4";
+    case 0:
+      return "size-4";
+    case 1:
+      return "size-5";
+    case 2:
+      return "size-6";
+    default:
+      return "size-4";
   }
 });
 
@@ -870,6 +918,10 @@ const addCard = () => {
 
 const duplicateCard = (cardId: string | undefined) => {
   emit("duplicateCard", props.id, cardId);
+};
+
+const archiveCard = (cardId: string | undefined) => {
+  emit("archiveCard", props.id, cardId);
 };
 
 const scrollCardIntoView = () => {
