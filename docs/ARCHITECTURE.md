@@ -19,13 +19,14 @@ Persistenz: eine JSON-Datei `.kanri.dat` im App-Data-Verzeichnis über `@tauri-a
 src-tauri/            Rust-Shell, tauri.conf.json, capabilities
 app.vue               Root, leitet console.* an Tauri-Log weiter
 layouts/default.vue   Lädt alle Stores, setzt Theme-CSS-Variablen, Sidebar; Teleport-Ziel ".default-layout"
-pages/                index (Board-Übersicht), kanban/[id] (Board-Ansicht), document (Markdown-Editor), settings, import, licenses/*
+pages/                index (Board-Übersicht), kanban/[id] (Board-Ansicht), document (Markdown-Editor), search (Volltextsuche),
+                      settings, import, licenses/*
 components/           kanban/*, modal/*, document/*, icon/*, generische (Dropdown, Modal, Tooltip, HexColorInput, ...)
-composables/          useBoard (Board-Fassade), useBackgroundImage, useContextMenuClasses
+composables/          useBoard (Board-Fassade), useBackgroundImage, useContextMenuClasses, useDocumentHistory, useSearch
 stores/               Pinia: boards, settings, theme, layout, tauriStore
 types/                kanban-types.d.ts (Domänentypen), json-schemas.ts (zod, für Import)
 utils/                colorUtils, drag-n-drop, emitter (mitt), exampleData, idGenerator, sorting, themes, iconManager,
-                      documentPaths, markdownLint, cardLinks
+                      documentPaths, markdownLint, cardLinks, search
 i18n/locales/*.json   11 Sprachen, Fallback en
 assets/css/           global.css, scrollbars.css (Theme-Klassen liegen in layouts/default.vue <style>)
 ```
@@ -71,7 +72,7 @@ CardLink { id, url, title? }                 (http/https/mailto-URL, optionaler 
 Bindet `boardId` (Ref) und reicht an den Store durch: `board` (computed), `isPinned`, `init()`, alle Column-/Card-Actions ohne `boardId`-Parameter, plus `setCardName/Description/Color/Tasks/DueDate/Tags` (alle via `mutateCard`). Neue Store-Actions hier spiegeln.
 
 ### Weitere Stores
-- `settings`: Locale, Animationen, Zoom (`columnZoomLevel` -1..2), Add-to-top-Button, Kartenzähler, Sortierung, `markdownDocumentsFolder` (Startordner der Dokument-Dialoge, `""` = System-Default), `markdownPreviewEnabled` (Vorschau im Editor). Jede Action schreibt direkt in den Tauri-Store (kein Auto-Save).
+- `settings`: Locale, Animationen, Zoom (`columnZoomLevel` -1..2), Add-to-top-Button, Kartenzähler, Sortierung, `markdownDocumentsFolder` (Startordner der Dokument-Dialoge, `""` = System-Default), `markdownPreviewEnabled` (Vorschau im Editor), `searchDocumentContentsEnabled` (Volltextsuche liest Dokumentinhalte). Jede Action schreibt direkt in den Tauri-Store (kein Auto-Save).
 - `theme`: `activeTheme` (dark/light/catppuccin/custom/auto), `colors: Theme`. `layouts/default.vue` mappt `colors` auf CSS-Variablen (`--elevation-1`, `--text-dim-1`, …) und definiert dort im `<style>` die Utility-Klassen `bg-elevation-1/2/3`, `bg-elevation-2-hover`, `border-elevation-*`, `text-dim-*`, `bg-accent`, `text-buttons`, `bg-primary-darker`.
 - `layout`: Sidebar-Flags, Changelog-Anzeige. `tauriStore`: hält die `LazyStore`-Instanz.
 - ESLint-Regel `custom/no-store-outside-stores`: `useTauriStore()` nur in `stores/`.
@@ -124,6 +125,14 @@ Für Tailwind-Klassen-Farben (`bg-*-600`) wird pauschal heller Text angenommen (
 - Speichern: Autosave 1 s nach der letzten Änderung, `Strg+S`, Flush in `onBeforeRouteLeave`; Dateien mit CRLF werden mit CRLF zurückgeschrieben (CodeMirror arbeitet intern mit `\n`).
 - Versionshistorie (Spec: `docs/specs/document-history.md`): `utils/documentHistory.ts` (reine Helfer: Key = FNV-1a des normalisierten Pfads, Snapshot-Dateinamen, Konstanten) und `composables/useDocumentHistory.ts` (fs-Zugriffe, Fehler nur geloggt). Ablage im App-Datenordner (`%APPDATA%\tech.trobonox.kanri\document-history\<key>\<zeitstempel>.md`), höchstens 20 je Dokument. `flushSave` sichert den Plattenstand vor dem Schreiben (erste Speicherung der Sitzung, danach alle 10 min); Dropdown „Verlauf" für manuelles Sichern und Wiederherstellen. `Dropdown.vue` reicht dafür optional `update:open` durch. Escape schließt ein offenes radix-Menü, ohne das Event als behandelt zu markieren; die Seite prüft deshalb den Öffnungszustand. Automatische Bereinigung (`runScheduledDocumentHistoryCleanup`, aufgerufen in `layouts/default.vue` nach `boards.init()`): höchstens einmal je 24 h werden verwaiste Historien (Key zu keinem Dokumentpfad eines Boards) und Snapshots älter als 30 Tage gelöscht; Zeitstempel des letzten Laufs in `settings.documentHistoryLastCleanup`.
 - `.bg-accent-checked` (Switch-Farbe) ist in `pages/settings.vue` definiert und nur mit deren CSS-Chunk geladen; die Editor-Seite definiert die Regel deshalb selbst.
+
+## 6b. Volltextsuche (`pages/search.vue`)
+
+- Spec: `docs/specs/full-text-search.md`. Aufruf über den Sidebar-Eintrag (Lupe) oder `Strg+Umschalt+F`; das Kürzel hängt am `keydown`-Listener in `components/Sidebar.vue` (dort liegt auch `F1`), ignoriert Events aus Eingabefeldern und `contenteditable`. Ein zentrales Shortcut-System gibt es nicht; Board-Shortcuts sind seitenlokal in `[id].vue`.
+- `utils/search.ts` (rein): `buildSearchIndex(boards, documentTexts)` baut je Karte Felder (Titel, Beschreibung via `stripHtml`, Aufgaben, Tags, Links, Dokument-Dateinamen, Dokumentinhalte), `searchIndex(index, parseQuery(q))` liefert nach Board gruppierte Treffer (UND über alle Felder einer Karte, ein Treffer je Karte), Ausschnitte als Segmente `{ text, match }`. Die Seite rendert die Segmente per Textinterpolation mit `<mark>`, kein `v-html`.
+- `composables/useSearch.ts`: modulweiter Cache der Dokumentinhalte (Schlüssel `normalizeDocumentPath`), einmal je Sitzung per `readTextFile` gefüllt, Lesefehler werden übersprungen; `resetDocumentTexts` für „Neu einlesen", `updateCachedDocumentText` wird vom Editor nach dem Speichern aufgerufen.
+- Der Index wird bei jedem Suchlauf (200 ms entprellt) neu aus dem Boards-Store gebaut.
+- Ergebnis-Klick → `/kanban/<boardId>?card=<cardId>`; `[id].vue` öffnet in `openCardFromQuery` nach dem Laden den Karten-Dialog und entfernt den Parameter per `router.replace`. Dieser Query-Parameter ist der Einstiegspunkt für jede künftige „Karte direkt öffnen"-Navigation.
 
 ## 7. Startseite, Import/Export, Settings
 
