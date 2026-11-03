@@ -281,6 +281,15 @@ export const useBoardsStore = defineStore("boards", {
       col.backgroundColor = color;
       b.lastEdited = new Date();
     },
+    setColumnCollapsed(boardId: string, columnId: string, collapsed: boolean) {
+      const b = this.boardById(boardId);
+      if (!b) return;
+      const col = b.columns.find(c => c.id === columnId);
+      if (!col) return;
+
+      col.collapsed = collapsed;
+      b.lastEdited = new Date();
+    },
     applyColumnDefaultCardColorToAllCards(boardId: string, columnId: string) {
       const b = this.boardById(boardId);
       if (!b) return;

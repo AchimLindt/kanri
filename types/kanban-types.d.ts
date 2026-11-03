@@ -41,6 +41,7 @@ export declare interface Column {
   title: string;
   defaultCardColor?: string | null;
   backgroundColor?: string | null;
+  collapsed?: boolean;
 }
 
 export declare interface Task {

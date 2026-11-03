@@ -83,21 +83,29 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
           emitter.emit('columnActionDone');
         "
       />
-      
-      <Dropdown align="end">
-        <template #trigger>
-          <button
-          :class="[
-            'transition-button h-full rounded-md',
-            backgroundColor ? 'bg-transparent hover:bg-black/10' : 'bg-elevation-1 bg-elevation-2-hover',
-            columnTextClass,
-          ]"
-          @click.prevent
-          >
-          <EllipsisHorizontalIcon class="size-6" />
-          </button>
-        </template>
-        <template #content>
+
+      <div class="flex shrink-0 flex-row gap-0.5">
+        <button
+          :class="headerButtonClass"
+          :title="collapseToggleLabel"
+          :aria-label="collapseToggleLabel"
+          :aria-expanded="!collapsed"
+          @click.prevent="toggleCollapsed"
+        >
+          <ChevronDownIcon v-if="collapsed" class="size-6" />
+          <ChevronUpIcon v-else class="size-6" />
+        </button>
+
+        <Dropdown align="end">
+          <template #trigger>
+            <button
+            :class="headerButtonClass"
+            @click.prevent
+            >
+            <EllipsisHorizontalIcon class="size-6" />
+            </button>
+          </template>
+          <template #content>
             <DropdownMenuItem
               class="bg-elevation-2-hover w-full cursor-pointer rounded-md px-4 py-1.5 pr-6 text-left flex items-center gap-2"
               @click="enableCardAddMode(true)"
@@ -111,6 +119,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
                 {{$t('components.kanban.column.colorsAction')}}
             </DropdownMenuItem>
             <DropdownMenuItem
+              class="bg-elevation-2-hover flex w-full cursor-pointer items-center gap-2 rounded-md px-4 py-1.5 pr-6 text-left"
+              @click="toggleCollapsed"
+            >
+                {{ collapseToggleLabel }}
+            </DropdownMenuItem>
+            <DropdownMenuItem
               class="bg-elevation-2-hover w-full cursor-pointer rounded-md px-4 py-1.5 pr-6 text-left flex items-center gap-2"
               @click="$emit('removeAllColumnCards', id)"
             >
@@ -122,118 +136,122 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
             >
                 {{$t('components.kanban.column.deleteColumnAction')}}
             </DropdownMenuItem>
-        </template>
-      </Dropdown>
-    </div>
-
-    <Container
-      :get-child-payload="getChildPayload"
-      :class="[
-        'max-h-65vh custom-scrollbar mt-2 overflow-y-auto rounded-sm',
-        containerSpacingClass,
-      ]"
-      drag-class="cursor-grabbing"
-      drag-handle-selector=".kanbancard-drag"
-      group-name="cards"
-      orientation="vertical"
-      :get-ghost-parent="getGhostParent"
-      @drop="onDrop"
-    >
-      <Draggable
-        v-for="(card, index) in filteredCards"
-        :key="card.id"
-        :class="[
-          draggingEnabled ? 'kanbancard-drag' : 'nomoredragging',
-          cardSpacingClass,
-        ]"
-        :index="index"
-      >
-        <KanbanCard
-          :card="card"
-          :index="index"
-          :zoom-level="zoomLevel"
-          @disable-dragging="disableDragging"
-          @enable-dragging="enableDragging"
-          @open-edit-card-modal="openEditCardModal"
-          @remove-card="removeCard"
-          @remove-card-with-confirmation="removeCardWithConfirmation"
-          @set-card-name="setCardName"
-          @update-card-tags="updateCardTags"
-          @duplicate-card="duplicateCard"
-        />
-      </Draggable>
-    </Container>
-
-    <div
-      v-if="cardAddMode"
-      :class="['mt-2 flex flex-col', addCardFormSpacingClass]"
-    >
-      <textarea
-        id="newCardInput"
-        ref="newCardInput"
-        v-model="newCardName"
-        v-focus
-        v-resizable
-        :class="[
-          'bg-elevation-2 border-accent-focus border-2 border-transparent mb-2 overflow-hidden rounded-sm p-1 focus:border-dotted focus:outline-none',
-          textAreaSizeClass,
-        ]"
-        maxlength="5000"
-        :placeholder="$t('components.kanban.column.addCardPlaceholder')"
-        type="text"
-        @keypress.enter="
-          addCard();
-          emitter.emit('columnActionDone');
-        "
-      />
-      <div class="flex w-full flex-row justify-start gap-2">
-        <button
-          id="submitButton"
-          :class="[
-            'text-buttons transition-button bg-accent rounded-md px-2 py-1',
-            buttonSizeClass,
-          ]"
-          @click="
-            addCard();
-            emitter.emit('columnActionDone');
-          "
-        >
-          {{ $t("general.addAction") }}
-        </button>
-        <button
-          :class="[
-            'bg-elevation-3-hover transition-button rounded-md px-2 py-1',
-            buttonSizeClass,
-          ]"
-          @click="
-            cardAddMode = !cardAddMode;
-            cardAddModeAddToTopOfColumn = false;
-            newCardName = '';
-            draggingEnabled = true;
-            emit('enableDragging');
-            emitter.emit('columnActionDone');
-          "
-        >
-          {{ $t("general.cancelAction") }}
-        </button>
+          </template>
+        </Dropdown>
       </div>
     </div>
 
-    <div
-      v-if="!cardAddMode"
-      :class="[
-        'mt-2 flex cursor-pointer flex-row items-center gap-1 rounded-md py-1 font-medium',
-        backgroundColor ? 'hover:bg-black/10' : 'bg-elevation-3-hover',
-        columnTextClass || 'text-dim-1',
-        addCardButtonSpacingClass,
-      ]"
-      @click="enableCardAddMode()"
-    >
-      <PlusIcon :class="['p-0.5', addCardIconSizeClass]" />
-      <h2 :class="addCardTextSizeClass">
-        {{ $t("components.kanban.column.addCard") }}
-      </h2>
-    </div>
+    <!-- collapsed: only the header stays visible (cards and "Add card" are not rendered) -->
+    <template v-if="!collapsed">
+      <Container
+        :get-child-payload="getChildPayload"
+        :class="[
+          'max-h-65vh custom-scrollbar mt-2 overflow-y-auto rounded-sm',
+          containerSpacingClass,
+        ]"
+        drag-class="cursor-grabbing"
+        drag-handle-selector=".kanbancard-drag"
+        group-name="cards"
+        orientation="vertical"
+        :get-ghost-parent="getGhostParent"
+        @drop="onDrop"
+      >
+        <Draggable
+          v-for="(card, index) in filteredCards"
+          :key="card.id"
+          :class="[
+            draggingEnabled ? 'kanbancard-drag' : 'nomoredragging',
+            cardSpacingClass,
+          ]"
+          :index="index"
+        >
+          <KanbanCard
+            :card="card"
+            :index="index"
+            :zoom-level="zoomLevel"
+            @disable-dragging="disableDragging"
+            @enable-dragging="enableDragging"
+            @open-edit-card-modal="openEditCardModal"
+            @remove-card="removeCard"
+            @remove-card-with-confirmation="removeCardWithConfirmation"
+            @set-card-name="setCardName"
+            @update-card-tags="updateCardTags"
+            @duplicate-card="duplicateCard"
+          />
+        </Draggable>
+      </Container>
+
+      <div
+        v-if="cardAddMode"
+        :class="['mt-2 flex flex-col', addCardFormSpacingClass]"
+      >
+        <textarea
+          id="newCardInput"
+          ref="newCardInput"
+          v-model="newCardName"
+          v-focus
+          v-resizable
+          :class="[
+            'bg-elevation-2 border-accent-focus border-2 border-transparent mb-2 overflow-hidden rounded-sm p-1 focus:border-dotted focus:outline-none',
+            textAreaSizeClass,
+          ]"
+          maxlength="5000"
+          :placeholder="$t('components.kanban.column.addCardPlaceholder')"
+          type="text"
+          @keypress.enter="
+            addCard();
+            emitter.emit('columnActionDone');
+          "
+        />
+        <div class="flex w-full flex-row justify-start gap-2">
+          <button
+            id="submitButton"
+            :class="[
+              'text-buttons transition-button bg-accent rounded-md px-2 py-1',
+              buttonSizeClass,
+            ]"
+            @click="
+              addCard();
+              emitter.emit('columnActionDone');
+            "
+          >
+            {{ $t("general.addAction") }}
+          </button>
+          <button
+            :class="[
+              'bg-elevation-3-hover transition-button rounded-md px-2 py-1',
+              buttonSizeClass,
+            ]"
+            @click="
+              cardAddMode = !cardAddMode;
+              cardAddModeAddToTopOfColumn = false;
+              newCardName = '';
+              draggingEnabled = true;
+              emit('enableDragging');
+              emitter.emit('columnActionDone');
+            "
+          >
+            {{ $t("general.cancelAction") }}
+          </button>
+        </div>
+      </div>
+
+      <div
+        v-if="!cardAddMode"
+        :class="[
+          'mt-2 flex cursor-pointer flex-row items-center gap-1 rounded-md py-1 font-medium',
+          backgroundColor ? 'hover:bg-black/10' : 'bg-elevation-3-hover',
+          columnTextClass || 'text-dim-1',
+          addCardButtonSpacingClass,
+        ]"
+        @click="enableCardAddMode()"
+      >
+        <PlusIcon :class="['p-0.5', addCardIconSizeClass]" />
+        <h2 :class="addCardTextSizeClass">
+          {{ $t("components.kanban.column.addCard") }}
+        </h2>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -243,7 +261,12 @@ import type { Ref } from "vue";
 
 import { applyDrag } from "@/utils/drag-n-drop";
 import emitter from "@/utils/emitter";
-import { PlusIcon, EllipsisHorizontalIcon } from "@heroicons/vue/24/solid";
+import {
+  PlusIcon,
+  EllipsisHorizontalIcon,
+  ChevronUpIcon,
+  ChevronDownIcon,
+} from "@heroicons/vue/24/solid";
 //@ts-expect-error, sadly this library does not have ts typings
 import { Container, Draggable } from "vue3-smooth-dnd";
 
@@ -258,6 +281,7 @@ const props = defineProps<{
   cardSearchQuery?: string;
   defaultCardColor?: string | null;
   backgroundColor?: string | null;
+  collapsed?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -292,6 +316,7 @@ const emit = defineEmits<{
   (e: "duplicateCard", columnId: string, cardId: string | undefined): void;
   (e: "reorderCards", columnId: string, newCardsOrder: Array<Card>): void;
   (e: "openColumnColorsModal", columnId: string): void;
+  (e: "setColumnCollapsed", columnId: string, collapsed: boolean): void;
 }>();
 
 const settings = useSettingsStore();
@@ -387,6 +412,35 @@ const columnTextClass = computed(() => {
   if (props.backgroundColor.startsWith("#")) return getContrast(props.backgroundColor);
   return "text-gray-50";
 });
+
+// shared by the collapse toggle and the dropdown trigger in the header
+const headerButtonClass = computed(() => [
+  "transition-button h-full rounded-md",
+  props.backgroundColor
+    ? "bg-transparent hover:bg-black/10"
+    : "bg-elevation-1 bg-elevation-2-hover",
+  columnTextClass.value,
+]);
+
+// column collapse: label is used for the toggle button (title/aria-label) and the dropdown entry
+const { t } = useI18n();
+const collapseToggleLabel = computed(() =>
+  props.collapsed
+    ? t("components.kanban.column.expandAction")
+    : t("components.kanban.column.collapseAction")
+);
+
+const toggleCollapsed = () => {
+  // collapsing hides the "Add card" form, so cancel an open add mode (re-enables dragging)
+  if (!props.collapsed && cardAddMode.value) {
+    cardAddMode.value = false;
+    cardAddModeAddToTopOfColumn.value = false;
+    newCardName.value = "";
+    enableDragging();
+  }
+
+  emit("setColumnCollapsed", props.id, !props.collapsed);
+};
 
 const defaultCardColorDotClass = computed(() => {
   if (!props.defaultCardColor || props.defaultCardColor.startsWith("#")) return "";
@@ -754,6 +808,11 @@ const enableTitleEditing = () => {
 };
 
 const enableCardAddMode = (addToTopOfColumn?: boolean) => {
+  // a collapsed column is expanded first, otherwise the new card input would not be visible
+  if (props.collapsed) {
+    emit("setColumnCollapsed", props.id, false);
+  }
+
   emit("setColumnEditIndex", props.colIndex, "card-add");
   disableDragging();
 

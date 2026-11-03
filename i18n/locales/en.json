@@ -151,7 +151,9 @@
         "deleteColumnAction": "Delete column",
         "deleteColumnConfirmation": "Are you sure you want to delete the column '{columnName}'? This action is irreversible.",
         "addCardPlaceholder": "Enter a card name...",
-        "colorsAction": "Column colors…"
+        "colorsAction": "Column colors…",
+        "collapseAction": "Collapse column",
+        "expandAction": "Expand column"
       },
       "card": {
         "deleteCardAction": "Delete card",

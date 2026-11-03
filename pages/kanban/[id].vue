@@ -264,6 +264,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
                   :card-search-query="searchQuery"
                   :default-card-color="column.defaultCardColor"
                   :background-color="column.backgroundColor"
+                  :collapsed="column.collapsed"
                   @disableDragging="draggingEnabled = false"
                   @enableDragging="draggingEnabled = true"
                   @openEditCardModal="openEditCardModal"
@@ -280,6 +281,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
                   @duplicateCard="board.duplicateCard"
                   @reorderCards="board.reorderCards"
                   @openColumnColorsModal="openColumnColorsModal"
+                  @setColumnCollapsed="board.setColumnCollapsed"
                 />
               </Draggable>
               <div class="pr-8">

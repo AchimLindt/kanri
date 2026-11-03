@@ -92,6 +92,10 @@ export function useBoard(id: string | Ref<string>) {
     if (!board.value) return;
     store.setColumnBackgroundColor(board.value.id, columnId, color);
   }
+  function setColumnCollapsed(columnId: string, collapsed: boolean) {
+    if (!board.value) return;
+    store.setColumnCollapsed(board.value.id, columnId, collapsed);
+  }
   function applyColumnDefaultCardColorToAllCards(columnId: string) {
     if (!board.value) return;
     store.applyColumnDefaultCardColorToAllCards(board.value.id, columnId);
@@ -257,6 +261,7 @@ export function useBoard(id: string | Ref<string>) {
     setColumnTitle,
     setColumnDefaultCardColor,
     setColumnBackgroundColor,
+    setColumnCollapsed,
     applyColumnDefaultCardColorToAllCards,
 
     // card actions
