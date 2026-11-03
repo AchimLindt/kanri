@@ -45,6 +45,9 @@ export const useSettingsStore = defineStore("settings", {
     // epoch milliseconds of the last automatic document history cleanup, 0 = never
     const documentHistoryLastCleanup = ref(0);
 
+    /* Full-text search */
+    const searchDocumentContentsEnabled = ref(true);
+
     return {
   locale,
   animationsEnabled,
@@ -59,6 +62,8 @@ export const useSettingsStore = defineStore("settings", {
   markdownDocumentsFolder,
   markdownPreviewEnabled,
   documentHistoryLastCleanup,
+
+  searchDocumentContentsEnabled,
 
   boardSortingOption,
   reverseSorting,
@@ -83,6 +88,7 @@ export const useSettingsStore = defineStore("settings", {
       const documentHistoryLastCleanupRaw: unknown = await store.get("documentHistoryLastCleanup");
       const documentHistoryLastCleanupSaved: number =
         typeof documentHistoryLastCleanupRaw === "number" ? documentHistoryLastCleanupRaw : 0;
+      const searchDocumentContentsEnabledSaved: boolean = await store.get("searchDocumentContentsEnabled") ?? true;
 
       const boardSortingOptionSaved: string = (await store.get("boardSortingOption")) ?? "createdAt";
       const reverseSortingSavedRaw: unknown = await store.get("reverseSorting");
@@ -100,6 +106,7 @@ export const useSettingsStore = defineStore("settings", {
       this.markdownDocumentsFolder = markdownDocumentsFolderSaved;
       this.markdownPreviewEnabled = markdownPreviewEnabledSaved;
       this.documentHistoryLastCleanup = documentHistoryLastCleanupSaved;
+      this.searchDocumentContentsEnabled = searchDocumentContentsEnabledSaved;
       this.boardSortingOption =
         boardSortingOptionSaved === "alphabetical" ||
         boardSortingOptionSaved === "lastEdited" ||
@@ -189,6 +196,11 @@ export const useSettingsStore = defineStore("settings", {
     async setDocumentHistoryLastCleanup(value: number) {
       this.documentHistoryLastCleanup = value;
       await useTauriStore().store.set("documentHistoryLastCleanup", value);
+    },
+
+    async setSearchDocumentContentsEnabled(value: boolean) {
+      this.searchDocumentContentsEnabled = value;
+      await useTauriStore().store.set("searchDocumentContentsEnabled", value);
     },
 
     async setBoardSortingOption(option: "alphabetical" | "lastEdited" | "createdAt") {

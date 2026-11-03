@@ -136,6 +136,24 @@
       "historySaveNow": "Aktuelle Version sichern",
       "historyHint": "Wiederherstellen ersetzt den Editortext. Der aktuelle Text wird vorher als Version gesichert.",
       "historyEmpty": "Noch keine gesicherten Versionen"
+    },
+    "search": {
+      "title": "Suche",
+      "subtitle": "Alle Boards durchsuchen: Kartentitel, Beschreibungen, Aufgaben, Tags, Links und verknüpfte Dokumente.",
+      "placeholder": "Nach Wörtern suchen…",
+      "searchDocumentContents": "In Dokumentinhalten suchen",
+      "reloadDocuments": "Dokumente neu einlesen",
+      "loadingDocuments": "Dokumente werden eingelesen…",
+      "emptyState": "Mindestens zwei Zeichen eingeben. Alle Wörter müssen in einer Karte vorkommen.",
+      "noResults": "Keine Treffer.",
+      "hitCount": "{count} Treffer | {count} Treffer",
+      "fieldTitle": "Titel",
+      "fieldDescription": "Beschreibung",
+      "fieldTask": "Aufgabe",
+      "fieldTag": "Tag",
+      "fieldLink": "Link",
+      "fieldDocumentName": "Dokumentname {name}",
+      "fieldDocumentContent": "Dokument {name}"
     }
   },
   "components": {
@@ -150,6 +168,7 @@
     },
     "sidebar": {
       "home": "Startseite",
+      "search": "Suche (Strg+Umschalt+F)",
       "back": "Zurück",
       "createNewBoard": "Neues Board erstellen",
       "importExport": "Importieren/Exportieren",

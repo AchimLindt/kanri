@@ -141,6 +141,7 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 import { readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
 import { useBoard } from "@/composables/useBoard";
 import { type DocumentSnapshot, useDocumentHistory } from "@/composables/useDocumentHistory";
+import { updateCachedDocumentText } from "@/composables/useSearch";
 import { SNAPSHOT_INTERVAL_MS } from "@/utils/documentHistory";
 import { documentFileName } from "@/utils/documentPaths";
 
@@ -285,6 +286,8 @@ const flushSave = (): Promise<void> => {
         fileLineBreak === "\n" ? text : text.replace(/\n/g, fileLineBreak)
       );
       lastSavedContent = text;
+      // the full-text search caches document contents for the session
+      updateCachedDocumentText(documentPath.value, text);
       // further changes during the write are saved by the pending timer
       saveStatus.value = content.value === lastSavedContent ? "saved" : "saving";
     } catch (err) {

@@ -142,6 +142,24 @@
       "historySaveNow": "Save current version",
       "historyHint": "Restoring replaces the editor text. The current text is saved as a version first.",
       "historyEmpty": "No saved versions yet"
+    },
+    "search": {
+      "title": "Search",
+      "subtitle": "Search all boards: card titles, descriptions, tasks, tags, links and linked documents.",
+      "placeholder": "Search for words…",
+      "searchDocumentContents": "Search in document contents",
+      "reloadDocuments": "Reload documents",
+      "loadingDocuments": "Reading documents…",
+      "emptyState": "Enter at least two characters. All words have to occur in a card.",
+      "noResults": "No results.",
+      "hitCount": "{count} result | {count} results",
+      "fieldTitle": "Title",
+      "fieldDescription": "Description",
+      "fieldTask": "Task",
+      "fieldTag": "Tag",
+      "fieldLink": "Link",
+      "fieldDocumentName": "Document name {name}",
+      "fieldDocumentContent": "Document {name}"
     }
   },
   "components": {
@@ -156,6 +174,7 @@
     },
     "sidebar": {
       "home": "Home",
+      "search": "Search (Ctrl+Shift+F)",
       "back": "Back",
       "createNewBoard": "Create a new board",
       "importExport": "Import/Export",

@@ -422,6 +422,10 @@ onMounted(async () => {
     columnCardAddMode.value = false;
     columnTitleEditing.value = false;
   });
+
+  // the board is rendered now; a search result may ask to open one of its cards
+  await nextTick();
+  openCardFromQuery();
 });
 
 /**
@@ -601,6 +605,26 @@ const openEditCardModal = (columnId: string, el: Card) => {
     draggingEnabled.value = false;
     emitter.emit("editCardModalOpened");
   });
+};
+
+// "/kanban/<boardId>?card=<cardId>" (full-text search results) opens that card's dialog once
+const openCardFromQuery = () => {
+  const cardId = route.query.card;
+  if (typeof cardId !== "string" || !cardId) return;
+
+  const columns = boardContent.value?.columns ?? [];
+  for (const column of columns) {
+    const card = column.cards.find((c) => c.id === cardId);
+    if (card) {
+      openEditCardModal(column.id, card);
+      break;
+    }
+  }
+
+  // drop the parameter, so reloading or navigating back does not reopen the dialog
+  const query = { ...route.query };
+  delete query.card;
+  router.replace({ query });
 };
 
 const closeEditCardModal = () => {

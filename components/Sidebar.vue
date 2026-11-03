@@ -1,4 +1,4 @@
-<!-- SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>, PwshLab, gitoak -->
+<!-- SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>, PwshLab, gitoak, AchimLindt -->
 <!-- -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!--
@@ -49,6 +49,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
           >
             <PhHouse class="size-7" />
           </button>
+        </template>
+      </Tooltip>
+
+      <Tooltip :label="$t('components.sidebar.search')">
+        <template #trigger>
+          <nuxt-link to="/search">
+            <div class="bg-elevation-2-hover transition-button rounded-md p-2">
+              <PhMagnifyingGlass class="size-7" />
+            </div>
+          </nuxt-link>
         </template>
       </Tooltip>
 
@@ -118,8 +128,11 @@ import {
   PhHouse,
   PhArrowsLeftRight,
   PhGearSix,
+  PhMagnifyingGlass,
   PhQuestion,
 } from "@phosphor-icons/vue";
+
+const router = useRouter();
 
 const { showSidebarAddButton, showSidebarBackArrow, showSidebarHelpModal } = storeToRefs(useLayoutStore());
 
@@ -133,10 +146,29 @@ onBeforeUnmount(() => {
   document.removeEventListener("keydown", keyDownListener);
 });
 
+// typing in a field (input, textarea, tiptap or CodeMirror) must not trigger app shortcuts
+const isEditableTarget = (target: EventTarget | null) => {
+  if (!(target instanceof HTMLElement)) return false;
+  return (
+    target.isContentEditable ||
+    target.tagName === "INPUT" ||
+    target.tagName === "TEXTAREA" ||
+    target.tagName === "SELECT"
+  );
+};
+
 const keyDownListener = (e: KeyboardEvent) => {
   if (e.key === "F1") {
     showSidebarHelpModal.value = true;
     return;
+  }
+
+  // Ctrl+Shift+F: full-text search across all boards
+  const controlOrMetaPressed = e.ctrlKey || e.metaKey;
+  if (controlOrMetaPressed && e.shiftKey && !e.altKey && e.key.toLowerCase() === "f") {
+    if (isEditableTarget(e.target)) return;
+    e.preventDefault();
+    router.push("/search");
   }
 };
 </script>
