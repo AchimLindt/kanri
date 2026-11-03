@@ -34,6 +34,7 @@ Eine eigene Suchseite findet Karten über alle Boards hinweg: in Kartentitel, Be
 - **Button „Dokumente neu einlesen"** leert den Cache und startet die Suche neu. Deaktiviert, solange gelesen wird oder die Checkbox aus ist.
 - **Ergänzung zur Vorgabe:** Speichert der In-App-Editor (`pages/document.vue`) ein Dokument, wird ein bereits gecachter Inhalt sofort aktualisiert (`updateCachedDocumentText`). Sonst würde die Suche Änderungen aus der App selbst erst nach „Neu einlesen" finden. Änderungen außerhalb der App brauchen weiterhin „Neu einlesen".
 - **Aktualität der Board-Daten:** Der Index wird bei jedem Suchlauf neu aus dem Boards-Store gebaut (kein persistenter Index). Bei üblichen Datenmengen ist das im Millisekundenbereich.
+- **Archivierte Karten** (`docs/specs/card-archive.md`) werden mit allen Feldern mitindexiert, im Ergebnis mit dem Badge „Archiv" und ihrer ursprünglichen Spalte angezeigt, und ein Klick öffnet die Archiv-Seite des Boards (`/kanban/<boardId>/archive`) statt eines Karten-Dialogs.
 - **Ergebnis öffnen:** Klick navigiert zu `/kanban/<boardId>?card=<cardId>`. Die Board-Seite öffnet nach dem Laden das Karten-Dialog dieser Karte (`openEditCardModal`) und entfernt den Query-Parameter per `router.replace`. Bei Dokument-Treffern wird ebenfalls die Karte geöffnet; das Dokument ist von dort erreichbar. Karten ohne `id` (Altdaten, nie in einer Spalte gerendert) öffnen nur das Board. Unbekannte `card`-IDs werden still ignoriert (Parameter wird trotzdem entfernt).
 
 ## 3. UI
