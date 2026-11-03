@@ -137,6 +137,7 @@ Für Tailwind-Klassen-Farben (`bg-*-600`) wird pauschal heller Text angenommen (
 ## 9. Bekannte Fallstricke
 
 - `Column.vue`/`Card.vue` kopieren Props in lokale Refs; direkte Mutation von Props vermeiden, Änderungen immer über Store-Actions.
+- Arrays an Karten (`tasks`, `tags`, `documents`) in Store-Actions in place mutieren (`push`, `splice`), nicht durch eine gefilterte Kopie ersetzen: Kachel und Karten-Dialog halten das ursprüngliche Array in lokalen Refs, eine neue Array-Instanz erreicht sie erst beim nächsten Öffnen (Bug beim Entfernen von Dokumenten, behoben 2026-11-03).
 - Tailwind-Klassen dynamisch zusammenzusetzen (`"bg-" + name`) funktioniert nicht (JIT). Vollständige Klassennamen verwenden.
 - `Card.id` kann in Altdaten fehlen → Vergleiche über `id` defensiv halten.
 - Auto-Save ist deep-reaktiv: große Arrays ersetzen ist ok, aber Mutationen außerhalb des Stores (z. B. direkt am `props.card`) werden ebenfalls persistiert, nur ohne `lastEdited`.

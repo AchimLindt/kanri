@@ -412,7 +412,10 @@ export const useBoardsStore = defineStore("boards", {
       const card = col.cards.find(c => c.id === cardId);
       if (!card || !card.documents) return;
 
-      card.documents = card.documents.filter(d => d.id !== documentId);
+      // mutate in place: the card tile and the edit dialog hold this array, a new array would not reach them
+      const index = card.documents.findIndex(d => d.id === documentId);
+      if (index === -1) return;
+      card.documents.splice(index, 1);
       b.lastEdited = new Date();
     },
     setCardDocumentPath(boardId: string, columnId: string, cardId: string, documentId: string, path: string) {
@@ -429,7 +432,7 @@ export const useBoardsStore = defineStore("boards", {
       const normalized = normalizeDocumentPath(path);
       const existing = card.documents.find(d => d.id !== documentId && normalizeDocumentPath(d.path) === normalized);
       if (existing) {
-        card.documents = card.documents.filter(d => d.id !== documentId);
+        card.documents.splice(card.documents.indexOf(doc), 1);
       } else {
         doc.path = path;
       }
