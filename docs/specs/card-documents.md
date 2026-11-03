@@ -6,7 +6,7 @@ SPDX-License-Identifier: CC0-1.0
 
 # Spec: Markdown-Dokumente an Karten
 
-Status: in Umsetzung (Branch `feat/card-documents`, 2026-11-03). Architekturkontext: `docs/ARCHITECTURE.md`. Entscheidungen stammen aus einer Grill-Session mit dem Nutzer am 2026-11-03; sie sind nicht neu zu verhandeln.
+Status: implementiert (Branch `feat/card-documents`, 2026-11-03), manueller UI-Test gemäß §9 noch offen. Architekturkontext: `docs/ARCHITECTURE.md`. Entscheidungen stammen aus einer Grill-Session mit dem Nutzer am 2026-11-03; sie sind nicht neu zu verhandeln.
 
 ## 1. Ziel
 

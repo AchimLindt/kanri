@@ -19,12 +19,13 @@ Persistenz: eine JSON-Datei `.kanri.dat` im App-Data-Verzeichnis über `@tauri-a
 src-tauri/            Rust-Shell, tauri.conf.json, capabilities
 app.vue               Root, leitet console.* an Tauri-Log weiter
 layouts/default.vue   Lädt alle Stores, setzt Theme-CSS-Variablen, Sidebar; Teleport-Ziel ".default-layout"
-pages/                index (Board-Übersicht), kanban/[id] (Board-Ansicht), settings, import, licenses/*
-components/           kanban/*, modal/*, icon/*, generische (Dropdown, Modal, Tooltip, HexColorInput, ...)
+pages/                index (Board-Übersicht), kanban/[id] (Board-Ansicht), document (Markdown-Editor), settings, import, licenses/*
+components/           kanban/*, modal/*, document/*, icon/*, generische (Dropdown, Modal, Tooltip, HexColorInput, ...)
 composables/          useBoard (Board-Fassade), useBackgroundImage, useContextMenuClasses
 stores/               Pinia: boards, settings, theme, layout, tauriStore
 types/                kanban-types.d.ts (Domänentypen), json-schemas.ts (zod, für Import)
-utils/                colorUtils, drag-n-drop, emitter (mitt), exampleData, idGenerator, sorting, themes, iconManager
+utils/                colorUtils, drag-n-drop, emitter (mitt), exampleData, idGenerator, sorting, themes, iconManager,
+                      documentPaths, markdownLint
 i18n/locales/*.json   11 Sprachen, Fallback en
 assets/css/           global.css, scrollbars.css (Theme-Klassen liegen in layouts/default.vue <style>)
 ```
@@ -36,14 +37,16 @@ Board { id, title, columns: Column[], background?: {src, blur, brightness}|null,
         globalTags?: Tag[]|null, lastEdited?, createdAt? }
 Column { id, title, cards: Card[], defaultCardColor?, backgroundColor?, collapsed? }
 Card { id?, name, description? (HTML aus tiptap), color?, dueDate?, isDueDateCounterRelative?,
-       isDueDateCompleted?, tasks?: Task[], tags?: Tag[]|null }
+       isDueDateCompleted?, tasks?: Task[], tags?: Tag[]|null, documents?: CardDocument[]|null }
 Tag { id?, text, color?, style? }            Task { id?, finished, name }
+CardDocument { id, path }                    (absoluter Pfad einer .md-Datei)
 ```
 
 - **IDs**: `generateUniqueID()` (cuid2). `Card.id` ist historisch optional; `Column.vue` ergänzt fehlende IDs beim Mount.
 - **`Card.color`** ist ein String in einem von zwei Formaten: Tailwind-Klasse (`bg-pink-600`, `bg-elevation-2` = Standard) **oder** Hex (`#rrggbb`). Leerer String/undefined = Standard. Konsumenten unterscheiden per `startsWith("#")` (Klasse → `:class`, Hex → `:style`). Dieses Muster für neue Farbfelder beibehalten.
 - **Sondername** `---`: Karte wird als Trennlinie gerendert.
 - **`Column.collapsed`**: `true` = Spalte eingeklappt (nur Header sichtbar), fehlend/`undefined` = ausgeklappt. Gesetzt über `setColumnCollapsed`, persistiert per Auto-Save (Spec: `docs/specs/column-collapse.md`).
+- **`Card.documents`**: Verweise auf Markdown-Dateien im Dateisystem; die Board-Daten enthalten nur Pfade, nie den Text. Ein Pfad je Karte höchstens einmal (Vergleich über `normalizeDocumentPath` aus `utils/documentPaths.ts`). Duplizieren kopiert die Verweise, Löschen/Entfernen fasst die Dateien nie an (Spec: `docs/specs/card-documents.md`).
 - **zod-Schemas** (`types/json-schemas.ts`) spiegeln die Typen und werden nur beim **Import** (`pages/import.vue`) angewendet. zod strippt unbekannte Keys → neue Felder müssen dort ergänzt werden, sonst gehen sie beim Re-Import verloren. `kanriJsonSchema` = komplettes `.kanri.dat`.
 - Der Tauri-Store speichert die Objekte wie sie sind; neue optionale Felder sind damit automatisch rückwärtskompatibel (alte Daten haben `undefined`).
 
@@ -57,13 +60,14 @@ Tag { id?, text, color?, style? }            Task { id?, finished, name }
   - Global Tags: `addGlobalTag`, `removeGlobalTag`, `setGlobalTagColor`, `updateGlobalTagName`, `_propagateGlobalTag` (Vorbild für „Änderung an einer Entität auf viele Karten propagieren")
   - Spalten: `addColumn`, `removeColumn`, `reorderColumns(boardId, nextColumns)`, `setColumnTitle`, `updateColumn`
   - Karten: `createCard(boardId, colId, card, addToTop)`, `duplicateCard`, `deleteCard`, `deleteAllColumnCards`, `mutateCard(boardId, colId, cardId, fn)`, `reorderCards(boardId, colId, nextCards)`, `moveCard(srcBoard, dstBoard, srcCol, dstCol, cardId)`
+  - Karten-Dokumente: `addCardDocument` (gibt die id zurück, ignoriert doppelte Pfade), `removeCardDocument`, `setCardDocumentPath`; Getter `findCardDocument(boardId, cardId, docId)` für die Editor-Seite
 - **Karten-Bewegungen landen an genau drei Stellen**: `createCard` (neu), `reorderCards` (Drag & Drop, siehe §5), `moveCard` (Kontextmenü „Move to", auch board-übergreifend).
 
 ### `composables/useBoard.ts` – Fassade für eine Board-Seite
 Bindet `boardId` (Ref) und reicht an den Store durch: `board` (computed), `isPinned`, `init()`, alle Column-/Card-Actions ohne `boardId`-Parameter, plus `setCardName/Description/Color/Tasks/DueDate/Tags` (alle via `mutateCard`). Neue Store-Actions hier spiegeln.
 
 ### Weitere Stores
-- `settings`: Locale, Animationen, Zoom (`columnZoomLevel` -1..2), Add-to-top-Button, Kartenzähler, Sortierung. Jede Action schreibt direkt in den Tauri-Store (kein Auto-Save).
+- `settings`: Locale, Animationen, Zoom (`columnZoomLevel` -1..2), Add-to-top-Button, Kartenzähler, Sortierung, `markdownDocumentsFolder` (Startordner der Dokument-Dialoge, `""` = System-Default), `markdownPreviewEnabled` (Vorschau im Editor). Jede Action schreibt direkt in den Tauri-Store (kein Auto-Save).
 - `theme`: `activeTheme` (dark/light/catppuccin/custom/auto), `colors: Theme`. `layouts/default.vue` mappt `colors` auf CSS-Variablen (`--elevation-1`, `--text-dim-1`, …) und definiert dort im `<style>` die Utility-Klassen `bg-elevation-1/2/3`, `bg-elevation-2-hover`, `border-elevation-*`, `text-dim-*`, `bg-accent`, `text-buttons`, `bg-primary-darker`.
 - `layout`: Sidebar-Flags, Changelog-Anzeige. `tauriStore`: hält die `LazyStore`-Instanz.
 - ESLint-Regel `custom/no-store-outside-stores`: `useTauriStore()` nur in `stores/`.
@@ -89,6 +93,7 @@ pages/kanban/[id].vue                       Seite: Header (Titel, Buttons, Dropd
 - **EditCard.vue**: Farbwahl = 9 feste Swatches (`bg-pink/red/orange/yellow/green/teal/blue/purple-600`, `bg-elevation-2`) + Custom (`<input type="color">` + `HexColorInput`). Diese Klassennamen stehen wörtlich im Template, damit Tailwind-JIT sie generiert; neue Farbklassen müssen irgendwo wörtlich im Quelltext vorkommen.
 - **Modals**: `components/Modal.vue` (fixed overlay, Esc schließt, Enter → `enterKeyPressed`). Die Seite rendert alle Modals dauerhaft mit `v-show`; Inhalt wird über Props/Emitter befüllt. Confirm-Dialoge nutzen `useConfirmDialog` (vueuse) + `emitter.emit("openModalWithCustomDescription")`.
 - **Dropdown.vue** (radix DropdownMenu) teleportiert nach `.default-layout`; Items sind `DropdownMenuItem` mit Klassen `bg-elevation-2-hover ... rounded-md px-4 py-1.5`.
+- **Dokumente** (`EditCard.vue` → `[id].vue`): Abschnitt „Dokumente" mit Liste, Kontextmenü und Datei-Dialogen; `exists()` wird bei jedem Öffnen des Dialogs geprüft (Signal `editCardModalOpened` über den Emitter, weil das Modal per `v-show` gemountet bleibt). `openDocument` schließt den Dialog und navigiert nach `/document?board=&card=&doc=`. Das Kontextmenü im Modal braucht einen z-index über dem des Modals (`z-[10000001]`).
 - **Emitter** (`utils/emitter.ts`, mitt, typisiert): seitenweite Signale (`columnActionDone`, `enableColumnTitleEditing`, `columnDraggingOn/Off`, Modal-Steuerung). Neue Events im `Events`-Typ ergänzen; Listener in `onBeforeUnmount` wieder abmelden.
 
 ## 5. Drag & Drop (vue3-smooth-dnd)
@@ -105,11 +110,21 @@ pages/kanban/[id].vue                       Seite: Header (Titel, Buttons, Dropd
 Exporte: `getContrast(hex)` → `"text-gray-50"` oder dunkle Textklasse, `lightenColor`, `hexToRgb`, `rgbToHex`, `rgbToHsl`, `hslToHex`, `cssColorStringToHex`, `getAverageColor` (für Board-Hintergrund). Hat Unit-Tests (`colorUtils.spec.ts`), die aber mangels vitest nicht laufen.
 Für Tailwind-Klassen-Farben (`bg-*-600`) wird pauschal heller Text angenommen (`text-gray-50`); nur Hex-Farben werden berechnet.
 
+## 6a. Markdown-Editor (`pages/document.vue`)
+
+- Seite im `default`-Layout, Vollhöhe (`h-screen`, Panes mit `min-h-0`/`overflow-y-auto`). Liest die Datei mit `readTextFile`, Fehler oder fehlende Query-Parameter → Fehlermeldung mit Zurück-Button.
+- `components/document/MarkdownEditor.vue`: CodeMirror 6 (einzelne `@codemirror/*`-Pakete, nicht das Meta-Paket), `v-model` + `lintCount`-Event; Theme über die CSS-Variablen aus `layouts/default.vue` (transparenter Hintergrund, Container trägt `bg-elevation-1`).
+- `components/document/MarkdownPreview.vue`: `markdown-it` mit `html: false` per `v-html`; Link-Klicks werden abgefangen, `http(s)` über `openUrl`.
+- `utils/markdownLint.ts`: `markdownlint/sync` (Browser-Build über die `browser`-Condition) als CodeMirror-`LintSource`; Regeln Default minus MD013/MD033/MD034/MD041.
+- Speichern: Autosave 1 s nach der letzten Änderung, `Strg+S`, Flush in `onBeforeRouteLeave`; Dateien mit CRLF werden mit CRLF zurückgeschrieben (CodeMirror arbeitet intern mit `\n`).
+- `.bg-accent-checked` (Switch-Farbe) ist in `pages/settings.vue` definiert und nur mit deren CSS-Chunk geladen; die Editor-Seite definiert die Regel deshalb selbst.
+
 ## 7. Startseite, Import/Export, Settings
 
 - `pages/index.vue`: Board-Liste mit `KanbanBoardPreview` (Mini-Rendering der Spalten/Karten inkl. `card.color`), Sortierung (`utils/sorting.ts`), NewBoard-Modal (`utils/exampleData.ts`), Pins.
 - `pages/import.vue`: Import von Kanri-Vollexport, einzelnem Board, KanbanElectron und Trello, jeweils via zod-Schema; Export eines Boards in `[id].vue` (`exportBoardToJson`, `JSON.stringify(board)`).
-- `pages/settings.vue`: Theme-Wahl (`CustomThemeEditor` mit `HexColorInput` + `<input type="color">`), Sprache, Verhalten.
+- `pages/settings.vue`: Theme-Wahl (`CustomThemeEditor` mit `HexColorInput` + `<input type="color">`), Sprache, Verhalten, Standardordner für Markdown-Dokumente.
+- **Capabilities** (`src-tauri/capabilities/main.json`): für Dokumente zusätzlich `fs:allow-exists`, `opener:allow-open-path` (Scope `**/*.md`, `**/*.markdown`) und `http(s)://**` bei `opener:allow-open-url`. Dateizugriff auf per Dialog gewählte Pfade kommt über den Dialog-Scope, `tauri-plugin-persisted-scope` hält ihn über Neustarts.
 
 ## 8. Toolchain & Qualitätssicherung
 
