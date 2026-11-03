@@ -6,7 +6,7 @@ SPDX-License-Identifier: CC0-1.0
 
 # Spec: Versionshistorie für Kartendokumente
 
-Status: in Umsetzung (Branch `feat/document-history`, 2026-11-03). Baut auf `docs/specs/card-documents.md` auf. Architekturkontext: `docs/ARCHITECTURE.md`.
+Status: implementiert (Branch `feat/document-history`, 2026-11-03), manueller UI-Test gemäß §7 noch offen. Baut auf `docs/specs/card-documents.md` auf. Architekturkontext: `docs/ARCHITECTURE.md`.
 
 ## 1. Ziel
 
@@ -59,7 +59,7 @@ Die Liste wird beim Öffnen des Dropdowns geladen (`readDir`), nicht beim Seiten
 
 ## 7. Verifikation
 
-Lint-Baseline (`corepack pnpm exec eslint .`, ohne `--fix`): 4 Fehler / 75 Warnungen auf `main` (2a4f820); keine neuen. `corepack pnpm generate` und `cargo build` (PowerShell) erfolgreich. Pure Helfer in `utils/documentHistory.ts` mit einem Node-Smoke-Test prüfen (Key stabil für `C:\A\b.md` und `c:/a/B.md`? Nein: Groß-/Kleinschreibung wird vom Laufwerksbuchstaben normalisiert, vom Rest nicht; dokumentieren, was `normalizeDocumentPath` tut) und Round-Trip `snapshotFileName`/`parseSnapshotFileName`.
+Lint-Baseline (`corepack pnpm exec eslint .`, ohne `--fix`): 4 Fehler / 75 Warnungen auf `main` (2a4f820); keine neuen. `corepack pnpm generate` und `cargo build` (PowerShell) erfolgreich. Pure Helfer in `utils/documentHistory.ts` mit einem Node-Smoke-Test prüfen (Key stabil für `C:\A\b.md` und `c:/a/B.md`? Ja: `normalizeDocumentPath` vereinheitlicht die Trenner, löst `.`/`..` auf und schreibt Windows-Pfade (Laufwerksbuchstabe oder UNC) komplett klein, beide ergeben `58396bec`; POSIX-Pfade bleiben case-sensitiv) und Round-Trip `snapshotFileName`/`parseSnapshotFileName`.
 
 Manueller UI-Test (`corepack pnpm tauri dev`):
 

@@ -117,6 +117,7 @@ Für Tailwind-Klassen-Farben (`bg-*-600`) wird pauschal heller Text angenommen (
 - `components/document/MarkdownPreview.vue`: `markdown-it` mit `html: false` per `v-html`; Link-Klicks werden abgefangen, `http(s)` über `openUrl`.
 - `utils/markdownLint.ts`: `markdownlint/sync` (Browser-Build über die `browser`-Condition) als CodeMirror-`LintSource`; Regeln Default minus MD013/MD033/MD034/MD041.
 - Speichern: Autosave 1 s nach der letzten Änderung, `Strg+S`, Flush in `onBeforeRouteLeave`; Dateien mit CRLF werden mit CRLF zurückgeschrieben (CodeMirror arbeitet intern mit `\n`).
+- Versionshistorie (Spec: `docs/specs/document-history.md`): `utils/documentHistory.ts` (reine Helfer: Key = FNV-1a des normalisierten Pfads, Snapshot-Dateinamen, Konstanten) und `composables/useDocumentHistory.ts` (fs-Zugriffe, Fehler nur geloggt). Ablage im App-Datenordner (`%APPDATA%\tech.trobonox.kanri\document-history\<key>\<zeitstempel>.md`), höchstens 20 je Dokument. `flushSave` sichert den Plattenstand vor dem Schreiben (erste Speicherung der Sitzung, danach alle 10 min); Dropdown „Verlauf" für manuelles Sichern und Wiederherstellen. `Dropdown.vue` reicht dafür optional `update:open` durch. Escape schließt ein offenes radix-Menü, ohne das Event als behandelt zu markieren; die Seite prüft deshalb den Öffnungszustand.
 - `.bg-accent-checked` (Switch-Farbe) ist in `pages/settings.vue` definiert und nur mit deren CSS-Chunk geladen; die Editor-Seite definiert die Regel deshalb selbst.
 
 ## 7. Startseite, Import/Export, Settings
@@ -124,7 +125,7 @@ Für Tailwind-Klassen-Farben (`bg-*-600`) wird pauschal heller Text angenommen (
 - `pages/index.vue`: Board-Liste mit `KanbanBoardPreview` (Mini-Rendering der Spalten/Karten inkl. `card.color`), Sortierung (`utils/sorting.ts`), NewBoard-Modal (`utils/exampleData.ts`), Pins.
 - `pages/import.vue`: Import von Kanri-Vollexport, einzelnem Board, KanbanElectron und Trello, jeweils via zod-Schema; Export eines Boards in `[id].vue` (`exportBoardToJson`, `JSON.stringify(board)`).
 - `pages/settings.vue`: Theme-Wahl (`CustomThemeEditor` mit `HexColorInput` + `<input type="color">`), Sprache, Verhalten, Standardordner für Markdown-Dokumente.
-- **Capabilities** (`src-tauri/capabilities/main.json`): für Dokumente zusätzlich `fs:allow-exists`, `opener:allow-open-path` (Scope `**/*.md`, `**/*.markdown`) und `http(s)://**` bei `opener:allow-open-url`. Dateizugriff auf per Dialog gewählte Pfade kommt über den Dialog-Scope, `tauri-plugin-persisted-scope` hält ihn über Neustarts.
+- **Capabilities** (`src-tauri/capabilities/main.json`): für Dokumente zusätzlich `fs:allow-exists`, `opener:allow-open-path` (Scope `**/*.md`, `**/*.markdown`) und `http(s)://**` bei `opener:allow-open-url`; für die Versionshistorie `fs:allow-appdata-read/write/meta-recursive`, `fs:allow-mkdir`, `fs:allow-read-dir`, `fs:allow-remove`, `fs:allow-stat`. Dateizugriff auf per Dialog gewählte Pfade kommt über den Dialog-Scope, `tauri-plugin-persisted-scope` hält ihn über Neustarts.
 
 ## 8. Toolchain & Qualitätssicherung
 
