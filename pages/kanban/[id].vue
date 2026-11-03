@@ -51,6 +51,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
       @setCardTasks="board.setCardTasks"
       @setCardTitle="board.setCardName"
       @setCardDueDate="board.setCardDueDate"
+      @setCardReminderLeadTime="board.setCardReminderLeadTime"
       @setCardTags="board.setCardTags"
       @addGlobalTag="board.addGlobalTag"
       @openTagEdit="editTagModalVisible = true"

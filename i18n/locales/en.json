@@ -93,7 +93,17 @@
       "preferencesMarkdownFolderClear": "Reset",
       "preferencesArchiveAfterDaysHeading": "Archive done cards after",
       "preferencesArchiveAfterDaysSubtext": "Cards in a board's done column move to the board archive after this many days. Archived cards are never deleted automatically.",
-      "preferencesArchiveAfterDaysUnit": "days"
+      "preferencesArchiveAfterDaysUnit": "days",
+      "preferencesReminderLeadTimeHeading": "Reminder before the due date",
+      "preferencesReminderLeadTimeSubtext": "Default for all cards, can be changed per card next to the due date. You are also reminded on the due date and once a day while a card is overdue.",
+      "preferencesReminderLeadTimeNone": "No early reminder",
+      "preferencesReminderLeadTime1d": "1 day before",
+      "preferencesReminderLeadTime3d": "3 days before",
+      "preferencesReminderLeadTime7d": "1 week before",
+      "preferencesStartPageHeading": "Start page",
+      "preferencesStartPageSubtext": "Page shown when the app starts.",
+      "preferencesStartPageBoards": "Board overview",
+      "preferencesStartPageToday": "Today view"
     },
     "import": {
       "importExportHeading": "Import & Export",
@@ -182,6 +192,25 @@
       "deleteAction": "Delete permanently",
       "deleteConfirmationTitle": "Delete card permanently",
       "deleteConfirmation": "Permanently delete the archived card '{cardName}'? This action is irreversible."
+    },
+    "today": {
+      "title": "Today",
+      "subtitle": "Open cards with a due date across all boards.",
+      "emptyState": "Nothing due.",
+      "sectionOverdue": "Overdue",
+      "sectionToday": "Today",
+      "sectionNext7": "Next 7 days",
+      "sectionLater": "Later",
+      "location": "{boardName} › {columnName}",
+      "relativeToday": "today",
+      "relativeFuture": "tomorrow | in {count} days",
+      "relativePast": "yesterday | {count} days ago",
+      "markCompleted": "Mark due date as completed",
+      "moreActions": "Reschedule",
+      "postponeDay": "+1 day",
+      "postponeWeek": "+1 week",
+      "pickDate": "Pick date…",
+      "applyDate": "Apply"
     }
   },
   "components": {
@@ -201,7 +230,9 @@
       "createNewBoard": "Create a new board",
       "importExport": "Import/Export",
       "help": "Help",
-      "settings": "Settings"
+      "settings": "Settings",
+      "today": "Today",
+      "todayWithCount": "Today: {count} card overdue or due today | Today: {count} cards overdue or due today"
     },
     "kanban": {
       "column": {
@@ -313,7 +344,13 @@
       "linksCopy": "Copy URL",
       "linksEdit": "Edit",
       "linksRemove": "Remove",
-      "linksOpenFailed": "The link could not be opened."
+      "linksOpenFailed": "The link could not be opened.",
+      "reminderLabel": "Reminder",
+      "reminderDefault": "Reminder: default",
+      "reminderNone": "Reminder: none",
+      "reminder1d": "Reminder: 1 day before",
+      "reminder3d": "Reminder: 3 days before",
+      "reminder7d": "Reminder: 1 week before"
     },
     "help": {
       "title": "Help & Resources",
@@ -360,5 +397,11 @@
       "backgroundColorTitle": "Column background",
       "done": "Done"
     }
+  },
+  "reminders": {
+    "body": "{stage} · {boardName} › {columnName}",
+    "stageLead": "Due tomorrow | Due in {count} days",
+    "stageDue": "Due today",
+    "stageOverdue": "Overdue since yesterday | Overdue for {count} days"
   }
 }

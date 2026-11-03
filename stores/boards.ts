@@ -21,11 +21,21 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import { defineStore } from "pinia";
 import { toRaw } from "vue";
-import type { Board, Column, Card, CardDocument, CardLink, Tag } from "@/types/kanban-types";
+import type {
+  Board,
+  Column,
+  Card,
+  CardDocument,
+  CardLink,
+  ReminderLeadTime,
+  ReminderStage,
+  Tag,
+} from "@/types/kanban-types";
 import { useTauriStore } from "@/stores/tauriStore";
 import { generateUniqueID } from "@/utils/idGenerator";
 import { normalizeDocumentPath } from "@/utils/documentPaths";
 import { hasValidCompletedAt, isCompletionExpired, isSeparatorCard, resolveRestoreColumn } from "@/utils/cardArchive";
+import { parseDueDate } from "@/utils/reminders";
 
 type Pin = { id: string; title: string; pinIcon?: string; pinIconText?: string };
 
@@ -421,6 +431,10 @@ export const useBoardsStore = defineStore("boards", {
 
       copy.id = generateUniqueID();
       copy.name = `${copy.name} (copy)`;
+      // one origin per card (the import matches action points by source); the copy is a new
+      // card that has not been reminded yet
+      delete copy.source;
+      delete copy.remindersSent;
       col.cards.push(copy);
       b.lastEdited = new Date();
     },
@@ -558,6 +572,54 @@ export const useBoardsStore = defineStore("boards", {
       if (!card) return;
       mut(card);
       b.lastEdited = new Date();
+    },
+
+    // Due dates and reminders (spec docs/specs/reminders.md)
+    // Sets the due date; omitted flags stay unchanged. A changed due date clears remindersSent,
+    // so all reminder stages are sent again for the new date.
+    setCardDueDate(
+      boardId: string,
+      columnId: string,
+      cardId: string,
+      dueDate: Date | null,
+      isCounterRelative?: boolean,
+      isCompleted?: boolean
+    ) {
+      const found = this._findCard(boardId, columnId, cardId);
+      if (!found) return;
+      const { board: b, card } = found;
+
+      const previous = parseDueDate(card.dueDate)?.getTime() ?? null;
+      const next = parseDueDate(dueDate)?.getTime() ?? null;
+      card.dueDate = dueDate;
+      if (isCounterRelative !== undefined) card.isDueDateCounterRelative = isCounterRelative;
+      if (isCompleted !== undefined) card.isDueDateCompleted = isCompleted;
+      if (previous !== next) delete card.remindersSent;
+      b.lastEdited = new Date();
+    },
+    setCardDueDateCompleted(boardId: string, columnId: string, cardId: string, completed: boolean) {
+      const found = this._findCard(boardId, columnId, cardId);
+      if (!found) return;
+      found.card.isDueDateCompleted = completed;
+      found.board.lastEdited = new Date();
+    },
+    // null = use the global setting
+    setCardReminderLeadTime(boardId: string, columnId: string, cardId: string, leadTime: ReminderLeadTime | null) {
+      const found = this._findCard(boardId, columnId, cardId);
+      if (!found) return;
+      if (leadTime === null) {
+        delete found.card.reminderLeadTime;
+      } else {
+        found.card.reminderLeadTime = leadTime;
+      }
+      found.board.lastEdited = new Date();
+    },
+    // bookkeeping of the reminder check, not a user edit: lastEdited stays unchanged
+    markReminderSent(boardId: string, columnId: string, cardId: string, stage: ReminderStage, isoDate: string) {
+      const found = this._findCard(boardId, columnId, cardId);
+      if (!found) return;
+      if (!found.card.remindersSent) found.card.remindersSent = {};
+      found.card.remindersSent[stage] = isoDate;
     },
     reorderCards(boardId: string, columnId: string, nextCards: Card[]) {
       const b = this.boardById(boardId);

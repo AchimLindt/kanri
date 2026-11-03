@@ -62,6 +62,22 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
         </template>
       </Tooltip>
 
+      <Tooltip :label="todayTooltip">
+        <template #trigger>
+          <nuxt-link to="/today">
+            <div class="bg-elevation-2-hover transition-button relative rounded-md p-2">
+              <CalendarDaysIcon class="size-7" />
+              <span
+                v-if="reminderBadgeCount > 0"
+                class="pointer-events-none absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-600 px-1 text-xs font-semibold leading-none text-white"
+              >
+                {{ reminderBadgeCount > 99 ? "99+" : reminderBadgeCount }}
+              </span>
+            </div>
+          </nuxt-link>
+        </template>
+      </Tooltip>
+
       <Tooltip v-if="showSidebarBackArrow" :label="$t('components.sidebar.back')">
         <template #trigger>
           <button
@@ -131,8 +147,18 @@ import {
   PhMagnifyingGlass,
   PhQuestion,
 } from "@phosphor-icons/vue";
+import { CalendarDaysIcon } from "@heroicons/vue/24/outline";
 
 const router = useRouter();
+const { t } = useI18n();
+
+// overdue + due today, open cards only (spec docs/specs/reminders.md)
+const reminderBadgeCount = useReminderBadgeCount();
+const todayTooltip = computed(() =>
+  reminderBadgeCount.value > 0
+    ? t("components.sidebar.todayWithCount", { count: reminderBadgeCount.value }, reminderBadgeCount.value)
+    : t("components.sidebar.today")
+);
 
 const { showSidebarAddButton, showSidebarBackArrow, showSidebarHelpModal } = storeToRefs(useLayoutStore());
 

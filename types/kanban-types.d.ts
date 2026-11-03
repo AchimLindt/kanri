@@ -83,6 +83,25 @@ export declare interface Card {
   documents?: Array<CardDocument> | null;
   links?: Array<CardLink> | null;
   completedAt?: string; // ISO timestamp, set while the card is in the board's done column
+  reminderLeadTime?: ReminderLeadTime; // overrides the global setting, missing = global setting
+  remindersSent?: RemindersSent; // cleared whenever the due date changes
+  source?: CardSource; // origin of the card, set outside the app (meeting summary import)
+}
+
+export declare type ReminderLeadTime = "none" | "1d" | "3d" | "7d";
+
+export declare type ReminderStage = "lead" | "due" | "overdue";
+
+// ISO timestamp of the last notification per stage
+export declare interface RemindersSent {
+  lead?: string;
+  due?: string;
+  overdue?: string;
+}
+
+export declare interface CardSource {
+  path: string; // Markdown file the card was created from
+  row: number; // row of the action point in that file
 }
 
 export declare interface ArchivedCard {

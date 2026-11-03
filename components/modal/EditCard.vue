@@ -329,6 +329,35 @@ limitations under the License.
                 </div>
               </template>
             </VDatePicker>
+            <label
+              v-if="dueDate"
+              class="mt-1 flex flex-row items-center gap-2"
+            >
+              <PhBell class="size-5" />
+              <span class="sr-only">{{ $t("modals.editCard.reminderLabel") }}</span>
+              <select
+                :value="reminderLeadTime"
+                class="bg-elevation-2 bg-elevation-3-hover cursor-pointer rounded-md px-2 py-1"
+                :title="$t('modals.editCard.reminderLabel')"
+                @change="updateReminderLeadTime"
+              >
+                <option value="default">
+                  {{ $t("modals.editCard.reminderDefault") }}
+                </option>
+                <option value="none">
+                  {{ $t("modals.editCard.reminderNone") }}
+                </option>
+                <option value="1d">
+                  {{ $t("modals.editCard.reminder1d") }}
+                </option>
+                <option value="3d">
+                  {{ $t("modals.editCard.reminder3d") }}
+                </option>
+                <option value="7d">
+                  {{ $t("modals.editCard.reminder7d") }}
+                </option>
+              </select>
+            </label>
           </div>
         </div>
 
@@ -714,6 +743,7 @@ import type {
   Card,
   CardDocument,
   CardLink,
+  ReminderLeadTime,
   Task,
   Tag,
 } from "@/types/kanban-types";
@@ -721,9 +751,11 @@ import type { Ref } from "vue";
 
 import emitter from "@/utils/emitter";
 import { generateUniqueID } from "@/utils/idGenerator";
+import { isReminderLeadTime } from "@/utils/reminders";
 import { SwatchIcon } from "@heroicons/vue/24/outline";
 import { CheckIcon, PlusIcon, XMarkIcon } from "@heroicons/vue/24/solid";
 import {
+  PhBell,
   PhCalendar,
   PhCheck,
   PhFileText,
@@ -788,6 +820,12 @@ const emit = defineEmits<{
     dueDate: Date | null,
     isCounterRelative: boolean,
     isCompleted: boolean
+  ): void;
+  (
+    e: "setCardReminderLeadTime",
+    columnID: string,
+    cardId: string | undefined,
+    leadTime: ReminderLeadTime | null
   ): void;
   (
     e: "setCardTags",
@@ -871,6 +909,8 @@ const dueDate: Ref<Date | null> = ref(null);
 const isDueDateCounterRelative = ref(false);
 const settingsStore = useSettingsStore();
 const isDueDateCompleted = ref(false);
+// "default" = no card setting, the global reminder lead time applies
+const reminderLeadTime = ref<ReminderLeadTime | "default">("default");
 
 const tag = ref("");
 const tags: Ref<Array<Tag>> = ref([]);
@@ -1092,6 +1132,13 @@ const updateDueDate = () => {
     isDueDateCounterRelative.value,
     isDueDateCompleted.value
   );
+};
+
+const updateReminderLeadTime = (event: Event) => {
+  const value = (event.target as HTMLSelectElement).value;
+  const leadTime = isReminderLeadTime(value) ? value : null;
+  reminderLeadTime.value = leadTime ?? "default";
+  emit("setCardReminderLeadTime", columnID.value, props.card?.id, leadTime);
 };
 
 const updateDescription = () => {
@@ -1422,6 +1469,9 @@ watch(props, (newVal) => {
         ? newVal.card.isDueDateCounterRelative
         : settingsStore.defaultRelativeDueDatesEnabled;
     isDueDateCompleted.value = newVal.card.isDueDateCompleted || false;
+    reminderLeadTime.value = isReminderLeadTime(newVal.card.reminderLeadTime)
+      ? newVal.card.reminderLeadTime
+      : "default";
 
     tags.value = newVal.card.tags || [];
     tag.value = "";

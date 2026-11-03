@@ -21,6 +21,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import { disable, enable, isEnabled } from "@tauri-apps/plugin-autostart";
 import { DEFAULT_ARCHIVE_AFTER_DAYS, normalizeArchiveAfterDays } from "@/utils/cardArchive";
+import type { ReminderLeadTime } from "@/types/kanban-types";
+import {
+  DEFAULT_REMINDER_LEAD_TIME,
+  DEFAULT_START_PAGE,
+  normalizeReminderLeadTime,
+  normalizeStartPage,
+  normalizeTodaySectionsCollapsed,
+  type StartPage,
+  type TodaySection,
+} from "@/utils/reminders";
 
 export const useSettingsStore = defineStore("settings", {
   state: () => {
@@ -54,6 +64,14 @@ export const useSettingsStore = defineStore("settings", {
     // epoch milliseconds of the last automatic card archive run, 0 = never
     const cardArchiveLastRun = ref(0);
 
+    /* Reminders and today view */
+    const reminderLeadTime = ref<ReminderLeadTime>(DEFAULT_REMINDER_LEAD_TIME);
+    const startPage = ref<StartPage>(DEFAULT_START_PAGE);
+    const todaySectionsCollapsed = ref<Record<string, boolean>>({});
+
+    // true once loadSettings() has finished (not persisted), e.g. for the start page redirect
+    const loaded = ref(false);
+
     return {
   locale,
   animationsEnabled,
@@ -73,6 +91,11 @@ export const useSettingsStore = defineStore("settings", {
 
   archiveAfterDays,
   cardArchiveLastRun,
+
+  reminderLeadTime,
+  startPage,
+  todaySectionsCollapsed,
+  loaded,
 
   boardSortingOption,
   reverseSorting,
@@ -102,6 +125,9 @@ export const useSettingsStore = defineStore("settings", {
       const cardArchiveLastRunRaw: unknown = await store.get("cardArchiveLastRun");
       const cardArchiveLastRunSaved: number =
         typeof cardArchiveLastRunRaw === "number" ? cardArchiveLastRunRaw : 0;
+      const reminderLeadTimeSaved = normalizeReminderLeadTime(await store.get("reminderLeadTime"));
+      const startPageSaved = normalizeStartPage(await store.get("startPage"));
+      const todaySectionsCollapsedSaved = normalizeTodaySectionsCollapsed(await store.get("todaySectionsCollapsed"));
 
       const boardSortingOptionSaved: string = (await store.get("boardSortingOption")) ?? "createdAt";
       const reverseSortingSavedRaw: unknown = await store.get("reverseSorting");
@@ -122,6 +148,9 @@ export const useSettingsStore = defineStore("settings", {
       this.searchDocumentContentsEnabled = searchDocumentContentsEnabledSaved;
       this.archiveAfterDays = archiveAfterDaysSaved;
       this.cardArchiveLastRun = cardArchiveLastRunSaved;
+      this.reminderLeadTime = reminderLeadTimeSaved;
+      this.startPage = startPageSaved;
+      this.todaySectionsCollapsed = todaySectionsCollapsedSaved;
       this.boardSortingOption =
         boardSortingOptionSaved === "alphabetical" ||
         boardSortingOptionSaved === "lastEdited" ||
@@ -129,6 +158,7 @@ export const useSettingsStore = defineStore("settings", {
           ? boardSortingOptionSaved
           : "createdAt";
       this.reverseSorting = reverseSortingSaved;
+      this.loaded = true;
     },
 
     async loadBoardSortingOptions() {
@@ -227,6 +257,23 @@ export const useSettingsStore = defineStore("settings", {
     async setCardArchiveLastRun(value: number) {
       this.cardArchiveLastRun = value;
       await useTauriStore().store.set("cardArchiveLastRun", value);
+    },
+
+    async setReminderLeadTime(value: ReminderLeadTime) {
+      const leadTime = normalizeReminderLeadTime(value);
+      this.reminderLeadTime = leadTime;
+      await useTauriStore().store.set("reminderLeadTime", leadTime);
+    },
+
+    async setStartPage(value: StartPage) {
+      const page = normalizeStartPage(value);
+      this.startPage = page;
+      await useTauriStore().store.set("startPage", page);
+    },
+
+    async setTodaySectionCollapsed(section: TodaySection, collapsed: boolean) {
+      this.todaySectionsCollapsed = { ...this.todaySectionsCollapsed, [section]: collapsed };
+      await useTauriStore().store.set("todaySectionsCollapsed", this.todaySectionsCollapsed);
     },
 
     async setBoardSortingOption(option: "alphabetical" | "lastEdited" | "createdAt") {

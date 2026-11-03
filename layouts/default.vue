@@ -38,6 +38,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
 <script setup>
 import { hslToHex, rgbToHsl } from "@/utils/colorUtils";
 import { dark } from "@/utils/themes";
+import { REMINDER_CHECK_INTERVAL_MS } from "@/utils/reminders";
 
 const { setLocale, setLocaleCookie } = useI18n();
 
@@ -49,6 +50,10 @@ const boards = useBoardsStore();
 const systemTheme = useDark();
 
 const mounted = ref(false);
+
+// due date reminders (spec docs/specs/reminders.md); the check needs the i18n context of this setup
+const { runReminderCheck } = useReminders();
+let reminderTimer = null;
 const { colors: savedColors, autoThemeEnabled } = toRefs(theme)
 
 onMounted(async () => {
@@ -69,6 +74,19 @@ onMounted(async () => {
 
   // archives cards that have been in a done column for too long, at most once a day, errors are logged inside
   runScheduledCardArchive();
+
+  // reminders right away, then every minute (also while the window is hidden); the same loop
+  // triggers the archive run, which skips itself until 24 h have passed since the last run
+  runReminderCheck();
+  reminderTimer = setInterval(() => {
+    runReminderCheck();
+    runScheduledCardArchive();
+  }, REMINDER_CHECK_INTERVAL_MS);
+});
+
+onBeforeUnmount(() => {
+  if (reminderTimer) clearInterval(reminderTimer);
+  reminderTimer = null;
 });
 
 watch(systemTheme, async (newValue) => {

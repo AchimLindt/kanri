@@ -279,6 +279,58 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
           <span>{{ $t("pages.settings.preferencesArchiveAfterDaysUnit") }}</span>
         </label>
       </div>
+
+      <div class="mt-4 flex w-[48rem] flex-row items-start justify-between gap-4">
+        <div>
+          <h3 class="text-lg">
+            {{ $t("pages.settings.preferencesReminderLeadTimeHeading") }}
+          </h3>
+          <span class="text-dim-2">
+            {{ $t("pages.settings.preferencesReminderLeadTimeSubtext") }}
+          </span>
+        </div>
+        <select
+          :value="globalSettingsStore.reminderLeadTime"
+          class="bg-elevation-2 border-elevation-3 shrink-0 cursor-pointer rounded-md border px-2 py-1"
+          @change="onReminderLeadTimeChanged"
+        >
+          <option value="none">
+            {{ $t("pages.settings.preferencesReminderLeadTimeNone") }}
+          </option>
+          <option value="1d">
+            {{ $t("pages.settings.preferencesReminderLeadTime1d") }}
+          </option>
+          <option value="3d">
+            {{ $t("pages.settings.preferencesReminderLeadTime3d") }}
+          </option>
+          <option value="7d">
+            {{ $t("pages.settings.preferencesReminderLeadTime7d") }}
+          </option>
+        </select>
+      </div>
+
+      <div class="mt-4 flex w-[48rem] flex-row items-start justify-between gap-4">
+        <div>
+          <h3 class="text-lg">
+            {{ $t("pages.settings.preferencesStartPageHeading") }}
+          </h3>
+          <span class="text-dim-2">
+            {{ $t("pages.settings.preferencesStartPageSubtext") }}
+          </span>
+        </div>
+        <select
+          :value="globalSettingsStore.startPage"
+          class="bg-elevation-2 border-elevation-3 shrink-0 cursor-pointer rounded-md border px-2 py-1"
+          @change="onStartPageChanged"
+        >
+          <option value="boards">
+            {{ $t("pages.settings.preferencesStartPageBoards") }}
+          </option>
+          <option value="today">
+            {{ $t("pages.settings.preferencesStartPageToday") }}
+          </option>
+        </select>
+      </div>
     </section>
 
     <section id="miscellaneous-settings">
@@ -408,6 +460,7 @@ import { message, open, save } from "@tauri-apps/plugin-dialog";
 import { readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
 
 import { useI18n } from "vue-i18n";
+import { isReminderLeadTime, normalizeStartPage } from "@/utils/reminders";
 
 const router = useRouter();
 
@@ -468,6 +521,17 @@ const onArchiveAfterDaysChanged = async (event: Event) => {
   }
   await globalSettingsStore.setArchiveAfterDays(value);
   input.value = String(globalSettingsStore.archiveAfterDays);
+};
+
+const onReminderLeadTimeChanged = async (event: Event) => {
+  const value = (event.target as HTMLSelectElement).value;
+  if (!isReminderLeadTime(value)) return;
+  await globalSettingsStore.setReminderLeadTime(value);
+};
+
+const onStartPageChanged = async (event: Event) => {
+  const value = (event.target as HTMLSelectElement).value;
+  await globalSettingsStore.setStartPage(normalizeStartPage(value));
 };
 
 const chooseMarkdownDocumentsFolder = async () => {

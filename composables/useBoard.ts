@@ -21,7 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import { computed, toValue } from "vue";
 import type { Ref } from "vue";
-import type { Board, Card, Column, Tag } from "@/types/kanban-types";
+import type { Board, Card, Column, ReminderLeadTime, Tag } from "@/types/kanban-types";
 import { useBoardsStore } from "@/stores/boards";
 
 export function useBoard(id: string | Ref<string>) {
@@ -223,11 +223,19 @@ export function useBoard(id: string | Ref<string>) {
     if (!board.value) return;
     if (!cardId) return;
 
-    mutateCard(columnId, cardId, (card) => {
-      card.dueDate = dueDate;
-      card.isDueDateCounterRelative = isCounterRelative;
-      card.isDueDateCompleted = isCompleted;
-    });
+    // store action: a changed due date also clears the sent reminders
+    store.setCardDueDate(board.value.id, columnId, cardId, dueDate, isCounterRelative, isCompleted);
+  };
+
+  // null = use the global reminder lead time
+  const setCardReminderLeadTime = (
+    columnId: string,
+    cardId: string | undefined,
+    leadTime: ReminderLeadTime | null
+  ) => {
+    if (!board.value) return;
+    if (!cardId) return;
+    store.setCardReminderLeadTime(board.value.id, columnId, cardId, leadTime);
   };
 
   const setCardTags = (
@@ -380,6 +388,7 @@ export function useBoard(id: string | Ref<string>) {
     setCardColor,
     setCardTasks,
     setCardDueDate,
+    setCardReminderLeadTime,
     setCardTags,
 
     // card documents

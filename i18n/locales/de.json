@@ -87,7 +87,17 @@
       "preferencesMarkdownFolderClear": "Zurücksetzen",
       "preferencesArchiveAfterDaysHeading": "Erledigte Karten archivieren nach",
       "preferencesArchiveAfterDaysSubtext": "Karten in der Erledigt-Spalte eines Boards wandern nach so vielen Tagen ins Archiv des Boards. Archivierte Karten werden nie automatisch gelöscht.",
-      "preferencesArchiveAfterDaysUnit": "Tagen"
+      "preferencesArchiveAfterDaysUnit": "Tagen",
+      "preferencesReminderLeadTimeHeading": "Erinnerung vor der Fälligkeit",
+      "preferencesReminderLeadTimeSubtext": "Standard für alle Karten, je Karte neben der Fälligkeit änderbar. Zusätzlich wird am Fälligkeitstag und einmal täglich bei überfälligen Karten erinnert.",
+      "preferencesReminderLeadTimeNone": "Keine Vorab-Erinnerung",
+      "preferencesReminderLeadTime1d": "1 Tag vorher",
+      "preferencesReminderLeadTime3d": "3 Tage vorher",
+      "preferencesReminderLeadTime7d": "1 Woche vorher",
+      "preferencesStartPageHeading": "Startseite",
+      "preferencesStartPageSubtext": "Seite, die beim Start der App angezeigt wird.",
+      "preferencesStartPageBoards": "Board-Übersicht",
+      "preferencesStartPageToday": "Tagesansicht"
     },
     "import": {
       "importExportHeading": "Import & Export",
@@ -176,6 +186,25 @@
       "deleteAction": "Endgültig löschen",
       "deleteConfirmationTitle": "Karte endgültig löschen",
       "deleteConfirmation": "Die archivierte Karte '{cardName}' endgültig löschen? Diese Aktion ist irreversibel."
+    },
+    "today": {
+      "title": "Heute",
+      "subtitle": "Offene Karten mit Fälligkeit aus allen Boards.",
+      "emptyState": "Nichts fällig.",
+      "sectionOverdue": "Überfällig",
+      "sectionToday": "Heute",
+      "sectionNext7": "Nächste 7 Tage",
+      "sectionLater": "Später",
+      "location": "{boardName} › {columnName}",
+      "relativeToday": "heute",
+      "relativeFuture": "morgen | in {count} Tagen",
+      "relativePast": "gestern | vor {count} Tagen",
+      "markCompleted": "Fälligkeit erledigt",
+      "moreActions": "Fälligkeit verschieben",
+      "postponeDay": "+1 Tag",
+      "postponeWeek": "+1 Woche",
+      "pickDate": "Datum wählen…",
+      "applyDate": "Übernehmen"
     }
   },
   "components": {
@@ -195,7 +224,9 @@
       "createNewBoard": "Neues Board erstellen",
       "importExport": "Importieren/Exportieren",
       "help": "Hilfe",
-      "settings": "Einstellungen"
+      "settings": "Einstellungen",
+      "today": "Heute",
+      "todayWithCount": "Heute: {count} Karte überfällig oder heute fällig | Heute: {count} Karten überfällig oder heute fällig"
     },
     "kanban": {
       "column": {
@@ -304,7 +335,13 @@
       "linksCopy": "URL kopieren",
       "linksEdit": "Bearbeiten",
       "linksRemove": "Entfernen",
-      "linksOpenFailed": "Der Link konnte nicht geöffnet werden."
+      "linksOpenFailed": "Der Link konnte nicht geöffnet werden.",
+      "reminderLabel": "Erinnerung",
+      "reminderDefault": "Erinnerung: Standard",
+      "reminderNone": "Erinnerung: keine",
+      "reminder1d": "Erinnerung: 1 Tag vorher",
+      "reminder3d": "Erinnerung: 3 Tage vorher",
+      "reminder7d": "Erinnerung: 1 Woche vorher"
     },
     "help": {
       "title": "Hilfe & Ressourcen",
@@ -351,5 +388,11 @@
       "backgroundColorTitle": "Spaltenhintergrund",
       "done": "Fertig"
     }
+  },
+  "reminders": {
+    "body": "{stage} · {boardName} › {columnName}",
+    "stageLead": "Morgen fällig | Fällig in {count} Tagen",
+    "stageDue": "Heute fällig",
+    "stageOverdue": "Seit gestern überfällig | Seit {count} Tagen überfällig"
   }
 }

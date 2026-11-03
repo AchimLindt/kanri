@@ -1,4 +1,4 @@
-<!-- SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>, gitoak, PwshLab -->
+<!-- SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>, gitoak, PwshLab, AchimLindt -->
 <!-- -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!--
@@ -299,6 +299,19 @@ const settingsStore = useSettingsStore();
 
 const { boards } = storeToRefs(boardsStore);
 const { boardSortingOption, reverseSorting } = storeToRefs(settingsStore);
+
+// start page setting (spec docs/specs/reminders.md): only the first visit of "/" in a session
+// redirects to the today view, later navigation to the board overview stays here
+const router = useRouter();
+watch(
+  () => settingsStore.loaded,
+  (loaded) => {
+    if (loaded && consumeFirstStartPageVisit() && settingsStore.startPage === "today") {
+      router.replace("/today");
+    }
+  },
+  { immediate: true }
+);
 
 const loading = ref(true);
 const editSortWarning = ref(false);

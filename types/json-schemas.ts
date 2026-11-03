@@ -61,6 +61,15 @@ const kanriCardSchema = z.object({
   isDueDateCounterRelative: z.boolean().optional(),
   isDueDateCompleted: z.boolean().optional(),
   completedAt: z.string().optional(),
+  reminderLeadTime: z.enum(["none", "1d", "3d", "7d"]).optional(),
+  remindersSent: z
+    .object({
+      lead: z.string().optional(),
+      due: z.string().optional(),
+      overdue: z.string().optional(),
+    })
+    .optional(),
+  source: z.object({ path: z.string(), row: z.number() }).optional(),
   tags: z.array(kanriTagSchema).optional().nullable(),
   documents: z
     .array(z.object({ id: z.string().optional(), path: z.string() }))
