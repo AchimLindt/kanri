@@ -54,6 +54,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
           />
         </span>
         <span
+          v-if="isQuickCaptureInbox"
+          class="flex shrink-0 items-center"
+          :title="$t('components.kanban.column.quickCaptureInboxTooltip')"
+        >
+          <InboxArrowDownIcon
+            :class="[columnTextClass || 'text-accent', doneColumnIconSizeClass]"
+          />
+        </span>
+        <span
           v-if="defaultCardColor"
           :class="[
             'border-elevation-3 shrink-0 rounded-full border',
@@ -136,6 +145,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
                   isDoneColumn
                     ? $t('components.kanban.column.unmarkDoneColumnAction')
                     : $t('components.kanban.column.markDoneColumnAction')
+                }}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              class="bg-elevation-2-hover flex w-full cursor-pointer items-center gap-2 rounded-md px-4 py-1.5 pr-6 text-left"
+              @click="toggleQuickCaptureInbox"
+            >
+                {{
+                  isQuickCaptureInbox
+                    ? $t('components.kanban.column.unmarkQuickCaptureInboxAction')
+                    : $t('components.kanban.column.markQuickCaptureInboxAction')
                 }}
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -295,6 +314,7 @@ import {
   ChevronUpIcon,
   ChevronDownIcon,
   CheckCircleIcon,
+  InboxArrowDownIcon,
 } from "@heroicons/vue/24/solid";
 //@ts-expect-error, sadly this library does not have ts typings
 import { Container, Draggable } from "vue3-smooth-dnd";
@@ -353,6 +373,22 @@ const emit = defineEmits<{
 }>();
 
 const settings = useSettingsStore();
+const route = useRoute();
+
+// the quick capture inbox is a global setting (board + column), not a column property
+const isQuickCaptureInbox = computed(
+  () =>
+    settings.quickCaptureBoardId === String(route.params.id) &&
+    settings.quickCaptureColumnId === props.id
+);
+
+const toggleQuickCaptureInbox = () => {
+  if (isQuickCaptureInbox.value) {
+    settings.setQuickCaptureInbox("", "");
+  } else {
+    settings.setQuickCaptureInbox(String(route.params.id), props.id);
+  }
+};
 
 const titleInput: Ref<HTMLInputElement | null> = ref(null);
 const newCardInput: Ref<HTMLInputElement | null> = ref(null);
