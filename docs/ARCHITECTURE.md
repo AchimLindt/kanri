@@ -34,7 +34,7 @@ assets/css/           global.css, scrollbars.css (Theme-Klassen liegen in layout
 ```
 Board { id, title, columns: Column[], background?: {src, blur, brightness}|null,
         globalTags?: Tag[]|null, lastEdited?, createdAt? }
-Column { id, title, cards: Card[] }
+Column { id, title, cards: Card[], defaultCardColor?, backgroundColor?, collapsed? }
 Card { id?, name, description? (HTML aus tiptap), color?, dueDate?, isDueDateCounterRelative?,
        isDueDateCompleted?, tasks?: Task[], tags?: Tag[]|null }
 Tag { id?, text, color?, style? }            Task { id?, finished, name }
@@ -43,6 +43,7 @@ Tag { id?, text, color?, style? }            Task { id?, finished, name }
 - **IDs**: `generateUniqueID()` (cuid2). `Card.id` ist historisch optional; `Column.vue` ergänzt fehlende IDs beim Mount.
 - **`Card.color`** ist ein String in einem von zwei Formaten: Tailwind-Klasse (`bg-pink-600`, `bg-elevation-2` = Standard) **oder** Hex (`#rrggbb`). Leerer String/undefined = Standard. Konsumenten unterscheiden per `startsWith("#")` (Klasse → `:class`, Hex → `:style`). Dieses Muster für neue Farbfelder beibehalten.
 - **Sondername** `---`: Karte wird als Trennlinie gerendert.
+- **`Column.collapsed`**: `true` = Spalte eingeklappt (nur Header sichtbar), fehlend/`undefined` = ausgeklappt. Gesetzt über `setColumnCollapsed`, persistiert per Auto-Save (Spec: `docs/specs/column-collapse.md`).
 - **zod-Schemas** (`types/json-schemas.ts`) spiegeln die Typen und werden nur beim **Import** (`pages/import.vue`) angewendet. zod strippt unbekannte Keys → neue Felder müssen dort ergänzt werden, sonst gehen sie beim Re-Import verloren. `kanriJsonSchema` = komplettes `.kanri.dat`.
 - Der Tauri-Store speichert die Objekte wie sie sind; neue optionale Felder sind damit automatisch rückwärtskompatibel (alte Daten haben `undefined`).
 
@@ -83,7 +84,7 @@ pages/kanban/[id].vue                       Seite: Header (Titel, Buttons, Dropd
 ```
 
 - **Datenfluss**: Props runter, Events hoch. Column/Card emittieren fachliche Events (`addCard`, `reorderCards`, `setCardName`, …), die Seite bindet sie direkt an `useBoard`-Funktionen (`@addCard="board.createCard"`). Column reicht Card-Events mit `props.id` angereichert weiter. Neue Spalten-/Kartenaktionen folgen diesem Weg: Event in Card/Column definieren → in `[id].vue` an `board.xyz` binden → Action in `useBoard` + Store.
-- **Column.vue** hält eine lokale Kopie `cards = ref(props.cardsList)` mit Watcher (TODO im Code: entfernen). `provide('columnId')` für `KanbanMoveTo`. Sehr viele `computed` Zoom-Klassen (`columnSizeClass`, …) – Muster beibehalten, wenn Elemente skalieren sollen.
+- **Column.vue** hält eine lokale Kopie `cards = ref(props.cardsList)` mit Watcher (TODO im Code: entfernen). `provide('columnId')` für `KanbanMoveTo`. Prop `collapsed`: Chevron-Button im Header bzw. Dropdown-Eintrag emittiert `setColumnCollapsed`; eingeklappt werden Karten-Container und „Add card" nicht gerendert, der „Add card"-Modus klappt die Spalte vorher aus. Sehr viele `computed` Zoom-Klassen (`columnSizeClass`, …) – Muster beibehalten, wenn Elemente skalieren sollen.
 - **Card.vue** spiegelt `props.card` in lokale Refs (deep watch) und berechnet `cardBackgroundColor` (`card.color || "bg-elevation-2"`), `cardTextColor`/`cardTextColorDim` via `getContrast()` aus `utils/colorUtils` (liefert `text-gray-50` oder eine dunkle Textklasse). Kontextmenü (radix `ContextMenu*`) mit Edit/Move to/Duplicate/Delete.
 - **EditCard.vue**: Farbwahl = 9 feste Swatches (`bg-pink/red/orange/yellow/green/teal/blue/purple-600`, `bg-elevation-2`) + Custom (`<input type="color">` + `HexColorInput`). Diese Klassennamen stehen wörtlich im Template, damit Tailwind-JIT sie generiert; neue Farbklassen müssen irgendwo wörtlich im Quelltext vorkommen.
 - **Modals**: `components/Modal.vue` (fixed overlay, Esc schließt, Enter → `enterKeyPressed`). Die Seite rendert alle Modals dauerhaft mit `v-show`; Inhalt wird über Props/Emitter befüllt. Confirm-Dialoge nutzen `useConfirmDialog` (vueuse) + `emitter.emit("openModalWithCustomDescription")`.
