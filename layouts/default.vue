@@ -63,6 +63,9 @@ onMounted(async () => {
   setLocaleCookie(settings.locale);
 
   mounted.value = true;
+
+  // fire and forget: removes orphaned/old document versions at most once a day, errors are logged inside
+  runScheduledDocumentHistoryCleanup();
 });
 
 watch(systemTheme, async (newValue) => {

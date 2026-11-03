@@ -42,6 +42,8 @@ export const useSettingsStore = defineStore("settings", {
     /* Card documents (Markdown files linked to cards) */
     const markdownDocumentsFolder = ref("");
     const markdownPreviewEnabled = ref(true);
+    // epoch milliseconds of the last automatic document history cleanup, 0 = never
+    const documentHistoryLastCleanup = ref(0);
 
     return {
   locale,
@@ -56,6 +58,7 @@ export const useSettingsStore = defineStore("settings", {
 
   markdownDocumentsFolder,
   markdownPreviewEnabled,
+  documentHistoryLastCleanup,
 
   boardSortingOption,
   reverseSorting,
@@ -77,6 +80,9 @@ export const useSettingsStore = defineStore("settings", {
 
       const markdownDocumentsFolderSaved: string = await store.get("markdownDocumentsFolder") ?? "";
       const markdownPreviewEnabledSaved: boolean = await store.get("markdownPreviewEnabled") ?? true;
+      const documentHistoryLastCleanupRaw: unknown = await store.get("documentHistoryLastCleanup");
+      const documentHistoryLastCleanupSaved: number =
+        typeof documentHistoryLastCleanupRaw === "number" ? documentHistoryLastCleanupRaw : 0;
 
       const boardSortingOptionSaved: string = (await store.get("boardSortingOption")) ?? "createdAt";
       const reverseSortingSavedRaw: unknown = await store.get("reverseSorting");
@@ -93,6 +99,7 @@ export const useSettingsStore = defineStore("settings", {
       this.defaultRelativeDueDatesEnabled = defaultRelativeDueDatesEnabledSaved;
       this.markdownDocumentsFolder = markdownDocumentsFolderSaved;
       this.markdownPreviewEnabled = markdownPreviewEnabledSaved;
+      this.documentHistoryLastCleanup = documentHistoryLastCleanupSaved;
       this.boardSortingOption =
         boardSortingOptionSaved === "alphabetical" ||
         boardSortingOptionSaved === "lastEdited" ||
@@ -177,6 +184,11 @@ export const useSettingsStore = defineStore("settings", {
     async setMarkdownPreviewEnabled(value: boolean) {
       this.markdownPreviewEnabled = value;
       await useTauriStore().store.set("markdownPreviewEnabled", value);
+    },
+
+    async setDocumentHistoryLastCleanup(value: number) {
+      this.documentHistoryLastCleanup = value;
+      await useTauriStore().store.set("documentHistoryLastCleanup", value);
     },
 
     async setBoardSortingOption(option: "alphabetical" | "lastEdited" | "createdAt") {

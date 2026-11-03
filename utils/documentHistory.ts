@@ -36,6 +36,12 @@ export const MAX_SNAPSHOTS = 20;
 /** Minimum age of the newest snapshot before a save creates another one. */
 export const SNAPSHOT_INTERVAL_MS = 10 * 60 * 1000;
 
+/** Snapshots older than this are deleted by the automatic cleanup. */
+export const SNAPSHOT_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
+
+/** Minimum time between two automatic cleanup runs. */
+export const CLEANUP_INTERVAL_MS = 24 * 60 * 60 * 1000;
+
 const SNAPSHOT_FILE_NAME = /^(\d{4}-\d{2}-\d{2})T(\d{2})-(\d{2})-(\d{2})-(\d{3})Z\.md$/;
 
 /**

@@ -30,10 +30,12 @@ import {
   writeTextFile,
 } from "@tauri-apps/plugin-fs";
 import {
+  CLEANUP_INTERVAL_MS,
   DOCUMENT_HISTORY_DIR,
   documentHistoryKey,
   MAX_SNAPSHOTS,
   parseSnapshotFileName,
+  SNAPSHOT_MAX_AGE_MS,
   snapshotFileName,
 } from "@/utils/documentHistory";
 
@@ -138,4 +140,97 @@ export function useDocumentHistory(documentPath: Ref<string>) {
   };
 
   return { listSnapshots, readSnapshot, createSnapshot, newestSnapshotDate };
+}
+
+export interface DocumentHistoryCleanupResult {
+  removedFolders: number;
+  removedSnapshots: number;
+}
+
+/**
+ * Deletes the histories of documents that no card references any more
+ * (`referencedPaths` = every document path of every board) and snapshots
+ * older than SNAPSHOT_MAX_AGE_MS; folders left empty are removed as well.
+ * Files that are not snapshots are left alone. Errors per folder are logged
+ * and the remaining folders are still processed.
+ */
+export async function cleanupDocumentHistory(
+  referencedPaths: Iterable<string>,
+  now: Date = new Date()
+): Promise<DocumentHistoryCleanupResult> {
+  const result: DocumentHistoryCleanupResult = { removedFolders: 0, removedSnapshots: 0 };
+  if (!(await exists(DOCUMENT_HISTORY_DIR, fsOptions))) return result;
+
+  const referencedKeys = new Set<string>();
+  for (const path of referencedPaths) {
+    referencedKeys.add(documentHistoryKey(path));
+  }
+  const cutoff = now.getTime() - SNAPSHOT_MAX_AGE_MS;
+
+  for (const entry of await readDir(DOCUMENT_HISTORY_DIR, fsOptions)) {
+    if (!entry.isDirectory) continue;
+    const dir = `${DOCUMENT_HISTORY_DIR}/${entry.name}`;
+
+    try {
+      if (!referencedKeys.has(entry.name)) {
+        await remove(dir, { ...fsOptions, recursive: true });
+        result.removedFolders++;
+        continue;
+      }
+
+      let remaining = 0;
+      for (const file of await readDir(dir, fsOptions)) {
+        const date = file.isFile ? parseSnapshotFileName(file.name) : null;
+        if (date && date.getTime() < cutoff) {
+          await remove(`${dir}/${file.name}`, fsOptions);
+          result.removedSnapshots++;
+        } else {
+          remaining++;
+        }
+      }
+
+      if (remaining === 0) {
+        await remove(dir, { ...fsOptions, recursive: true });
+        result.removedFolders++;
+      }
+    } catch (err) {
+      console.warn("Could not clean up document history:", dir, err);
+    }
+  }
+
+  return result;
+}
+
+/**
+ * Runs `cleanupDocumentHistory` at most once per CLEANUP_INTERVAL_MS; the time
+ * of the last run is kept in the settings store. Requires the boards store to
+ * be initialized, otherwise every history would look orphaned. Never throws.
+ */
+export async function runScheduledDocumentHistoryCleanup(): Promise<void> {
+  const settings = useSettingsStore();
+  const boards = useBoardsStore();
+
+  try {
+    if (!boards.initialized) return;
+
+    const now = Date.now();
+    if (now - settings.documentHistoryLastCleanup < CLEANUP_INTERVAL_MS) return;
+
+    const referencedPaths = boards.boards.flatMap((board) =>
+      board.columns.flatMap((column) =>
+        column.cards.flatMap((card) => (card.documents ?? []).map((doc) => doc.path))
+      )
+    );
+
+    const result = await cleanupDocumentHistory(referencedPaths, new Date(now));
+    await settings.setDocumentHistoryLastCleanup(now);
+
+    if (result.removedFolders > 0 || result.removedSnapshots > 0) {
+      console.info(
+        `Document history cleanup: removed ${result.removedFolders} orphaned histories and ${result.removedSnapshots} old versions`
+      );
+    }
+  } catch (err) {
+    console.warn("Document history cleanup failed:", err);
+  }
 }

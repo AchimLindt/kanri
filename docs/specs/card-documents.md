@@ -140,7 +140,7 @@ Settings (`stores/settings.ts`, Tauri-Store-Keys gleichnamig): `markdownDocument
 - Mehrere Dokumente gleichzeitig offen, Tabs, zweites Fenster.
 - Sortieren der Dokumentliste; editierbarer Anzeigename.
 - Automatisches Entfernen fehlender Verweise.
-- Papierkorb statt endgültigem Löschen; Löschen der Versionshistorie zusammen mit der Datei.
+- Papierkorb statt endgültigem Löschen; sofortiges Löschen der Versionshistorie zusammen mit der Datei (die automatische Bereinigung in `docs/specs/document-history.md` räumt sie später auf).
 
 ## 9. Verifikation
 
