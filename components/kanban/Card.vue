@@ -127,6 +127,16 @@ limitations under the License.
           </div>
 
           <div
+            v-if="links && links.length > 0"
+            class="flex flex-row items-center gap-1"
+          >
+            <PhLink :class="[cardTextColorDim, iconSizeClass]" />
+            <span :class="[cardTextColorDim, taskTextClass]">{{
+              links.length
+            }}</span>
+          </div>
+
+          <div
             v-if="dueDate"
             class="flex flex-row items-center gap-1"
             :class="{
@@ -184,6 +194,7 @@ import {
   PhChecks,
   PhClock,
   PhFileText,
+  PhLink,
   PhListChecks,
   PhTextAlignLeft,
 } from "@phosphor-icons/vue";
@@ -233,6 +244,7 @@ const isDueDateRelative = ref(props.card.isDueDateCounterRelative);
 const isDueDateCompleted = ref(props.card.isDueDateCompleted ?? false);
 const cardTags = ref(props.card.tags);
 const documents = ref(props.card.documents);
+const links = ref(props.card.links);
 
 const cardNameEditMode = ref(false);
 const cardNameInput: Ref<HTMLTextAreaElement | null> = ref(null);
@@ -248,6 +260,7 @@ watch(
     isDueDateRelative.value = newData.card.isDueDateCounterRelative;
     cardTags.value = newData.card.tags;
     documents.value = newData.card.documents;
+    links.value = newData.card.links;
     isDueDateCompleted.value = newData.card.isDueDateCompleted ?? false;
   },
   { deep: true }
@@ -264,6 +277,7 @@ const cardHasNoExtraProperties = computed(() => {
     !dueDate.value &&
     (props.card.tags || []).length === 0 &&
     (!documents.value || documents.value.length === 0) &&
+    (!links.value || links.value.length === 0) &&
     !props.card.name.startsWith("---")
   );
 });

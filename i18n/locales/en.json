@@ -251,7 +251,20 @@
       "documentRemoveQuestion": "Remove “{name}” from this card? You can keep the file or delete it from disk as well.",
       "documentRemoveDetach": "Remove link only",
       "documentRemoveDeleteFile": "Delete file",
-      "documentDeleteFailed": "The file could not be deleted."
+      "documentDeleteFailed": "The file could not be deleted.",
+      "linksTitle": "Links",
+      "linksUrlPlaceholder": "https://…",
+      "linksTitlePlaceholder": "Title (optional)",
+      "linksAdd": "Add",
+      "linksSave": "Save",
+      "linksCancel": "Cancel",
+      "linksInvalidScheme": "Only http, https and mailto links are allowed.",
+      "linksInvalidUrl": "This is not a valid URL.",
+      "linksOpen": "Open",
+      "linksCopy": "Copy URL",
+      "linksEdit": "Edit",
+      "linksRemove": "Remove",
+      "linksOpenFailed": "The link could not be opened."
     },
     "help": {
       "title": "Help & Resources",

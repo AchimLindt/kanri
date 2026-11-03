@@ -21,7 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import { defineStore } from "pinia";
 import { toRaw } from "vue";
-import type { Board, Column, Card, CardDocument, Tag } from "@/types/kanban-types";
+import type { Board, Column, Card, CardDocument, CardLink, Tag } from "@/types/kanban-types";
 import { useTauriStore } from "@/stores/tauriStore";
 import { generateUniqueID } from "@/utils/idGenerator";
 import { normalizeDocumentPath } from "@/utils/documentPaths";
@@ -375,6 +375,7 @@ export const useBoardsStore = defineStore("boards", {
           tags: card.tags ? card.tags.map(t => ({ ...t })) : undefined,
           // document references are copied, both cards point to the same files
           documents: card.documents ? card.documents.map(d => ({ ...d })) : undefined,
+          links: card.links ? card.links.map(l => ({ ...l })) : undefined,
         } as Card;
       }
 
@@ -437,6 +438,58 @@ export const useBoardsStore = defineStore("boards", {
         doc.path = path;
       }
       b.lastEdited = new Date();
+    },
+    // Card links (web URLs, already validated/normalized by the caller)
+    _findCard(boardId: string, columnId: string, cardId: string): { board: Board; card: Card } | null {
+      const b = this.boardById(boardId);
+      if (!b) return null;
+      const col = b.columns.find(c => c.id === columnId);
+      if (!col) return null;
+      const card = col.cards.find(c => c.id === cardId);
+      if (!card) return null;
+      return { board: b, card };
+    },
+    addCardLink(boardId: string, columnId: string, cardId: string, url: string, title?: string): string | null {
+      const found = this._findCard(boardId, columnId, cardId);
+      if (!found) return null;
+      const { board: b, card } = found;
+
+      if (!card.links) card.links = [];
+
+      const id = generateUniqueID();
+      const link: CardLink = { id, url };
+      const trimmedTitle = title?.trim();
+      if (trimmedTitle) link.title = trimmedTitle;
+
+      // mutate in place: the card tile and the edit dialog hold this array
+      card.links.push(link);
+      b.lastEdited = new Date();
+      return id;
+    },
+    updateCardLink(boardId: string, columnId: string, cardId: string, linkId: string, url: string, title?: string) {
+      const found = this._findCard(boardId, columnId, cardId);
+      if (!found || !found.card.links) return;
+      const link = found.card.links.find(l => l.id === linkId);
+      if (!link) return;
+
+      link.url = url;
+      const trimmedTitle = title?.trim();
+      if (trimmedTitle) {
+        link.title = trimmedTitle;
+      } else {
+        delete link.title;
+      }
+      found.board.lastEdited = new Date();
+    },
+    removeCardLink(boardId: string, columnId: string, cardId: string, linkId: string) {
+      const found = this._findCard(boardId, columnId, cardId);
+      if (!found || !found.card.links) return;
+
+      // mutate in place: the card tile and the edit dialog hold this array, a new array would not reach them
+      const index = found.card.links.findIndex(l => l.id === linkId);
+      if (index === -1) return;
+      found.card.links.splice(index, 1);
+      found.board.lastEdited = new Date();
     },
     deleteCard(boardId: string, columnId: string, cardId: string) {
       const b = this.boardById(boardId);

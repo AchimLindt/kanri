@@ -57,6 +57,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
       @addCardDocument="board.addCardDocument"
       @removeCardDocument="board.removeCardDocument"
       @setCardDocumentPath="board.setCardDocumentPath"
+      @addCardLink="board.addCardLink"
+      @updateCardLink="board.updateCardLink"
+      @removeCardLink="board.removeCardLink"
       @openDocument="openDocument"
     />
     <ModalColumnColors

@@ -242,7 +242,20 @@
       "documentRemoveQuestion": "„{name}“ von dieser Karte entfernen? Die Datei kann erhalten bleiben oder zusätzlich von der Festplatte gelöscht werden.",
       "documentRemoveDetach": "Nur Verknüpfung entfernen",
       "documentRemoveDeleteFile": "Datei löschen",
-      "documentDeleteFailed": "Die Datei konnte nicht gelöscht werden."
+      "documentDeleteFailed": "Die Datei konnte nicht gelöscht werden.",
+      "linksTitle": "Links",
+      "linksUrlPlaceholder": "https://…",
+      "linksTitlePlaceholder": "Titel (optional)",
+      "linksAdd": "Hinzufügen",
+      "linksSave": "Speichern",
+      "linksCancel": "Abbrechen",
+      "linksInvalidScheme": "Nur http-, https- und mailto-Links sind erlaubt.",
+      "linksInvalidUrl": "Das ist keine gültige URL.",
+      "linksOpen": "Öffnen",
+      "linksCopy": "URL kopieren",
+      "linksEdit": "Bearbeiten",
+      "linksRemove": "Entfernen",
+      "linksOpenFailed": "Der Link konnte nicht geöffnet werden."
     },
     "help": {
       "title": "Hilfe & Ressourcen",

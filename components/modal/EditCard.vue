@@ -24,6 +24,7 @@ limitations under the License.
       taskAddMode = false;
       showCustomColorPopup = false;
       documentPendingRemoval = null;
+      resetLinkForm();
       emitter.emit('columnDraggingOn');
     "
   >
@@ -268,6 +269,7 @@ limitations under the License.
                 titleEditing = false;
                 taskAddMode = false;
                 showCustomColorPopup = false;
+                resetLinkForm();
                 emitter.emit('columnDraggingOn');
               "
             />
@@ -588,6 +590,102 @@ limitations under the License.
           </div>
           <div class="mt-4 flex flex-col pr-6">
             <h2 class="text-lg font-semibold">
+              {{ $t("modals.editCard.linksTitle") }}
+            </h2>
+            <div v-if="links.length > 0" class="mt-1 flex flex-col gap-1">
+              <ContextMenuRoot v-for="link in links" :key="link.id">
+                <ContextMenuTrigger as-child>
+                  <button
+                    class="bg-elevation-2-hover flex w-full cursor-pointer flex-row items-center gap-2 rounded-md px-2 py-1 text-left"
+                    :class="{ 'bg-elevation-2': link.id === editingLinkId }"
+                    :title="link.url"
+                    @click="openLink(link)"
+                  >
+                    <PhLink class="text-dim-2 size-5 shrink-0" />
+                    <span class="text-no-overflow-task">{{
+                      linkDisplayName(link)
+                    }}</span>
+                  </button>
+                </ContextMenuTrigger>
+                <ContextMenuPortal to=".default-layout">
+                  <ContextMenuContent :class="documentContextMenuClass">
+                    <ContextMenuItem
+                      value="Open"
+                      class="bg-elevation-2-hover flex w-full cursor-pointer flex-row items-center rounded-md px-4 py-1.5"
+                      @select="openLink(link)"
+                    >
+                      {{ $t("modals.editCard.linksOpen") }}
+                    </ContextMenuItem>
+                    <ContextMenuItem
+                      value="Copy URL"
+                      class="bg-elevation-2-hover flex w-full cursor-pointer flex-row items-center rounded-md px-4 py-1.5"
+                      @select="copyLinkUrl(link)"
+                    >
+                      {{ $t("modals.editCard.linksCopy") }}
+                    </ContextMenuItem>
+                    <ContextMenuItem
+                      value="Edit"
+                      class="bg-elevation-2-hover flex w-full cursor-pointer flex-row items-center rounded-md px-4 py-1.5"
+                      @select="startLinkEdit(link)"
+                    >
+                      {{ $t("modals.editCard.linksEdit") }}
+                    </ContextMenuItem>
+                    <ContextMenuItem
+                      value="Remove"
+                      class="bg-elevation-2-hover flex w-full cursor-pointer flex-row items-center rounded-md px-4 py-1.5"
+                      @select="removeLink(link)"
+                    >
+                      {{ $t("modals.editCard.linksRemove") }}
+                    </ContextMenuItem>
+                  </ContextMenuContent>
+                </ContextMenuPortal>
+              </ContextMenuRoot>
+            </div>
+            <div class="mt-2 flex flex-col gap-2">
+              <input
+                ref="linkUrlInput"
+                v-model="linkUrlInputValue"
+                class="bg-elevation-2 text-normal border-accent-focus w-full rounded-md p-1 text-base focus:border-2 focus:border-dotted focus:outline-none"
+                maxlength="4000"
+                :placeholder="$t('modals.editCard.linksUrlPlaceholder')"
+                type="text"
+                @input="linkError = ''"
+                @keypress.enter="submitLink"
+              >
+              <input
+                v-model="linkTitleInputValue"
+                class="bg-elevation-2 text-normal border-accent-focus w-full rounded-md p-1 text-base focus:border-2 focus:border-dotted focus:outline-none"
+                maxlength="1000"
+                :placeholder="$t('modals.editCard.linksTitlePlaceholder')"
+                type="text"
+                @keypress.enter="submitLink"
+              >
+              <p v-if="linkError" class="text-sm text-red-500">
+                {{ linkError }}
+              </p>
+              <div class="flex flex-row gap-2">
+                <button
+                  class="bg-elevation-2 bg-elevation-3-hover transition-button rounded-md px-3 py-1"
+                  @click="submitLink"
+                >
+                  {{
+                    editingLinkId
+                      ? $t("modals.editCard.linksSave")
+                      : $t("modals.editCard.linksAdd")
+                  }}
+                </button>
+                <button
+                  v-if="editingLinkId"
+                  class="text-accent-hover transition-button px-3 py-1"
+                  @click="resetLinkForm"
+                >
+                  {{ $t("modals.editCard.linksCancel") }}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 flex flex-col pr-6">
+            <h2 class="text-lg font-semibold">
               {{ $t("modals.editCard.tagsTitle") }}
             </h2>
             <vue-tags-input
@@ -612,7 +710,13 @@ limitations under the License.
 </template>
 
 <script setup lang="ts">
-import type { Card, CardDocument, Task, Tag } from "@/types/kanban-types";
+import type {
+  Card,
+  CardDocument,
+  CardLink,
+  Task,
+  Tag,
+} from "@/types/kanban-types";
 import type { Ref } from "vue";
 
 import emitter from "@/utils/emitter";
@@ -623,6 +727,7 @@ import {
   PhCalendar,
   PhCheck,
   PhFileText,
+  PhLink,
   PhPencilSimple,
   PhTrash,
   PhWarning,
@@ -630,7 +735,7 @@ import {
 } from "@phosphor-icons/vue";
 import { message, open, save } from "@tauri-apps/plugin-dialog";
 import { exists, remove, writeTextFile } from "@tauri-apps/plugin-fs";
-import { openPath, revealItemInDir } from "@tauri-apps/plugin-opener";
+import { openPath, openUrl, revealItemInDir } from "@tauri-apps/plugin-opener";
 import {
   ContextMenuContent,
   ContextMenuItem,
@@ -644,6 +749,11 @@ import {
   joinDocumentPath,
   normalizeDocumentPath,
 } from "@/utils/documentPaths";
+import {
+  isAllowedLinkUrl,
+  linkDisplayName,
+  normalizeLinkUrl,
+} from "@/utils/cardLinks";
 import { vOnClickOutside } from "@vueuse/components";
 //@ts-expect-error library has no types
 import { Container, Draggable } from "vue3-smooth-dnd";
@@ -724,6 +834,27 @@ const emit = defineEmits<{
     cardId: string | undefined,
     documentId: string
   ): void;
+  (
+    e: "addCardLink",
+    columnID: string,
+    cardId: string | undefined,
+    url: string,
+    title?: string
+  ): void;
+  (
+    e: "updateCardLink",
+    columnID: string,
+    cardId: string | undefined,
+    linkId: string,
+    url: string,
+    title?: string
+  ): void;
+  (
+    e: "removeCardLink",
+    columnID: string,
+    cardId: string | undefined,
+    linkId: string
+  ): void;
 }>();
 
 const { locale, t } = useI18n();
@@ -768,6 +899,15 @@ const documentExists: Ref<Record<string, boolean>> = ref({});
 const documentPendingRemoval: Ref<CardDocument | null> = ref(null);
 let documentCheckGeneration = 0;
 let lastCheckedDocumentsKey = "";
+
+const links: Ref<Array<CardLink>> = ref([]);
+const linkUrlInput: Ref<HTMLInputElement | null> = ref(null);
+const linkUrlInputValue = ref("");
+const linkTitleInputValue = ref("");
+const linkError = ref("");
+// id of the link currently loaded into the form for editing; null = form adds a new link
+const editingLinkId: Ref<string | null> = ref(null);
+let linkFormCardId: string | undefined = undefined;
 
 const MARKDOWN_FILE_FILTERS = [
   { name: "Markdown", extensions: ["md", "markdown"] },
@@ -1130,6 +1270,98 @@ const confirmRemoveDocument = async (deleteFile: boolean) => {
   detachDocument(doc);
 };
 
+/**
+ * Card links (web URLs opened in the default browser)
+ */
+
+const resetLinkForm = () => {
+  linkUrlInputValue.value = "";
+  linkTitleInputValue.value = "";
+  linkError.value = "";
+  editingLinkId.value = null;
+};
+
+const submitLink = () => {
+  const result = normalizeLinkUrl(linkUrlInputValue.value);
+  if (!result.ok) {
+    if (result.error === "scheme") {
+      linkError.value = t("modals.editCard.linksInvalidScheme");
+    } else if (result.error === "invalid") {
+      linkError.value = t("modals.editCard.linksInvalidUrl");
+    }
+    return;
+  }
+
+  const title = linkTitleInputValue.value.trim() || undefined;
+  const editingId = editingLinkId.value;
+  if (editingId && links.value.some((l) => l.id === editingId)) {
+    emit("updateCardLink", columnID.value, props.card?.id, editingId, result.url, title);
+  } else {
+    emit("addCardLink", columnID.value, props.card?.id, result.url, title);
+  }
+
+  resetLinkForm();
+};
+
+const openLink = (link: CardLink) => {
+  if (!isAllowedLinkUrl(link.url)) {
+    message(`${t("modals.editCard.linksOpenFailed")}\n${t("modals.editCard.linksInvalidScheme")}`, {
+      kind: "error",
+    });
+    return;
+  }
+
+  openUrl(link.url).catch((err) => {
+    console.error("Could not open link:", link.url, err);
+    message(`${t("modals.editCard.linksOpenFailed")}\n${String(err)}`, {
+      kind: "error",
+    });
+  });
+};
+
+// navigator.clipboard is available in the Tauri WebView (*.localhost is a secure context);
+// the execCommand fallback covers a missing or rejecting Clipboard API
+const copyLinkUrl = async (link: CardLink) => {
+  try {
+    await navigator.clipboard.writeText(link.url);
+    return;
+  } catch (err) {
+    console.warn("Clipboard API failed, falling back to execCommand:", err);
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = link.url;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
+  document.body.appendChild(textarea);
+  textarea.select();
+  try {
+    if (!document.execCommand("copy")) {
+      console.error("Could not copy link URL to the clipboard");
+    }
+  } catch (err) {
+    console.error("Could not copy link URL to the clipboard:", err);
+  } finally {
+    document.body.removeChild(textarea);
+  }
+};
+
+const startLinkEdit = (link: CardLink) => {
+  editingLinkId.value = link.id;
+  linkUrlInputValue.value = link.url;
+  linkTitleInputValue.value = link.title ?? "";
+  linkError.value = "";
+
+  // the context menu returns focus to its trigger when it closes, focus the field afterwards
+  setTimeout(() => linkUrlInput.value?.focus(), 0);
+};
+
+const removeLink = (link: CardLink) => {
+  if (editingLinkId.value === link.id) resetLinkForm();
+  emit("removeCardLink", columnID.value, props.card?.id, link.id);
+};
+
 // re-check on every opening, files may have been renamed or deleted in the meantime
 const onEditCardModalOpened = () => {
   checkDocumentsExist();
@@ -1224,6 +1456,18 @@ watch(props, (newVal) => {
     if (documentsKey !== lastCheckedDocumentsKey) {
       lastCheckedDocumentsKey = documentsKey;
       checkDocumentsExist();
+    }
+
+    // same array instance as in the store, so in-place mutations by the store show up here
+    const savedLinks = newVal.card.links || [];
+    savedLinks.forEach((link) => {
+      if (!link.id) link.id = generateUniqueID();
+    });
+    links.value = savedLinks;
+    // the deep props watcher fires on every card change; only drop the form when another card is shown
+    if (newVal.card.id !== linkFormCardId) {
+      linkFormCardId = newVal.card.id;
+      resetLinkForm();
     }
 
     selectedColor.value = newVal.card.color || "bg-elevation-2";

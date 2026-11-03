@@ -63,6 +63,16 @@ const kanriCardSchema = z.object({
     .array(z.object({ id: z.string().optional(), path: z.string() }))
     .optional()
     .nullable(),
+  links: z
+    .array(
+      z.object({
+        id: z.string().optional(),
+        url: z.string(),
+        title: z.string().optional(),
+      })
+    )
+    .optional()
+    .nullable(),
 });
 
 const kanriColumnSchema = z.object({

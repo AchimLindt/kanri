@@ -62,6 +62,12 @@ export declare interface CardDocument {
   path: string; // absolute path of the linked Markdown file
 }
 
+export declare interface CardLink {
+  id: string; // generateUniqueID()
+  url: string; // normalized URL (http, https or mailto)
+  title?: string; // optional display name
+}
+
 export declare interface Card {
   color?: string;
   description?: string;
@@ -73,6 +79,7 @@ export declare interface Card {
   tasks?: Array<Task>;
   tags?: Array<Tag> | null;
   documents?: Array<CardDocument> | null;
+  links?: Array<CardLink> | null;
 }
 
 export declare interface Theme {
