@@ -41,7 +41,7 @@ Route `/document?board=<boardId>&card=<cardId>&doc=<docId>`. Die Seite sucht den
 
 Layout (Vollfenster, `default`-Layout wie die Settings-Seite):
 
-- Kopfzeile: Zurück-Button (`ArrowLeftIcon`, führt nach `/kanban/<boardId>`), Dateiname (Tooltip: Pfad), Speicherstatus (`modals.document.statusSaved` / `statusSaving` / `statusError`), Lint-Zähler (`n Hinweise`, ausgeblendet bei 0), Umschalter „Vorschau" (Toggle wie in den Settings, Zustand in Setting `markdownPreviewEnabled`, Default `true`).
+- Kopfzeile: Zurück-Button (`ArrowLeftIcon`, führt nach `/kanban/<boardId>`), Dateiname (Tooltip: Pfad), Speicherstatus (`pages.document.statusSaved` / `statusSaving` / `statusError`; „Speichert…" erscheint bereits ab der ersten ungesicherten Änderung), Lint-Zähler (`n Hinweise`, ausgeblendet bei 0), Umschalter „Vorschau" (Toggle wie in den Settings, Zustand in Setting `markdownPreviewEnabled`, Default `true`).
 - Darunter `flex-row`: Editor (`MarkdownEditor`) und, wenn aktiviert, Vorschau (`MarkdownPreview`) je `basis-1/2`, beide eigenständig scrollbar (`overflow-y-auto`), Höhe = Restfenster. Ohne Vorschau Editor volle Breite.
 - `Escape` (Window-Listener, nur wenn kein Dialog offen) = Zurück. Beim Zurück und in `onBeforeRouteLeave` wird ein ausstehender Save geflusht.
 
@@ -87,7 +87,7 @@ Settings (`stores/settings.ts`, Tauri-Store-Keys gleichnamig): `markdownDocument
 | --- | --- |
 | `addCardDocument(boardId, columnId, cardId, path)` | legt `card.documents` bei Bedarf an; ignoriert, wenn ein Eintrag mit gleichem Pfad existiert; pusht `{ id: generateUniqueID(), path }`; `lastEdited`; gibt die neue `id` (oder die vorhandene) zurück |
 | `removeCardDocument(boardId, columnId, cardId, documentId)` | filtert den Eintrag heraus; `lastEdited` |
-| `setCardDocumentPath(boardId, columnId, cardId, documentId, path)` | ersetzt `path`; `lastEdited` |
+| `setCardDocumentPath(boardId, columnId, cardId, documentId, path)` | ersetzt `path`; zeigt bereits ein anderer Eintrag der Karte auf diesen Pfad, wird der neu verknüpfte Eintrag stattdessen entfernt (ein Pfad pro Karte höchstens einmal); `lastEdited` |
 | `duplicateCard` (bestehend) | prüfen, dass die Kopie `documents` tief kopiert (Objekt-Kopie je Eintrag, gleiche `id`s sind zulässig) |
 
 `useBoard` spiegelt die drei neuen Aktionen mit `columnId, cardId, …` und exportiert sie. Ein Lookup-Helfer `findCardDocument(boardId, documentId)` im Store (oder in `useBoard`) für die Editor-Seite.
@@ -99,7 +99,7 @@ Settings (`stores/settings.ts`, Tauri-Store-Keys gleichnamig): `markdownDocument
 - `Card.vue`: Indikator (§3.5).
 - `pages/document.vue`, `components/document/MarkdownEditor.vue`, `components/document/MarkdownPreview.vue`, `utils/markdownLint.ts`, `utils/documentPaths.ts`: neu.
 - `pages/settings.vue`, `stores/settings.ts`: Einstellung (§3.6, §4).
-- `src-tauri/capabilities/*.json`: ergänzen `opener:allow-open-path` mit `allow: [{ "path": "**/*.md" }, { "path": "**/*.markdown" }]`, und bei `opener:allow-open-url` die Einträge `{ "url": "http://**" }`, `{ "url": "https://**" }`. `dialog:allow-save` ist über `dialog:default` abgedeckt; `fs`-Zugriff auf per Dialog gewählte Pfade kommt über den Dialog-Scope plus `tauri-plugin-persisted-scope`.
+- `src-tauri/capabilities/*.json`: ergänzen `fs:allow-exists` (für die Fehlt-Prüfung) und `opener:allow-open-path` mit `allow` für `**/*.md`, `**/*.MD`, `**/*.markdown`, `**/*.MARKDOWN` (der Scope-Glob ist case-sensitiv, der Windows-Dateidialog nicht). `http(s)`-Links sind über `opener:default` (`allow-default-urls`) bereits erlaubt. `dialog:allow-save` ist über `dialog:default` abgedeckt; `fs`-Zugriff auf per Dialog gewählte Pfade kommt über den Dialog-Scope plus `tauri-plugin-persisted-scope`.
 - `package.json`: neue Dependencies (exakte Versionen eintragen, Stand 2026-11-03): `@codemirror/state 6.7.6`, `@codemirror/view 6.43.15`, `@codemirror/language`, `@codemirror/commands`, `@codemirror/lang-markdown 6.5.2`, `@codemirror/lint 6.9.7`, `@lezer/highlight`, `markdown-it 15.0.3`, `@types/markdown-it 14.2.0` (dev), `markdownlint 0.42.0`. Alle MIT. Nicht das Meta-Paket `codemirror` (zieht Autocomplete u. a. mit). Prüfen, ob `pages/licenses/index.vue` eine generierte Liste nutzt und ob sie zu aktualisieren ist.
 
 ## 7. i18n-Keys (en + de)

@@ -425,7 +425,14 @@ export const useBoardsStore = defineStore("boards", {
       const doc = card.documents.find(d => d.id === documentId);
       if (!doc) return;
 
-      doc.path = path;
+      // relinking to a path that is already linked merges the two entries (a path is linked at most once)
+      const normalized = normalizeDocumentPath(path);
+      const existing = card.documents.find(d => d.id !== documentId && normalizeDocumentPath(d.path) === normalized);
+      if (existing) {
+        card.documents = card.documents.filter(d => d.id !== documentId);
+      } else {
+        doc.path = path;
+      }
       b.lastEdited = new Date();
     },
     deleteCard(boardId: string, columnId: string, cardId: string) {

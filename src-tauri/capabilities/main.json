@@ -37,12 +37,6 @@
         },
         {
           "url": "https://discord.gg/AVqHrvxB9C"
-        },
-        {
-          "url": "http://**"
-        },
-        {
-          "url": "https://**"
         }
       ]
     },
@@ -53,7 +47,13 @@
           "path": "**/*.md"
         },
         {
+          "path": "**/*.MD"
+        },
+        {
           "path": "**/*.markdown"
+        },
+        {
+          "path": "**/*.MARKDOWN"
         }
       ]
     }

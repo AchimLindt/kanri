@@ -720,6 +720,7 @@ const documents: Ref<Array<CardDocument>> = ref([]);
 // result of the exists() check per document id; undefined = not checked yet
 const documentExists: Ref<Record<string, boolean>> = ref({});
 let documentCheckGeneration = 0;
+let lastCheckedDocumentsKey = "";
 
 const MARKDOWN_FILE_FILTERS = [
   { name: "Markdown", extensions: ["md", "markdown"] },
@@ -1028,9 +1029,10 @@ const revealDocument = (doc: CardDocument) => {
 };
 
 const openDocumentExternally = (doc: CardDocument) => {
-  openPath(doc.path).catch((err) =>
-    console.error("Could not open document externally:", err)
-  );
+  openPath(doc.path).catch((err) => {
+    console.error("Could not open document externally:", err);
+    message(String(err), { kind: "error" });
+  });
 };
 
 const relinkDocument = async (doc: CardDocument) => {
@@ -1123,7 +1125,13 @@ watch(props, (newVal) => {
       if (!doc.id) doc.id = generateUniqueID();
     });
     documents.value = savedDocuments;
-    checkDocumentsExist();
+    // the deep props watcher fires on every card change; only re-check when the card or its paths changed
+    // (renames on disk are covered by the re-check on every modal opening)
+    const documentsKey = `${newVal.card.id}|${savedDocuments.map((doc) => doc.path).join("|")}`;
+    if (documentsKey !== lastCheckedDocumentsKey) {
+      lastCheckedDocumentsKey = documentsKey;
+      checkDocumentsExist();
+    }
 
     selectedColor.value = newVal.card.color || "bg-elevation-2";
     if (newVal.card.color?.startsWith("#")) {

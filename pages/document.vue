@@ -95,6 +95,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
 
 <script setup lang="ts">
 import { ArrowLeftIcon } from "@heroicons/vue/24/solid";
+import { getCurrentWindow } from "@tauri-apps/api/window";
 import { readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
 import { useBoard } from "@/composables/useBoard";
 import { documentFileName } from "@/utils/documentPaths";
@@ -121,6 +122,7 @@ const lintCount = ref(0);
 
 const saveStatus = ref<"saved" | "saving" | "error">("saved");
 let saveTimeout: ReturnType<typeof setTimeout> | null = null;
+let unlistenCloseRequested: (() => void) | null = null;
 let currentSave: Promise<void> = Promise.resolve();
 // content as last read from / written to disk (with "\n" line breaks)
 let lastSavedContent = "";
@@ -142,6 +144,16 @@ const saveStatusText = computed(() => {
 
 onMounted(async () => {
   window.addEventListener("keydown", keyDownListener);
+
+  // closing the app window within the autosave delay must not lose the last keystrokes
+  getCurrentWindow()
+    .onCloseRequested(async () => {
+      await flushSave();
+    })
+    .then((unlisten) => {
+      unlistenCloseRequested = unlisten;
+    })
+    .catch((err) => console.warn("Could not register close handler:", err));
 
   if (!boardId.value || !cardId.value || !documentId.value) {
     loadError.value = true;
@@ -171,6 +183,8 @@ onMounted(async () => {
 
 onBeforeUnmount(() => {
   window.removeEventListener("keydown", keyDownListener);
+  unlistenCloseRequested?.();
+  unlistenCloseRequested = null;
   // last resort, normally already flushed by the route leave guard
   flushSave();
 });
@@ -182,6 +196,8 @@ onBeforeRouteLeave(async () => {
 // autosave, debounced after the last change
 watch(content, (value) => {
   if (!loaded.value || value === lastSavedContent) return;
+  // unsaved changes are never shown as "saved"
+  saveStatus.value = "saving";
   if (saveTimeout) clearTimeout(saveTimeout);
   saveTimeout = setTimeout(() => {
     saveTimeout = null;
@@ -219,6 +235,8 @@ const flushSave = (): Promise<void> => {
 
 const goBack = async () => {
   await flushSave();
+  // a failed write keeps the page open so no text is lost silently; the status shows the error
+  if (loaded.value && saveStatus.value === "error") return;
   router.push(boardId.value ? `/kanban/${boardId.value}` : "/");
 };
 

@@ -21,7 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
 <template>
   <!-- markdown-it runs with html: false, raw HTML in the source is escaped -->
   <!-- eslint-disable-next-line vue/no-v-html -->
-  <div class="markdown-preview" @click="onClick" v-html="renderedHtml" />
+  <div class="markdown-preview" @click="onClick" @auxclick="onClick" v-html="renderedHtml" />
 </template>
 
 <script setup lang="ts">
