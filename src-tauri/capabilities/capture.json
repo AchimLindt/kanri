@@ -1,0 +1,20 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "capture-capability",
+  "description": "Capability for the quick capture window (no store, no file system access)",
+  "windows": [
+    "capture"
+  ],
+  "permissions": [
+    "core:default",
+    "core:event:default",
+    "core:webview:default",
+    "core:window:allow-hide",
+    "core:window:allow-close",
+    "core:window:allow-set-focus",
+    "core:window:allow-center",
+    "core:window:allow-set-position",
+    "core:window:allow-set-size",
+    "log:default"
+  ]
+}

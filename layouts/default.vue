@@ -36,8 +36,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
 </template>
 
 <script setup>
-import { hslToHex, rgbToHsl } from "@/utils/colorUtils";
-import { dark } from "@/utils/themes";
+import { themeCssVars } from "@/utils/themeCssVars";
 import { REMINDER_CHECK_INTERVAL_MS } from "@/utils/reminders";
 
 const { setLocale, setLocaleCookie } = useI18n();
@@ -56,11 +55,28 @@ const { runReminderCheck } = useReminders();
 let reminderTimer = null;
 const { colors: savedColors, autoThemeEnabled } = toRefs(theme)
 
+// tray and quick capture (spec docs/specs/tray-quick-capture.md)
+const quickCaptureHost = useQuickCaptureHost();
+let cleanupWindowLifecycle = null;
+let unmounted = false;
+
 onMounted(async () => {
   // Load settings into pinia stores
-  await settings.loadSettings();
-  await theme.loadThemeSettings();
+  try {
+    await settings.loadSettings();
+    await theme.loadThemeSettings();
+  } finally {
+    // the window starts hidden (tauri.conf.json), shown here unless "start minimized" applies
+    await showMainWindowOnStartup(settings.startMinimized);
+  }
   await layout.loadLayoutSettings();
+
+  // one close handler for the whole window: hide into the tray or close (pages register
+  // their "before close" work via onBeforeWindowClose)
+  const cleanup = await setupMainWindowLifecycle(() => settings.minimizeToTray);
+  if (unmounted) cleanup();
+  else cleanupWindowLifecycle = cleanup;
+
   await boards.init();
 
   // Set locale cookies based on saved value
@@ -82,11 +98,18 @@ onMounted(async () => {
     runReminderCheck();
     runScheduledCardArchive();
   }, REMINDER_CHECK_INTERVAL_MS);
+
+  // quick capture: event listeners for the capture window and the tray menu, global shortcut
+  if (!unmounted) quickCaptureHost.start();
 });
 
 onBeforeUnmount(() => {
+  unmounted = true;
   if (reminderTimer) clearInterval(reminderTimer);
   reminderTimer = null;
+  cleanupWindowLifecycle?.();
+  cleanupWindowLifecycle = null;
+  quickCaptureHost.stop();
 });
 
 watch(systemTheme, async (newValue) => {
@@ -97,66 +120,7 @@ watch(systemTheme, async (newValue) => {
   }
 });
 
-const increaseSaturation = (hex) => {
-  if (hex == undefined) return;
-
-  const rgb = hex
-    .replace(
-      /^#?([a-f\d])([a-f\d])([a-f\d])$/i,
-      (m, r, g, b) => "#" + r + r + g + g + b + b
-    )
-    .substring(1)
-    .match(/.{2}/g)
-    .map((x) => parseInt(x, 16));
-
-  const hslColor = rgbToHsl(...rgb);
-
-  hslColor[0] = Math.round(hslColor[0]);
-  hslColor[1] =
-    Math.round(hslColor[1]) < 80
-      ? Math.round(hslColor[1] + 20)
-      : Math.round(hslColor[1]);
-  hslColor[2] = Math.round(hslColor[2]);
-
-  return hslToHex(...hslColor);
-};
-
-const cssVars = computed(() => {
-  if (!savedColors.value) {
-    // until our store gets propagated with the saved colors, use dark theme as fallback
-    return {
-      "--accent": dark.accent,
-      "--accent-darker": dark.accentDarker,
-      "--bg-primary": dark.bgPrimary,
-      "--elevation-1": dark.elevation1,
-      "--elevation-2": dark.elevation2,
-      "--elevation-3": dark.elevation3,
-      "--logo-accent": increaseSaturation(dark.accent),
-      "--text": dark.text,
-      "--text-buttons": dark.textButtons,
-      "--text-dim-1": dark.textD1,
-      "--text-dim-2": dark.textD2,
-      "--text-dim-3": dark.textD3,
-      "--text-dim-4": dark.textD4,
-    };
-  } else {
-    return {
-      "--accent": savedColors.value.accent,
-      "--accent-darker": savedColors.value.accentDarker,
-      "--bg-primary": savedColors.value.bgPrimary,
-      "--elevation-1": savedColors.value.elevation1,
-      "--elevation-2": savedColors.value.elevation2,
-      "--elevation-3": savedColors.value.elevation3,
-      "--logo-accent": increaseSaturation(savedColors.value.accent),
-      "--text": savedColors.value.text,
-      "--text-buttons": savedColors.value.textButtons,
-      "--text-dim-1": savedColors.value.textD1,
-      "--text-dim-2": savedColors.value.textD2,
-      "--text-dim-3": savedColors.value.textD3,
-      "--text-dim-4": savedColors.value.textD4,
-    };
-  }
-});
+const cssVars = computed(() => themeCssVars(savedColors.value));
 </script>
 
 <style>

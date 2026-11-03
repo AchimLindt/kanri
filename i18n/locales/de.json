@@ -43,6 +43,18 @@
       "deleteBoardConfirmation": "Bist du sicher, dass du das Board '{boardName}' löschen möchtest? Diese Aktion ist irreversibel.",
       "archiveAction": "Archiv ({count})"
     },
+    "capture": {
+      "placeholder": "Titel, weitere Zeilen werden zur Beschreibung",
+      "targetLabel": "Board und Spalte der neuen Karte",
+      "targetPlaceholder": "Board › Spalte wählen…",
+      "targetOption": "{boardName} › {columnName}",
+      "saved": "Gespeichert",
+      "hint": "Enter speichert · Umschalt+Enter neue Zeile · Esc schließt",
+      "errorEmptyTitle": "Bitte einen Titel eingeben.",
+      "errorNoTarget": "Bitte Board und Spalte wählen.",
+      "errorUnknown": "Die Karte konnte nicht gespeichert werden.",
+      "errorNoAnswer": "Kanri hat nicht geantwortet, bitte erneut versuchen."
+    },
     "settings": {
       "deleteAllDataConfirmationAction": "Daten löschen",
       "deleteAllDataConfirmationDescription": "Alle Daten löschen?",
@@ -97,7 +109,25 @@
       "preferencesStartPageHeading": "Startseite",
       "preferencesStartPageSubtext": "Seite, die beim Start der App angezeigt wird.",
       "preferencesStartPageBoards": "Board-Übersicht",
-      "preferencesStartPageToday": "Tagesansicht"
+      "preferencesStartPageToday": "Tagesansicht",
+      "trayHeading": "Tray & Schnellerfassung",
+      "trayMinimizeToTrayHeading": "In den Tray schließen",
+      "trayMinimizeToTraySubtext": "Beim Schließen des Fensters läuft Kanri im Infobereich weiter (Erinnerungen und Schnellerfassung bleiben aktiv). Beenden über das Tray-Menü.",
+      "trayShortcutHeading": "Tastenkürzel für die Schnellerfassung",
+      "trayShortcutSubtext": "Globales Tastenkürzel, das das Schnellerfassungs-Fenster öffnet, z. B. CommandOrControl+Alt+K. Mindestens Strg, Alt, Super oder CommandOrControl plus eine Taste. Leer lassen zum Abschalten.",
+      "trayShortcutReset": "Standard wiederherstellen",
+      "trayShortcutRegisterError": "Tastenkürzel konnte nicht registriert werden, vermutlich belegt es ein anderes Programm.",
+      "trayShortcutInvalidFormat": "Ungültiges Format. Modifier und eine Taste mit + verbinden, z. B. Control+Alt+K.",
+      "trayShortcutInvalidModifier": "Mindestens Control, Alt, Super oder CommandOrControl verwenden.",
+      "trayShortcutInvalidKey": "Unbekannte Taste. Der letzte Teil muss eine einzelne Taste sein, z. B. K, F8 oder Space.",
+      "trayInboxHeading": "Eingang der Schnellerfassung",
+      "trayInboxSubtext": "Board und Spalte, in die neue Karten aus der Schnellerfassung kommen. Wird im Schnellerfassungs-Fenster gewählt.",
+      "trayInboxNotSet": "Noch nicht gewählt",
+      "trayInboxInvalid": "Board oder Spalte gibt es nicht mehr, wird erneut abgefragt",
+      "trayInboxValue": "{boardName} › {columnName}",
+      "trayInboxReset": "Zurücksetzen",
+      "miscellaneousStartMinimizedHeading": "Minimiert starten",
+      "miscellaneousStartMinimizedSubtext": "Beim automatischen Start nach der Anmeldung startet Kanri verborgen im Infobereich."
     },
     "import": {
       "importExportHeading": "Import & Export",
@@ -388,6 +418,12 @@
       "backgroundColorTitle": "Spaltenhintergrund",
       "done": "Fertig"
     }
+  },
+  "quickCapture": {
+    "errorNotReady": "Kanri lädt noch, bitte gleich noch einmal versuchen.",
+    "errorEmptyTitle": "Bitte einen Titel eingeben.",
+    "errorTargetMissing": "Board oder Spalte gibt es nicht mehr, bitte ein anderes Ziel wählen.",
+    "errorUnknown": "Die Karte konnte nicht gespeichert werden."
   },
   "reminders": {
     "body": "{stage} · {boardName} › {columnName}",

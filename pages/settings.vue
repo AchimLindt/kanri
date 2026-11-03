@@ -333,6 +333,94 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
       </div>
     </section>
 
+    <section id="tray-settings">
+      <h2 class="mb-2 mt-8 text-2xl font-bold">
+        {{ $t("pages.settings.trayHeading") }}
+      </h2>
+
+      <div class="flex flex-col gap-4">
+        <div class="flex w-[48rem] flex-row items-start justify-between gap-4">
+          <div>
+            <h3 class="text-lg">
+              {{ $t("pages.settings.trayMinimizeToTrayHeading") }}
+            </h3>
+            <span class="text-dim-2">
+              {{ $t("pages.settings.trayMinimizeToTraySubtext") }}
+            </span>
+          </div>
+          <SwitchRoot
+            v-model:checked="globalSettingsStore.minimizeToTray"
+            class="bg-elevation-2 bg-accent-checked relative flex h-[24px] w-[42px] shrink-0 cursor-pointer rounded-full shadow-sm focus-within:outline focus-within:outline-black"
+            @update:checked="(val) => globalSettingsStore.setMinimizeToTray(val)"
+          >
+            <SwitchThumb
+              class="bg-button-text my-auto block size-[18px] translate-x-0.5 rounded-full shadow-sm transition-transform duration-100 will-change-transform data-[state=checked]:translate-x-[19px]"
+            />
+          </SwitchRoot>
+        </div>
+
+        <div class="flex w-[48rem] flex-col">
+          <h3 class="text-lg">
+            {{ $t("pages.settings.trayShortcutHeading") }}
+          </h3>
+          <span class="text-dim-2">
+            {{ $t("pages.settings.trayShortcutSubtext") }}
+          </span>
+          <div class="mt-2 flex flex-row items-center gap-2">
+            <input
+              v-model="shortcutDraft"
+              class="bg-elevation-2 border-elevation-3 w-72 rounded-md border px-2 py-1"
+              type="text"
+              spellcheck="false"
+              :placeholder="DEFAULT_QUICK_CAPTURE_SHORTCUT"
+              @change="onShortcutChanged"
+              @keydown.enter.prevent="onShortcutChanged"
+            >
+            <button
+              v-if="globalSettingsStore.quickCaptureShortcut !== DEFAULT_QUICK_CAPTURE_SHORTCUT"
+              class="bg-elevation-2 bg-elevation-3-hover transition-button shrink-0 rounded-md px-3 py-1"
+              @click="resetShortcut"
+            >
+              {{ $t("pages.settings.trayShortcutReset") }}
+            </button>
+          </div>
+          <span
+            v-if="shortcutValidationError"
+            class="mt-1 text-red-500"
+          >
+            {{ shortcutValidationError }}
+          </span>
+          <span
+            v-else-if="globalSettingsStore.quickCaptureShortcutError && globalSettingsStore.quickCaptureShortcut"
+            class="mt-1 text-red-500"
+          >
+            {{ $t("pages.settings.trayShortcutRegisterError") }}
+          </span>
+        </div>
+
+        <div class="flex w-[48rem] flex-col">
+          <h3 class="text-lg">
+            {{ $t("pages.settings.trayInboxHeading") }}
+          </h3>
+          <span class="text-dim-2">
+            {{ $t("pages.settings.trayInboxSubtext") }}
+          </span>
+          <div class="mt-2 flex flex-row items-center gap-2">
+            <span class="text-dim-3 text-no-overflow min-w-0 flex-1">
+              {{ quickCaptureInboxLabel }}
+            </span>
+            <button
+              v-if="globalSettingsStore.quickCaptureBoardId || globalSettingsStore.quickCaptureColumnId"
+              class="bg-elevation-2 bg-elevation-3-hover transition-button shrink-0 rounded-md px-3 py-1"
+              @click="globalSettingsStore.setQuickCaptureInbox('', '')"
+            >
+              {{ $t("pages.settings.trayInboxReset") }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="miscellaneous-settings">
       <h2 class="mb-2 mt-8 text-2xl font-bold">
         {{ $t("pages.settings.miscellaneousHeading") }}
@@ -414,6 +502,26 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
           </SwitchRoot>
         </div>
 
+        <div class="flex w-[48rem] flex-row items-start justify-between gap-4">
+          <div>
+            <h3 class="text-lg">
+              {{ $t("pages.settings.miscellaneousStartMinimizedHeading") }}
+            </h3>
+            <span class="text-dim-2">
+              {{ $t("pages.settings.miscellaneousStartMinimizedSubtext") }}
+            </span>
+          </div>
+          <SwitchRoot
+            v-model:checked="globalSettingsStore.startMinimized"
+            class="bg-elevation-2 bg-accent-checked relative flex h-[24px] w-[42px] shrink-0 cursor-pointer rounded-full shadow-sm focus-within:outline focus-within:outline-black"
+            @update:checked="(val) => globalSettingsStore.setStartMinimized(val)"
+          >
+            <SwitchThumb
+              class="bg-button-text my-auto block size-[18px] translate-x-0.5 rounded-full shadow-sm transition-transform duration-100 will-change-transform data-[state=checked]:translate-x-[19px]"
+            />
+          </SwitchRoot>
+        </div>
+
         <div class="flex w-[48rem] flex-row items-start justify-between">
           <div class="mb-8 flex w-[48rem] flex-row items-start justify-between">
             <div>
@@ -461,6 +569,7 @@ import { readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
 
 import { useI18n } from "vue-i18n";
 import { isReminderLeadTime, normalizeStartPage } from "@/utils/reminders";
+import { DEFAULT_QUICK_CAPTURE_SHORTCUT, validateShortcut } from "@/utils/quickCapture";
 
 const router = useRouter();
 
@@ -533,6 +642,57 @@ const onStartPageChanged = async (event: Event) => {
   const value = (event.target as HTMLSelectElement).value;
   await globalSettingsStore.setStartPage(normalizeStartPage(value));
 };
+
+/* Tray and quick capture */
+
+const boardsStore = useBoardsStore();
+
+const shortcutDraft = ref(globalSettingsStore.quickCaptureShortcut);
+const shortcutValidationError = ref("");
+
+// the settings may finish loading after this page was created (direct start on this page)
+watch(
+  () => globalSettingsStore.quickCaptureShortcut,
+  (value) => {
+    shortcutDraft.value = value;
+  },
+);
+
+const onShortcutChanged = async () => {
+  const result = validateShortcut(shortcutDraft.value);
+  if (!result.valid) {
+    shortcutValidationError.value = t(
+      result.reason === "modifier"
+        ? "pages.settings.trayShortcutInvalidModifier"
+        : result.reason === "key"
+          ? "pages.settings.trayShortcutInvalidKey"
+          : "pages.settings.trayShortcutInvalidFormat",
+    );
+    return;
+  }
+  shortcutValidationError.value = "";
+  shortcutDraft.value = result.shortcut;
+  if (result.shortcut !== globalSettingsStore.quickCaptureShortcut) {
+    // the layout re-registers the shortcut when the setting changes
+    await globalSettingsStore.setQuickCaptureShortcut(result.shortcut);
+  }
+};
+
+const resetShortcut = async () => {
+  shortcutDraft.value = DEFAULT_QUICK_CAPTURE_SHORTCUT;
+  await onShortcutChanged();
+};
+
+const quickCaptureInboxLabel = computed(() => {
+  const boardId = globalSettingsStore.quickCaptureBoardId;
+  const columnId = globalSettingsStore.quickCaptureColumnId;
+  if (!boardId || !columnId) return t("pages.settings.trayInboxNotSet");
+
+  const board = boardsStore.boardById(boardId);
+  const column = board?.columns.find((c) => c.id === columnId);
+  if (!board || !column) return t("pages.settings.trayInboxInvalid");
+  return t("pages.settings.trayInboxValue", { boardName: board.title, columnName: column.title });
+});
 
 const chooseMarkdownDocumentsFolder = async () => {
   const selected = await open({

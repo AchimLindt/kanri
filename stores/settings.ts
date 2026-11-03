@@ -22,6 +22,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import { disable, enable, isEnabled } from "@tauri-apps/plugin-autostart";
 import { DEFAULT_ARCHIVE_AFTER_DAYS, normalizeArchiveAfterDays } from "@/utils/cardArchive";
 import type { ReminderLeadTime } from "@/types/kanban-types";
+import { DEFAULT_QUICK_CAPTURE_SHORTCUT, normalizeQuickCaptureShortcut } from "@/utils/quickCapture";
 import {
   DEFAULT_REMINDER_LEAD_TIME,
   DEFAULT_START_PAGE,
@@ -69,6 +70,16 @@ export const useSettingsStore = defineStore("settings", {
     const startPage = ref<StartPage>(DEFAULT_START_PAGE);
     const todaySectionsCollapsed = ref<Record<string, boolean>>({});
 
+    /* Tray and quick capture */
+    const minimizeToTray = ref(true);
+    const startMinimized = ref(false);
+    const quickCaptureShortcut = ref(DEFAULT_QUICK_CAPTURE_SHORTCUT);
+    // inbox of the quick capture window, "" = not chosen yet
+    const quickCaptureBoardId = ref("");
+    const quickCaptureColumnId = ref("");
+    // true if the shortcut could not be registered (not persisted)
+    const quickCaptureShortcutError = ref(false);
+
     // true once loadSettings() has finished (not persisted), e.g. for the start page redirect
     const loaded = ref(false);
 
@@ -95,6 +106,14 @@ export const useSettingsStore = defineStore("settings", {
   reminderLeadTime,
   startPage,
   todaySectionsCollapsed,
+
+  minimizeToTray,
+  startMinimized,
+  quickCaptureShortcut,
+  quickCaptureBoardId,
+  quickCaptureColumnId,
+  quickCaptureShortcutError,
+
   loaded,
 
   boardSortingOption,
@@ -128,6 +147,11 @@ export const useSettingsStore = defineStore("settings", {
       const reminderLeadTimeSaved = normalizeReminderLeadTime(await store.get("reminderLeadTime"));
       const startPageSaved = normalizeStartPage(await store.get("startPage"));
       const todaySectionsCollapsedSaved = normalizeTodaySectionsCollapsed(await store.get("todaySectionsCollapsed"));
+      const minimizeToTrayRaw: unknown = await store.get("minimizeToTray");
+      const startMinimizedRaw: unknown = await store.get("startMinimized");
+      const quickCaptureShortcutSaved = normalizeQuickCaptureShortcut(await store.get("quickCaptureShortcut"));
+      const quickCaptureBoardIdRaw: unknown = await store.get("quickCaptureBoardId");
+      const quickCaptureColumnIdRaw: unknown = await store.get("quickCaptureColumnId");
 
       const boardSortingOptionSaved: string = (await store.get("boardSortingOption")) ?? "createdAt";
       const reverseSortingSavedRaw: unknown = await store.get("reverseSorting");
@@ -151,6 +175,11 @@ export const useSettingsStore = defineStore("settings", {
       this.reminderLeadTime = reminderLeadTimeSaved;
       this.startPage = startPageSaved;
       this.todaySectionsCollapsed = todaySectionsCollapsedSaved;
+      this.minimizeToTray = typeof minimizeToTrayRaw === "boolean" ? minimizeToTrayRaw : true;
+      this.startMinimized = typeof startMinimizedRaw === "boolean" ? startMinimizedRaw : false;
+      this.quickCaptureShortcut = quickCaptureShortcutSaved;
+      this.quickCaptureBoardId = typeof quickCaptureBoardIdRaw === "string" ? quickCaptureBoardIdRaw : "";
+      this.quickCaptureColumnId = typeof quickCaptureColumnIdRaw === "string" ? quickCaptureColumnIdRaw : "";
       this.boardSortingOption =
         boardSortingOptionSaved === "alphabetical" ||
         boardSortingOptionSaved === "lastEdited" ||
@@ -274,6 +303,42 @@ export const useSettingsStore = defineStore("settings", {
     async setTodaySectionCollapsed(section: TodaySection, collapsed: boolean) {
       this.todaySectionsCollapsed = { ...this.todaySectionsCollapsed, [section]: collapsed };
       await useTauriStore().store.set("todaySectionsCollapsed", this.todaySectionsCollapsed);
+    },
+
+    async setMinimizeToTray(value: boolean) {
+      this.minimizeToTray = value;
+      await useTauriStore().store.set("minimizeToTray", value);
+    },
+
+    async setStartMinimized(value: boolean) {
+      this.startMinimized = value;
+      await useTauriStore().store.set("startMinimized", value);
+      // rewrite an existing autostart entry so it carries the "--autostart" argument
+      // (entries created before this feature lack it, see docs/specs/tray-quick-capture.md)
+      if (value && this.autostartEnabled) {
+        try {
+          await enable();
+        } catch (err) {
+          console.warn("Could not refresh the autostart entry:", err);
+        }
+      }
+    },
+
+    async setQuickCaptureShortcut(value: string) {
+      this.quickCaptureShortcut = value;
+      await useTauriStore().store.set("quickCaptureShortcut", value);
+    },
+
+    setQuickCaptureShortcutError(value: boolean) {
+      this.quickCaptureShortcutError = value;
+    },
+
+    async setQuickCaptureInbox(boardId: string, columnId: string) {
+      this.quickCaptureBoardId = boardId;
+      this.quickCaptureColumnId = columnId;
+      const store = useTauriStore().store;
+      await store.set("quickCaptureBoardId", boardId);
+      await store.set("quickCaptureColumnId", columnId);
     },
 
     async setBoardSortingOption(option: "alphabetical" | "lastEdited" | "createdAt") {

@@ -44,6 +44,18 @@
       "deleteBoardConfirmation": "Are you sure you want to delete the board '{boardName}'? This action is irreversible.",
       "archiveAction": "Archive ({count})"
     },
+    "capture": {
+      "placeholder": "Title, further lines become the description",
+      "targetLabel": "Board and column of the new card",
+      "targetPlaceholder": "Choose board › column…",
+      "targetOption": "{boardName} › {columnName}",
+      "saved": "Saved",
+      "hint": "Enter saves · Shift+Enter new line · Esc closes",
+      "errorEmptyTitle": "Please enter a title.",
+      "errorNoTarget": "Please choose a board and column.",
+      "errorUnknown": "The card could not be saved.",
+      "errorNoAnswer": "Kanri did not respond, please try again."
+    },
     "settings": {
       "deleteAllDataConfirmationAction": "Delete Data",
       "deleteAllDataConfirmationDescription": "Delete all data?",
@@ -103,7 +115,25 @@
       "preferencesStartPageHeading": "Start page",
       "preferencesStartPageSubtext": "Page shown when the app starts.",
       "preferencesStartPageBoards": "Board overview",
-      "preferencesStartPageToday": "Today view"
+      "preferencesStartPageToday": "Today view",
+      "trayHeading": "Tray & quick capture",
+      "trayMinimizeToTrayHeading": "Close to tray",
+      "trayMinimizeToTraySubtext": "Closing the window keeps Kanri running in the system tray (reminders and quick capture stay active). Quit via the tray menu.",
+      "trayShortcutHeading": "Quick capture shortcut",
+      "trayShortcutSubtext": "Global shortcut that opens the quick capture window, e.g. CommandOrControl+Alt+K. Needs at least Ctrl, Alt, Super or CommandOrControl plus one key. Leave empty to disable.",
+      "trayShortcutReset": "Reset to default",
+      "trayShortcutRegisterError": "The shortcut could not be registered, another program probably uses it.",
+      "trayShortcutInvalidFormat": "Invalid format. Use modifiers and one key joined with +, e.g. Control+Alt+K.",
+      "trayShortcutInvalidModifier": "Use at least one of Control, Alt, Super or CommandOrControl.",
+      "trayShortcutInvalidKey": "Unknown key. The last part must be a single key such as K, F8 or Space.",
+      "trayInboxHeading": "Quick capture inbox",
+      "trayInboxSubtext": "Board and column that new cards from the quick capture go to. Chosen in the quick capture window.",
+      "trayInboxNotSet": "Not chosen yet",
+      "trayInboxInvalid": "Board or column no longer exists, will be asked again",
+      "trayInboxValue": "{boardName} › {columnName}",
+      "trayInboxReset": "Reset",
+      "miscellaneousStartMinimizedHeading": "Start minimized",
+      "miscellaneousStartMinimizedSubtext": "When started automatically at login, Kanri starts hidden in the system tray."
     },
     "import": {
       "importExportHeading": "Import & Export",
@@ -397,6 +427,12 @@
       "backgroundColorTitle": "Column background",
       "done": "Done"
     }
+  },
+  "quickCapture": {
+    "errorNotReady": "Kanri is still loading, please try again in a moment.",
+    "errorEmptyTitle": "Please enter a title.",
+    "errorTargetMissing": "The board or column no longer exists, please choose another one.",
+    "errorUnknown": "The card could not be saved."
   },
   "reminders": {
     "body": "{stage} · {boardName} › {columnName}",
