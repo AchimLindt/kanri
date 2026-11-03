@@ -20,7 +20,8 @@ Eine Karte kann beliebig viele Markdown-Dokumente verknüpfen. Die Dokumente sin
 - **Anzeigename:** Dateiname ohne Endung, aus dem Pfad abgeleitet, nicht editierbar.
 - **Reihenfolge:** Einfügereihenfolge, neueste unten, kein Sortieren.
 - **Öffnen:** Klick auf einen Eintrag schließt den Karten-Dialog und navigiert zur Editor-Seite (§3.2).
-- **Kontextmenü je Eintrag** (radix `ContextMenu`, wie in `Card.vue`): „Öffnen", „Im Explorer anzeigen" (`revealItemInDir`), „Mit Standardprogramm öffnen" (`openPath`), „Neu verknüpfen…" (Öffnen-Dialog, Einzelauswahl, ersetzt den Pfad), „Verknüpfung entfernen" (entfernt nur den Verweis, nie die Datei, keine Rückfrage).
+- **Kontextmenü je Eintrag** (radix `ContextMenu`, wie in `Card.vue`): „Öffnen", „Im Explorer anzeigen" (`revealItemInDir`), „Mit Standardprogramm öffnen" (`openPath`), „Neu verknüpfen…" (Öffnen-Dialog, Einzelauswahl, ersetzt den Pfad), „Entfernen…" (Rückfrage, siehe unten).
+- **Entfernen:** „Entfernen…" öffnet eine Inline-Rückfrage im Karten-Dialog (kein zweites `Modal`, sondern ein Overlay über dem Dialoginhalt, damit kein z-Index-Konflikt mit dem Modal entsteht) mit Dokumentname und Pfad und drei Aktionen: „Abbrechen" (auch `Escape` oder Klick auf den Overlay-Hintergrund; `Escape` wird im Capture-Phase abgefangen, damit der Karten-Dialog offen bleibt), „Nur Verknüpfung entfernen" (entfernt den Verweis, Datei bleibt) und „Datei löschen" (rot; `remove()` aus `@tauri-apps/plugin-fs`, danach Verweis entfernen). Schlägt das Löschen fehl, bleibt der Verweis erhalten und ein Fehlerdialog (`message`, `kind: "error"`) zeigt den Fehler. Ist die Datei laut `exists()`-Prüfung nicht vorhanden, wird der Verweis ohne Rückfrage entfernt. Die Versionshistorie (`docs/specs/document-history.md`) wird beim Löschen der Datei nicht angefasst.
 - **Datei fehlt:** Beim Öffnen des Karten-Dialogs wird für jeden Verweis `exists()` geprüft (asynchron, Ergebnis in einer Map `documentExists[docId]`). Fehlende Dateien zeigen ein Warn-Icon, der Klick öffnet nichts, im Kontextmenü sind nur „Neu verknüpfen…" und „Verknüpfung entfernen" aktiv. Nichts wird automatisch entfernt. Ein `exists()`-Fehler (Pfad außerhalb des Tauri-fs-Scopes, z. B. nach Import auf anderem Rechner) zählt als „fehlt".
 - **Standardordner:** Globale Einstellung „Standardordner für Markdown-Dokumente" (Settings-Seite, Ordner-Dialog, leerbar). Ist er gesetzt, starten Öffnen- und Speichern-Dialoge dort (`defaultPath`). Ist er leer, wird kein `defaultPath` übergeben (System-Default). Kein Merken des zuletzt benutzten Ordners.
 - **Speichern im Editor:** Autosave, entprellt 1000 ms nach der letzten Änderung, plus `Strg+S` (sofort). Beim Verlassen der Seite (Zurück-Button, `Escape`, Router-Leave) wird ein ausstehender Save vorher geschrieben. Keine „ungespeicherte Änderungen"-Abfrage.
@@ -112,7 +113,12 @@ Settings (`stores/settings.ts`, Tauri-Store-Keys gleichnamig): `markdownDocument
 - `modals.editCard.documentReveal`: "Show in file manager" / "Im Explorer anzeigen"
 - `modals.editCard.documentOpenExternal`: "Open with default app" / "Mit Standardprogramm öffnen"
 - `modals.editCard.documentRelink`: "Relink…" / "Neu verknüpfen…"
-- `modals.editCard.documentRemove`: "Remove link" / "Verknüpfung entfernen"
+- `modals.editCard.documentRemove`: "Remove…" / "Entfernen…"
+- `modals.editCard.documentRemoveTitle`: "Remove document" / "Dokument entfernen"
+- `modals.editCard.documentRemoveQuestion`: "Remove “{name}” from this card? You can keep the file or delete it from disk as well." / "„{name}“ von dieser Karte entfernen? Die Datei kann erhalten bleiben oder zusätzlich von der Festplatte gelöscht werden."
+- `modals.editCard.documentRemoveDetach`: "Remove link only" / "Nur Verknüpfung entfernen"
+- `modals.editCard.documentRemoveDeleteFile`: "Delete file" / "Datei löschen"
+- `modals.editCard.documentDeleteFailed`: "The file could not be deleted." / "Die Datei konnte nicht gelöscht werden."
 - `pages.document.back`: "Back to board" / "Zurück zum Board"
 - `pages.document.statusSaved`: "Saved" / "Gespeichert"
 - `pages.document.statusSaving`: "Saving…" / "Speichert…"
@@ -133,8 +139,8 @@ Settings (`stores/settings.ts`, Tauri-Store-Keys gleichnamig): `markdownDocument
 - WYSIWYG, Toolbar, Tabellen-Editor, Rechtschreibprüfung im Editor.
 - Mehrere Dokumente gleichzeitig offen, Tabs, zweites Fenster.
 - Sortieren der Dokumentliste; editierbarer Anzeigename.
-- Rückfrage beim Entfernen einer Verknüpfung; Löschen von Dateien aus der App.
 - Automatisches Entfernen fehlender Verweise.
+- Papierkorb statt endgültigem Löschen; Löschen der Versionshistorie zusammen mit der Datei.
 
 ## 9. Verifikation
 
@@ -149,8 +155,8 @@ Manueller UI-Test (`corepack pnpm tauri dev`, PowerShell):
 5. Lint: ungeschlossener Code-Block oder Überschriften-Sprung (`#` → `###`) erzeugt Marker und Zähler; `MD013` (lange Zeile) meldet nichts.
 6. `Escape`/Zurück führt zum Board; Karte zeigt Dokument-Icon mit Anzahl.
 7. „Vorhandenes hinzufügen…" mit Mehrfachauswahl; doppelter Pfad wird nicht doppelt gelistet.
-8. Kontextmenü: Im Explorer anzeigen, Mit Standardprogramm öffnen, Neu verknüpfen, Entfernen (Datei bleibt bestehen).
-9. Datei im Explorer umbenennen → Karte öffnen: Eintrag mit Warn-Icon, nur Neu verknüpfen/Entfernen aktiv.
+8. Kontextmenü: Im Explorer anzeigen, Mit Standardprogramm öffnen, Neu verknüpfen. „Entfernen…": Rückfrage erscheint; „Abbrechen"/`Escape`/Klick daneben schließt nur die Rückfrage, Karten-Dialog bleibt offen; „Nur Verknüpfung entfernen": Eintrag weg, Datei bleibt; „Datei löschen": Eintrag weg, Datei gelöscht. Schreibgeschützte/gesperrte Datei: Fehlerdialog, Eintrag bleibt.
+9. Datei im Explorer umbenennen → Karte öffnen: Eintrag mit Warn-Icon, nur Neu verknüpfen/Entfernen aktiv; Entfernen entfernt ohne Rückfrage.
 10. Karte duplizieren: Kopie hat dieselben Dokumente. Karte löschen: Dateien bleiben.
 11. App neu starten: Verweise erhalten, Dateien ohne erneuten Dialog lesbar (persisted scope).
 12. Board exportieren und JSON prüfen: `documents` mit Pfaden enthalten.

@@ -23,11 +23,56 @@ limitations under the License.
       titleEditing = false;
       taskAddMode = false;
       showCustomColorPopup = false;
+      documentPendingRemoval = null;
       emitter.emit('columnDraggingOn');
     "
   >
     <template #content>
-      <div class="flex h-[40rem] w-[36rem] flex-col pl-2">
+      <div class="relative flex h-[40rem] w-[36rem] flex-col pl-2">
+        <!-- inline confirmation for removing a document; sits above the modal content, so no extra z-index juggling -->
+        <div
+          v-if="documentPendingRemoval"
+          class="absolute -inset-y-4 -left-8 -right-6 z-10 flex items-center justify-center rounded-md bg-zinc-800/40 backdrop-blur-sm"
+          @click.self="documentPendingRemoval = null"
+        >
+          <div
+            class="bg-elevation-2 flex max-w-md flex-col gap-4 rounded-md p-6 shadow-lg"
+          >
+            <h2 class="text-xl font-bold">
+              {{ $t("modals.editCard.documentRemoveTitle") }}
+            </h2>
+            <p>
+              {{
+                $t("modals.editCard.documentRemoveQuestion", {
+                  name: documentDisplayName(documentPendingRemoval.path),
+                })
+              }}
+            </p>
+            <p class="text-dim-3 break-all text-sm">
+              {{ documentPendingRemoval.path }}
+            </p>
+            <div class="flex flex-row flex-wrap items-center justify-end gap-3">
+              <button
+                class="text-accent-hover transition-button p-2"
+                @click="documentPendingRemoval = null"
+              >
+                {{ $t("general.cancelAction") }}
+              </button>
+              <button
+                class="bg-elevation-3 bg-elevation-3-hover transition-button rounded-md px-4 py-2"
+                @click="confirmRemoveDocument(false)"
+              >
+                {{ $t("modals.editCard.documentRemoveDetach") }}
+              </button>
+              <button
+                class="transition-button rounded-md bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+                @click="confirmRemoveDocument(true)"
+              >
+                {{ $t("modals.editCard.documentRemoveDeleteFile") }}
+              </button>
+            </div>
+          </div>
+        </div>
         <div class="mb-4">
           <div class="flex flex-row items-start justify-between gap-12">
             <div
@@ -584,7 +629,7 @@ import {
   PhX,
 } from "@phosphor-icons/vue";
 import { message, open, save } from "@tauri-apps/plugin-dialog";
-import { exists, writeTextFile } from "@tauri-apps/plugin-fs";
+import { exists, remove, writeTextFile } from "@tauri-apps/plugin-fs";
 import { openPath, revealItemInDir } from "@tauri-apps/plugin-opener";
 import {
   ContextMenuContent,
@@ -681,7 +726,7 @@ const emit = defineEmits<{
   ): void;
 }>();
 
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 
 const columnID = ref("");
 const { textarea: titleTextArea, input: title } = useTextareaAutosize();
@@ -719,6 +764,8 @@ const draggingEnabled = ref(true);
 const documents: Ref<Array<CardDocument>> = ref([]);
 // result of the exists() check per document id; undefined = not checked yet
 const documentExists: Ref<Record<string, boolean>> = ref({});
+// document whose removal is awaiting confirmation (inline dialog)
+const documentPendingRemoval: Ref<CardDocument | null> = ref(null);
 let documentCheckGeneration = 0;
 let lastCheckedDocumentsKey = "";
 
@@ -1047,8 +1094,40 @@ const relinkDocument = async (doc: CardDocument) => {
   emit("setCardDocumentPath", columnID.value, props.card?.id, doc.id, selected);
 };
 
-const removeDocument = (doc: CardDocument) => {
+const detachDocument = (doc: CardDocument) => {
   emit("removeCardDocument", columnID.value, props.card?.id, doc.id);
+};
+
+// a missing file has nothing to delete, so the link is removed without asking
+const removeDocument = (doc: CardDocument) => {
+  if (isDocumentMissing(doc.id)) {
+    detachDocument(doc);
+    return;
+  }
+
+  documentPendingRemoval.value = doc;
+};
+
+const confirmRemoveDocument = async (deleteFile: boolean) => {
+  const doc = documentPendingRemoval.value;
+  if (!doc) return;
+
+  documentPendingRemoval.value = null;
+
+  if (deleteFile) {
+    try {
+      await remove(doc.path);
+    } catch (err) {
+      // keep the link so the user can retry or detach only
+      console.error("Could not delete document:", doc.path, err);
+      message(`${t("modals.editCard.documentDeleteFailed")}\n${String(err)}`, {
+        kind: "error",
+      });
+      return;
+    }
+  }
+
+  detachDocument(doc);
 };
 
 // re-check on every opening, files may have been renamed or deleted in the meantime
@@ -1056,12 +1135,26 @@ const onEditCardModalOpened = () => {
   checkDocumentsExist();
 };
 
+// capture phase, so Escape closes only the inline dialog and not the whole modal
+const documentDialogKeyDownListener = (e: KeyboardEvent) => {
+  if (!documentPendingRemoval.value) return;
+
+  if (e.key === "Escape") {
+    documentPendingRemoval.value = null;
+    e.stopImmediatePropagation();
+  } else if (e.key === "Enter") {
+    e.stopImmediatePropagation();
+  }
+};
+
 onMounted(() => {
   emitter.on("editCardModalOpened", onEditCardModalOpened);
+  document.addEventListener("keydown", documentDialogKeyDownListener, true);
 });
 
 onBeforeUnmount(() => {
   emitter.off("editCardModalOpened", onEditCardModalOpened);
+  document.removeEventListener("keydown", documentDialogKeyDownListener, true);
 });
 
 const dateToLocalFormat = (date: Date | string) => {

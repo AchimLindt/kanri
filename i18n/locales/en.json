@@ -246,7 +246,12 @@
       "documentReveal": "Show in file manager",
       "documentOpenExternal": "Open with default app",
       "documentRelink": "Relink…",
-      "documentRemove": "Remove link"
+      "documentRemove": "Remove…",
+      "documentRemoveTitle": "Remove document",
+      "documentRemoveQuestion": "Remove “{name}” from this card? You can keep the file or delete it from disk as well.",
+      "documentRemoveDetach": "Remove link only",
+      "documentRemoveDeleteFile": "Delete file",
+      "documentDeleteFailed": "The file could not be deleted."
     },
     "help": {
       "title": "Help & Resources",

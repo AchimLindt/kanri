@@ -237,7 +237,12 @@
       "documentReveal": "Im Explorer anzeigen",
       "documentOpenExternal": "Mit Standardprogramm öffnen",
       "documentRelink": "Neu verknüpfen…",
-      "documentRemove": "Verknüpfung entfernen"
+      "documentRemove": "Entfernen…",
+      "documentRemoveTitle": "Dokument entfernen",
+      "documentRemoveQuestion": "„{name}“ von dieser Karte entfernen? Die Datei kann erhalten bleiben oder zusätzlich von der Festplatte gelöscht werden.",
+      "documentRemoveDetach": "Nur Verknüpfung entfernen",
+      "documentRemoveDeleteFile": "Datei löschen",
+      "documentDeleteFailed": "Die Datei konnte nicht gelöscht werden."
     },
     "help": {
       "title": "Hilfe & Ressourcen",
