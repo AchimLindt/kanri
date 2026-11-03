@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>
+/* SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>, AchimLindt
 
 SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -57,6 +57,11 @@ export declare interface Tag {
   color?: string | null;
 }
 
+export declare interface CardDocument {
+  id: string; // generateUniqueID()
+  path: string; // absolute path of the linked Markdown file
+}
+
 export declare interface Card {
   color?: string;
   description?: string;
@@ -67,6 +72,7 @@ export declare interface Card {
   name: string;
   tasks?: Array<Task>;
   tags?: Array<Tag> | null;
+  documents?: Array<CardDocument> | null;
 }
 
 export declare interface Theme {

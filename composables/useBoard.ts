@@ -217,6 +217,43 @@ export function useBoard(id: string | Ref<string>) {
     });
   };
 
+  // Card documents
+  const addCardDocument = (
+    columnId: string,
+    cardId: string | undefined,
+    path: string
+  ): string | null => {
+    if (!board.value) return null;
+    if (!cardId) return null;
+    return store.addCardDocument(board.value.id, columnId, cardId, path);
+  };
+
+  const removeCardDocument = (
+    columnId: string,
+    cardId: string | undefined,
+    documentId: string
+  ) => {
+    if (!board.value) return;
+    if (!cardId) return;
+    store.removeCardDocument(board.value.id, columnId, cardId, documentId);
+  };
+
+  const setCardDocumentPath = (
+    columnId: string,
+    cardId: string | undefined,
+    documentId: string,
+    path: string
+  ) => {
+    if (!board.value) return;
+    if (!cardId) return;
+    store.setCardDocumentPath(board.value.id, columnId, cardId, documentId, path);
+  };
+
+  const findCardDocument = (cardId: string, documentId: string) => {
+    if (!board.value) return null;
+    return store.findCardDocument(board.value.id, cardId, documentId);
+  };
+
   // (Global) Card Tags
   const addGlobalTag = (tag: Tag) => {
     if (!board.value) return;
@@ -277,6 +314,12 @@ export function useBoard(id: string | Ref<string>) {
     setCardTasks,
     setCardDueDate,
     setCardTags,
+
+    // card documents
+    addCardDocument,
+    removeCardDocument,
+    setCardDocumentPath,
+    findCardDocument,
 
     // global tags
     addGlobalTag,

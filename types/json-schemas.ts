@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>
+/* SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>, AchimLindt
 
 SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -59,6 +59,10 @@ const kanriCardSchema = z.object({
     .optional(),
   dueDate: z.string().optional().nullable(),
   tags: z.array(kanriTagSchema).optional().nullable(),
+  documents: z
+    .array(z.object({ id: z.string().optional(), path: z.string() }))
+    .optional()
+    .nullable(),
 });
 
 const kanriColumnSchema = z.object({

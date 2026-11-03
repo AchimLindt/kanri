@@ -20,9 +20,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 import { defineStore } from "pinia";
-import type { Board, Column, Card, Tag } from "@/types/kanban-types";
+import { toRaw } from "vue";
+import type { Board, Column, Card, CardDocument, Tag } from "@/types/kanban-types";
 import { useTauriStore } from "@/stores/tauriStore";
 import { generateUniqueID } from "@/utils/idGenerator";
+import { normalizeDocumentPath } from "@/utils/documentPaths";
 
 type Pin = { id: string; title: string; pinIcon?: string; pinIconText?: string };
 
@@ -34,6 +36,17 @@ export const useBoardsStore = defineStore("boards", {
   }),
   getters: {
     boardById: (state) => (id: string) => state.boards.find(b => b.id === id) ?? null,
+    // Finds a document reference of a card (used by the document editor page)
+    findCardDocument: (state) => (boardId: string, cardId: string, documentId: string): CardDocument | null => {
+      const b = state.boards.find(b => b.id === boardId);
+      if (!b) return null;
+      for (const col of b.columns) {
+        const card = col.cards.find(c => c.id === cardId);
+        if (!card) continue;
+        return card.documents?.find(d => d.id === documentId) ?? null;
+      }
+      return null;
+    },
     isPinned: (state) => (id: string) => !!state.pins.find(p => p.id === id),
   },
   actions: {
@@ -342,11 +355,17 @@ export const useBoardsStore = defineStore("boards", {
       if (!card) return;
 
       // Clone card while preserving Date objects and creating new array instances
-      let copy: Card;
+      let copy: Card | null = null;
       if (typeof structuredClone === "function") {
-        // structuredClone preserves Date instances and performs a deep clone
-        copy = structuredClone(card);
-      } else {
+        // structuredClone preserves Date instances and performs a deep clone;
+        // it cannot clone the reactive proxy itself, so clone the raw object
+        try {
+          copy = structuredClone(toRaw(card));
+        } catch (e) {
+          console.warn("structuredClone failed, falling back to manual copy", e);
+        }
+      }
+      if (!copy) {
         // Fallback: shallow-copy primitives and explicitly copy arrays and Date-like fields
         copy = {
           ...card,
@@ -354,12 +373,59 @@ export const useBoardsStore = defineStore("boards", {
           dueDate: card.dueDate ? new Date(card.dueDate) : null,
           tasks: card.tasks ? card.tasks.map(t => ({ ...t })) : undefined,
           tags: card.tags ? card.tags.map(t => ({ ...t })) : undefined,
+          // document references are copied, both cards point to the same files
+          documents: card.documents ? card.documents.map(d => ({ ...d })) : undefined,
         } as Card;
       }
 
       copy.id = generateUniqueID();
       copy.name = `${copy.name} (copy)`;
       col.cards.push(copy);
+      b.lastEdited = new Date();
+    },
+    // Card documents (references to Markdown files, the files themselves are never touched)
+    addCardDocument(boardId: string, columnId: string, cardId: string, path: string): string | null {
+      const b = this.boardById(boardId);
+      if (!b) return null;
+      const col = b.columns.find(c => c.id === columnId);
+      if (!col) return null;
+      const card = col.cards.find(c => c.id === cardId);
+      if (!card) return null;
+
+      if (!card.documents) card.documents = [];
+
+      // a path is linked at most once per card
+      const normalized = normalizeDocumentPath(path);
+      const existing = card.documents.find(d => normalizeDocumentPath(d.path) === normalized);
+      if (existing) return existing.id;
+
+      const id = generateUniqueID();
+      card.documents.push({ id, path });
+      b.lastEdited = new Date();
+      return id;
+    },
+    removeCardDocument(boardId: string, columnId: string, cardId: string, documentId: string) {
+      const b = this.boardById(boardId);
+      if (!b) return;
+      const col = b.columns.find(c => c.id === columnId);
+      if (!col) return;
+      const card = col.cards.find(c => c.id === cardId);
+      if (!card || !card.documents) return;
+
+      card.documents = card.documents.filter(d => d.id !== documentId);
+      b.lastEdited = new Date();
+    },
+    setCardDocumentPath(boardId: string, columnId: string, cardId: string, documentId: string, path: string) {
+      const b = this.boardById(boardId);
+      if (!b) return;
+      const col = b.columns.find(c => c.id === columnId);
+      if (!col) return;
+      const card = col.cards.find(c => c.id === cardId);
+      if (!card || !card.documents) return;
+      const doc = card.documents.find(d => d.id === documentId);
+      if (!doc) return;
+
+      doc.path = path;
       b.lastEdited = new Date();
     },
     deleteCard(boardId: string, columnId: string, cardId: string) {
