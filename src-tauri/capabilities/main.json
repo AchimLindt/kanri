@@ -18,6 +18,7 @@
     "dialog:default",
     "autostart:default",
     "log:default",
+    "notification:default",
     "fs:default",
     "fs:allow-read",
     "fs:allow-write",
