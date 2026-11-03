@@ -1,4 +1,4 @@
-/* SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>
+/* SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>, AchimLindt
 
 SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -39,6 +39,10 @@ export const useSettingsStore = defineStore("settings", {
     const displayColumnCardCountEnabled = ref(false);
     const defaultRelativeDueDatesEnabled = ref(false);
 
+    /* Card documents (Markdown files linked to cards) */
+    const markdownDocumentsFolder = ref("");
+    const markdownPreviewEnabled = ref(true);
+
     return {
   locale,
   animationsEnabled,
@@ -49,6 +53,9 @@ export const useSettingsStore = defineStore("settings", {
   addToTopOfColumnButtonEnabled,
   displayColumnCardCountEnabled,
   defaultRelativeDueDatesEnabled,
+
+  markdownDocumentsFolder,
+  markdownPreviewEnabled,
 
   boardSortingOption,
   reverseSorting,
@@ -68,6 +75,9 @@ export const useSettingsStore = defineStore("settings", {
       const displayColumnCardCountEnabledSaved: boolean = await store.get("displayColumnCardCountEnabled") ?? false;
       const defaultRelativeDueDatesEnabledSaved: boolean = await store.get("defaultRelativeDueDatesEnabled") ?? false;
 
+      const markdownDocumentsFolderSaved: string = await store.get("markdownDocumentsFolder") ?? "";
+      const markdownPreviewEnabledSaved: boolean = await store.get("markdownPreviewEnabled") ?? true;
+
       const boardSortingOptionSaved: string = (await store.get("boardSortingOption")) ?? "createdAt";
       const reverseSortingSavedRaw: unknown = await store.get("reverseSorting");
       const reverseSortingSaved: boolean = typeof reverseSortingSavedRaw === "boolean"
@@ -81,6 +91,8 @@ export const useSettingsStore = defineStore("settings", {
       this.addToTopOfColumnButtonEnabled = addToTopOfColumnButtonEnabledSaved;
       this.displayColumnCardCountEnabled = displayColumnCardCountEnabledSaved;
       this.defaultRelativeDueDatesEnabled = defaultRelativeDueDatesEnabledSaved;
+      this.markdownDocumentsFolder = markdownDocumentsFolderSaved;
+      this.markdownPreviewEnabled = markdownPreviewEnabledSaved;
       this.boardSortingOption =
         boardSortingOptionSaved === "alphabetical" ||
         boardSortingOptionSaved === "lastEdited" ||
@@ -155,6 +167,16 @@ export const useSettingsStore = defineStore("settings", {
     async setDefaultRelativeDueDatesEnabled(value: boolean) {
       this.defaultRelativeDueDatesEnabled = value;
       await useTauriStore().store.set("defaultRelativeDueDatesEnabled", value);
+    },
+
+    async setMarkdownDocumentsFolder(value: string) {
+      this.markdownDocumentsFolder = value;
+      await useTauriStore().store.set("markdownDocumentsFolder", value);
+    },
+
+    async setMarkdownPreviewEnabled(value: boolean) {
+      this.markdownPreviewEnabled = value;
+      await useTauriStore().store.set("markdownPreviewEnabled", value);
     },
 
     async setBoardSortingOption(option: "alphabetical" | "lastEdited" | "createdAt") {

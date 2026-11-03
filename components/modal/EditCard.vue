@@ -1,4 +1,4 @@
-<!-- SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>, Khusyasy, gitoak -->
+<!-- SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>, Khusyasy, gitoak, AchimLindt -->
 <!-- -->
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 <!--
@@ -455,6 +455,94 @@ limitations under the License.
           </div>
           <div class="mt-4 flex flex-col pr-6">
             <h2 class="text-lg font-semibold">
+              {{ $t("modals.editCard.documentsTitle") }}
+            </h2>
+            <div v-if="documents.length > 0" class="mt-1 flex flex-col gap-1">
+              <ContextMenuRoot v-for="doc in documents" :key="doc.id">
+                <ContextMenuTrigger as-child>
+                  <button
+                    class="bg-elevation-2-hover flex w-full flex-row items-center gap-2 rounded-md px-2 py-1 text-left"
+                    :class="
+                      isDocumentMissing(doc.id) ? 'cursor-default' : 'cursor-pointer'
+                    "
+                    :title="
+                      isDocumentMissing(doc.id)
+                        ? `${$t('modals.editCard.documentMissing')}: ${doc.path}`
+                        : doc.path
+                    "
+                    @click="openDocument(doc)"
+                  >
+                    <PhWarning
+                      v-if="isDocumentMissing(doc.id)"
+                      class="size-5 shrink-0 text-red-500"
+                    />
+                    <PhFileText v-else class="text-dim-2 size-5 shrink-0" />
+                    <span class="text-no-overflow-task">{{
+                      documentDisplayName(doc.path)
+                    }}</span>
+                  </button>
+                </ContextMenuTrigger>
+                <ContextMenuPortal to=".default-layout">
+                  <ContextMenuContent :class="documentContextMenuClass">
+                    <ContextMenuItem
+                      value="Open"
+                      :disabled="isDocumentMissing(doc.id)"
+                      class="bg-elevation-2-hover flex w-full cursor-pointer flex-row items-center rounded-md px-4 py-1.5 data-[disabled]:cursor-default data-[disabled]:opacity-50"
+                      @select="openDocument(doc)"
+                    >
+                      {{ $t("modals.editCard.documentOpen") }}
+                    </ContextMenuItem>
+                    <ContextMenuItem
+                      value="Reveal"
+                      :disabled="isDocumentMissing(doc.id)"
+                      class="bg-elevation-2-hover flex w-full cursor-pointer flex-row items-center rounded-md px-4 py-1.5 data-[disabled]:cursor-default data-[disabled]:opacity-50"
+                      @select="revealDocument(doc)"
+                    >
+                      {{ $t("modals.editCard.documentReveal") }}
+                    </ContextMenuItem>
+                    <ContextMenuItem
+                      value="Open external"
+                      :disabled="isDocumentMissing(doc.id)"
+                      class="bg-elevation-2-hover flex w-full cursor-pointer flex-row items-center rounded-md px-4 py-1.5 data-[disabled]:cursor-default data-[disabled]:opacity-50"
+                      @select="openDocumentExternally(doc)"
+                    >
+                      {{ $t("modals.editCard.documentOpenExternal") }}
+                    </ContextMenuItem>
+                    <ContextMenuItem
+                      value="Relink"
+                      class="bg-elevation-2-hover flex w-full cursor-pointer flex-row items-center rounded-md px-4 py-1.5"
+                      @select="relinkDocument(doc)"
+                    >
+                      {{ $t("modals.editCard.documentRelink") }}
+                    </ContextMenuItem>
+                    <ContextMenuItem
+                      value="Remove"
+                      class="bg-elevation-2-hover flex w-full cursor-pointer flex-row items-center rounded-md px-4 py-1.5"
+                      @select="removeDocument(doc)"
+                    >
+                      {{ $t("modals.editCard.documentRemove") }}
+                    </ContextMenuItem>
+                  </ContextMenuContent>
+                </ContextMenuPortal>
+              </ContextMenuRoot>
+            </div>
+            <div class="mt-2 flex flex-row gap-2">
+              <button
+                class="bg-elevation-2 bg-elevation-3-hover transition-button rounded-md px-3 py-1"
+                @click="addExistingDocuments"
+              >
+                {{ $t("modals.editCard.documentsAddExisting") }}
+              </button>
+              <button
+                class="bg-elevation-2 bg-elevation-3-hover transition-button rounded-md px-3 py-1"
+                @click="createNewDocument"
+              >
+                {{ $t("modals.editCard.documentsCreateNew") }}
+              </button>
+            </div>
+          </div>
+          <div class="mt-4 flex flex-col pr-6">
+            <h2 class="text-lg font-semibold">
               {{ $t("modals.editCard.tagsTitle") }}
             </h2>
             <vue-tags-input
@@ -479,7 +567,7 @@ limitations under the License.
 </template>
 
 <script setup lang="ts">
-import type { Card, Task, Tag } from "@/types/kanban-types";
+import type { Card, CardDocument, Task, Tag } from "@/types/kanban-types";
 import type { Ref } from "vue";
 
 import emitter from "@/utils/emitter";
@@ -489,10 +577,28 @@ import { CheckIcon, PlusIcon, XMarkIcon } from "@heroicons/vue/24/solid";
 import {
   PhCalendar,
   PhCheck,
+  PhFileText,
   PhPencilSimple,
   PhTrash,
+  PhWarning,
   PhX,
 } from "@phosphor-icons/vue";
+import { message, open, save } from "@tauri-apps/plugin-dialog";
+import { exists, writeTextFile } from "@tauri-apps/plugin-fs";
+import { openPath, revealItemInDir } from "@tauri-apps/plugin-opener";
+import {
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuPortal,
+  ContextMenuRoot,
+  ContextMenuTrigger,
+} from "radix-vue";
+import {
+  cardTitleToFileName,
+  documentDisplayName,
+  joinDocumentPath,
+  normalizeDocumentPath,
+} from "@/utils/documentPaths";
 import { vOnClickOutside } from "@vueuse/components";
 //@ts-expect-error library has no types
 import { Container, Draggable } from "vue3-smooth-dnd";
@@ -548,6 +654,31 @@ const emit = defineEmits<{
   ): void;
   (e: "addGlobalTag", tag: Tag): void;
   (e: "openTagEdit"): void;
+  (
+    e: "addCardDocument",
+    columnID: string,
+    cardId: string | undefined,
+    path: string
+  ): void;
+  (
+    e: "removeCardDocument",
+    columnID: string,
+    cardId: string | undefined,
+    documentId: string
+  ): void;
+  (
+    e: "setCardDocumentPath",
+    columnID: string,
+    cardId: string | undefined,
+    documentId: string,
+    path: string
+  ): void;
+  (
+    e: "openDocument",
+    columnID: string,
+    cardId: string | undefined,
+    documentId: string
+  ): void;
 }>();
 
 const { locale } = useI18n();
@@ -584,6 +715,28 @@ const currentlyEditingTaskName = ref("");
 const taskEditMode = ref(false);
 
 const draggingEnabled = ref(true);
+
+const documents: Ref<Array<CardDocument>> = ref([]);
+// result of the exists() check per document id; undefined = not checked yet
+const documentExists: Ref<Record<string, boolean>> = ref({});
+let documentCheckGeneration = 0;
+
+const MARKDOWN_FILE_FILTERS = [
+  { name: "Markdown", extensions: ["md", "markdown"] },
+];
+
+// the modal itself has z-index 10000000, so the context menu has to be above it
+const documentContextMenuClass = computed(() => {
+  let classes =
+    "bg-primary-darker border-elevation-1 z-[10000001] min-w-[100px] rounded-md border p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] outline-none will-change-[opacity,transform]";
+
+  if (settingsStore.animationsEnabled) {
+    classes +=
+      " data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade";
+  }
+
+  return classes;
+});
 
 const enableTitleEditing = () => {
   emitter.emit("modalPreventClickOutsideClose");
@@ -776,6 +929,139 @@ const setCardColor = (
   emit("setCardColor", columnID, props.card?.id, color);
 };
 
+/**
+ * Card documents (Markdown files linked to the card)
+ */
+
+const isDocumentMissing = (documentId: string) =>
+  documentExists.value[documentId] === false;
+
+// a failing exists() (e.g. path outside the fs scope after an import) counts as missing
+const checkDocumentsExist = async () => {
+  const generation = ++documentCheckGeneration;
+  const result: Record<string, boolean> = {};
+
+  await Promise.all(
+    documents.value.map(async (doc) => {
+      try {
+        result[doc.id] = await exists(doc.path);
+      } catch (err) {
+        console.warn("Could not check if document exists:", doc.path, err);
+        result[doc.id] = false;
+      }
+    })
+  );
+
+  // ignore results of outdated checks (another card was opened meanwhile)
+  if (generation === documentCheckGeneration) {
+    documentExists.value = result;
+  }
+};
+
+const documentsDialogDefaultPath = () =>
+  settingsStore.markdownDocumentsFolder || undefined;
+
+const addExistingDocuments = async () => {
+  const selected = await open({
+    multiple: true,
+    directory: false,
+    filters: MARKDOWN_FILE_FILTERS,
+    defaultPath: documentsDialogDefaultPath(),
+  });
+  if (!selected) return;
+
+  const paths = Array.isArray(selected) ? selected : [selected];
+  for (const path of paths) {
+    emit("addCardDocument", columnID.value, props.card?.id, path);
+  }
+};
+
+const createNewDocument = async () => {
+  if (!props.card) return;
+  const cardTitle = props.card.name;
+
+  const path = await save({
+    defaultPath: joinDocumentPath(
+      settingsStore.markdownDocumentsFolder,
+      cardTitleToFileName(cardTitle)
+    ),
+    filters: MARKDOWN_FILE_FILTERS,
+  });
+  if (!path) return;
+
+  try {
+    await writeTextFile(path, `# ${cardTitle}\n`);
+  } catch (err) {
+    console.error("Could not create document:", err);
+    await message(String(err), { title: "Kanri", kind: "error" });
+    return;
+  }
+
+  emit("addCardDocument", columnID.value, props.card.id, path);
+
+  // the store mutated the card synchronously, look up the (new or existing) reference
+  const normalized = normalizeDocumentPath(path);
+  const doc = props.card.documents?.find(
+    (d) => normalizeDocumentPath(d.path) === normalized
+  );
+  if (doc) {
+    emitOpenDocument(doc.id);
+  }
+};
+
+const emitOpenDocument = (documentId: string) => {
+  titleEditing.value = false;
+  taskAddMode.value = false;
+  showCustomColorPopup.value = false;
+  emit("openDocument", columnID.value, props.card?.id, documentId);
+};
+
+const openDocument = (doc: CardDocument) => {
+  if (isDocumentMissing(doc.id)) return;
+  emitOpenDocument(doc.id);
+};
+
+const revealDocument = (doc: CardDocument) => {
+  revealItemInDir(doc.path).catch((err) =>
+    console.error("Could not reveal document:", err)
+  );
+};
+
+const openDocumentExternally = (doc: CardDocument) => {
+  openPath(doc.path).catch((err) =>
+    console.error("Could not open document externally:", err)
+  );
+};
+
+const relinkDocument = async (doc: CardDocument) => {
+  const selected = await open({
+    multiple: false,
+    directory: false,
+    filters: MARKDOWN_FILE_FILTERS,
+    defaultPath: documentsDialogDefaultPath(),
+  });
+  if (!selected || Array.isArray(selected)) return;
+
+  emit("setCardDocumentPath", columnID.value, props.card?.id, doc.id, selected);
+};
+
+const removeDocument = (doc: CardDocument) => {
+  emit("removeCardDocument", columnID.value, props.card?.id, doc.id);
+};
+
+// re-check on every opening, files may have been renamed or deleted in the meantime
+const onEditCardModalOpened = () => {
+  checkDocumentsExist();
+};
+
+onMounted(() => {
+  emitter.on("editCardModalOpened", onEditCardModalOpened);
+});
+
+onBeforeUnmount(() => {
+  emitter.off("editCardModalOpened", onEditCardModalOpened);
+});
+
 const dateToLocalFormat = (date: Date | string) => {
   const jsLocaleIdentifier = locale.value.replace("_", "-")
 
@@ -828,6 +1114,16 @@ watch(props, (newVal) => {
       });
     }
     tasks.value = savedTasks;
+
+    /**
+     * Document references from hand-written imports may lack an ID (the import schema allows it)
+     */
+    const savedDocuments = newVal.card.documents || [];
+    savedDocuments.forEach((doc) => {
+      if (!doc.id) doc.id = generateUniqueID();
+    });
+    documents.value = savedDocuments;
+    checkDocumentsExist();
 
     selectedColor.value = newVal.card.color || "bg-elevation-2";
     if (newVal.card.color?.startsWith("#")) {

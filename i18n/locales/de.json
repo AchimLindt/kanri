@@ -78,7 +78,12 @@
       "miscellaneousDeleteAllDataSubtext": " Dies wird unwiderruflich alle deine Daten löschen!",
       "exportThemeDialogTitle": "Datei zum Exportieren der Daten auswählen",
       "loadJsonErrorMessage": "Konnte die JSON-Datei nicht laden! Bitte überprüfe, ob die Datei korrektes JSON ist.",
-      "parseJsonErrorMessage": "Konnte die JSON-Datei nicht laden! Bitte überprüfe, ob die Datei richtig formatiert ist und nicht aus einer alten Version von Kanri stammt."
+      "parseJsonErrorMessage": "Konnte die JSON-Datei nicht laden! Bitte überprüfe, ob die Datei richtig formatiert ist und nicht aus einer alten Version von Kanri stammt.",
+      "preferencesMarkdownFolderHeading": "Standardordner für Markdown-Dokumente",
+      "preferencesMarkdownFolderSubtext": "Öffnen- und Speichern-Dialoge für Kartendokumente starten in diesem Ordner.",
+      "preferencesMarkdownFolderNotSet": "Nicht gesetzt",
+      "preferencesMarkdownFolderChoose": "Ordner wählen…",
+      "preferencesMarkdownFolderClear": "Zurücksetzen"
     },
     "import": {
       "importExportHeading": "Import & Export",
@@ -118,6 +123,15 @@
       "importDuplicateBoard": "Das Board {boardName} existiert bereits (Board mit derselben ID). Möchtest du es als Duplikat importieren?",
       "duplicateSuffix": " (Duplikat)",
       "importSuccessGithub": "GitHub Projects Board(s) wurden erfolgreich importiert."
+    },
+    "document": {
+      "back": "Zurück zum Board",
+      "statusSaved": "Gespeichert",
+      "statusSaving": "Speichert…",
+      "statusError": "Speichern fehlgeschlagen",
+      "lintCount": "{count} Hinweis | {count} Hinweise",
+      "previewToggle": "Vorschau",
+      "loadError": "Das Dokument konnte nicht geöffnet werden."
     }
   },
   "components": {
@@ -210,7 +224,16 @@
       "taskAdd": "Aufgabe hinzufügen",
       "newTaskPlaceholder": "Name der Aufgabe...",
       "tagsTitle": "Tags",
-      "tagsEdit": "Globale Tags bearbeiten"
+      "tagsEdit": "Globale Tags bearbeiten",
+      "documentsTitle": "Dokumente",
+      "documentsAddExisting": "Vorhandenes hinzufügen…",
+      "documentsCreateNew": "Neu erstellen…",
+      "documentMissing": "Datei nicht gefunden",
+      "documentOpen": "Öffnen",
+      "documentReveal": "Im Explorer anzeigen",
+      "documentOpenExternal": "Mit Standardprogramm öffnen",
+      "documentRelink": "Neu verknüpfen…",
+      "documentRemove": "Verknüpfung entfernen"
     },
     "help": {
       "title": "Hilfe & Ressourcen",

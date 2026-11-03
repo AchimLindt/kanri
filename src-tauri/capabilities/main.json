@@ -23,6 +23,7 @@
     "fs:allow-write",
     "fs:allow-read-text-file",
     "fs:allow-write-text-file",
+    "fs:allow-exists",
     "window-state:default",
     "opener:default",
     {
@@ -36,6 +37,23 @@
         },
         {
           "url": "https://discord.gg/AVqHrvxB9C"
+        },
+        {
+          "url": "http://**"
+        },
+        {
+          "url": "https://**"
+        }
+      ]
+    },
+    {
+      "identifier": "opener:allow-open-path",
+      "allow": [
+        {
+          "path": "**/*.md"
+        },
+        {
+          "path": "**/*.markdown"
         }
       ]
     }

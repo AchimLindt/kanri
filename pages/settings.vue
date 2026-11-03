@@ -1,4 +1,4 @@
-<!-- SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>, gitoak -->
+<!-- SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>, gitoak, AchimLindt -->
 <!-- -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!--
@@ -224,6 +224,39 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
           />
         </SwitchRoot>
       </div>
+
+      <div class="mt-4 flex w-[48rem] flex-col">
+        <h3 class="text-lg">
+          {{ $t("pages.settings.preferencesMarkdownFolderHeading") }}
+        </h3>
+        <span class="text-dim-2">
+          {{ $t("pages.settings.preferencesMarkdownFolderSubtext") }}
+        </span>
+        <div class="mt-2 flex flex-row items-center gap-2">
+          <span
+            class="text-dim-3 text-no-overflow min-w-0 flex-1"
+            :title="globalSettingsStore.markdownDocumentsFolder"
+          >
+            {{
+              globalSettingsStore.markdownDocumentsFolder ||
+                $t("pages.settings.preferencesMarkdownFolderNotSet")
+            }}
+          </span>
+          <button
+            class="bg-elevation-2 bg-elevation-3-hover transition-button shrink-0 rounded-md px-3 py-1"
+            @click="chooseMarkdownDocumentsFolder"
+          >
+            {{ $t("pages.settings.preferencesMarkdownFolderChoose") }}
+          </button>
+          <button
+            v-if="globalSettingsStore.markdownDocumentsFolder"
+            class="bg-elevation-2 bg-elevation-3-hover transition-button shrink-0 rounded-md px-3 py-1"
+            @click="globalSettingsStore.setMarkdownDocumentsFolder('')"
+          >
+            {{ $t("pages.settings.preferencesMarkdownFolderClear") }}
+          </button>
+        </div>
+      </div>
     </section>
 
     <section id="miscellaneous-settings">
@@ -401,6 +434,17 @@ const deleteAllData = async () => {
   router.go(0);
 
   await message("Successfully deleted data.", { title: "Kanri", kind: "info" });
+};
+
+const chooseMarkdownDocumentsFolder = async () => {
+  const selected = await open({
+    directory: true,
+    multiple: false,
+    defaultPath: globalSettingsStore.markdownDocumentsFolder || undefined,
+  });
+  if (!selected || Array.isArray(selected)) return;
+
+  await globalSettingsStore.setMarkdownDocumentsFolder(selected);
 };
 
 const exportThemeToJson = async () => {

@@ -84,7 +84,12 @@
       "miscellaneousDisableSpellcheckSubtext": "Disables the built-in spellchecking functionality in all input fields.",
       "exportThemeDialogTitle": "Select file to export data to",
       "loadJsonErrorMessage": "Could not load JSON file! Please check if the file is proper JSON.",
-      "parseJsonErrorMessage": "Could not load JSON file! Please check if the file is formatted correctly and is not from an old version of Kanri."
+      "parseJsonErrorMessage": "Could not load JSON file! Please check if the file is formatted correctly and is not from an old version of Kanri.",
+      "preferencesMarkdownFolderHeading": "Default folder for Markdown documents",
+      "preferencesMarkdownFolderSubtext": "Open and save dialogs for card documents start in this folder.",
+      "preferencesMarkdownFolderNotSet": "Not set",
+      "preferencesMarkdownFolderChoose": "Choose folder…",
+      "preferencesMarkdownFolderClear": "Reset"
     },
     "import": {
       "importExportHeading": "Import & Export",
@@ -124,6 +129,15 @@
       "importDuplicateBoard": "The board {boardName} already exists (board with the same ID). Do you want to import as a duplicate?",
       "duplicateSuffix": " (duplicate)",
       "importSuccessGithub": "Successfully imported GitHub Projects board(s)."
+    },
+    "document": {
+      "back": "Back to board",
+      "statusSaved": "Saved",
+      "statusSaving": "Saving…",
+      "statusError": "Could not save",
+      "lintCount": "{count} hint | {count} hints",
+      "previewToggle": "Preview",
+      "loadError": "The document could not be opened."
     }
   },
   "components": {
@@ -219,7 +233,16 @@
       "taskAdd": "Add Task",
       "newTaskPlaceholder": "Enter a task...",
       "tagsTitle": "Tags",
-      "tagsEdit": "Edit Board Tags"
+      "tagsEdit": "Edit Board Tags",
+      "documentsTitle": "Documents",
+      "documentsAddExisting": "Add existing…",
+      "documentsCreateNew": "Create new…",
+      "documentMissing": "File not found",
+      "documentOpen": "Open",
+      "documentReveal": "Show in file manager",
+      "documentOpenExternal": "Open with default app",
+      "documentRelink": "Relink…",
+      "documentRemove": "Remove link"
     },
     "help": {
       "title": "Help & Resources",

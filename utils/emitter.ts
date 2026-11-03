@@ -30,6 +30,8 @@ type Events = {
 
   createBoard: { columns?: Array<Column>; title: string };
 
+  editCardModalOpened: void;
+
   enableColumnCardAddMode: string;
   enableColumnTitleEditing: string;
 

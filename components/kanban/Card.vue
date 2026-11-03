@@ -1,4 +1,4 @@
-<!-- SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>, Khusyasy, PwshLab, jynxbt, tareqdayya, qunm00 -->
+<!-- SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>, Khusyasy, PwshLab, jynxbt, tareqdayya, qunm00, AchimLindt -->
 <!-- -->
 <!-- SPDX-License-Identifier: Apache-2.0 -->
 <!--
@@ -117,6 +117,16 @@ limitations under the License.
           </div>
 
           <div
+            v-if="documents && documents.length > 0"
+            class="flex flex-row items-center gap-1"
+          >
+            <PhFileText :class="[cardTextColorDim, iconSizeClass]" />
+            <span :class="[cardTextColorDim, taskTextClass]">{{
+              documents.length
+            }}</span>
+          </div>
+
+          <div
             v-if="dueDate"
             class="flex flex-row items-center gap-1"
             :class="{
@@ -173,6 +183,7 @@ import {
   PhCheckCircle,
   PhChecks,
   PhClock,
+  PhFileText,
   PhListChecks,
   PhTextAlignLeft,
 } from "@phosphor-icons/vue";
@@ -221,6 +232,7 @@ const dueDate = ref(props.card.dueDate);
 const isDueDateRelative = ref(props.card.isDueDateCounterRelative);
 const isDueDateCompleted = ref(props.card.isDueDateCompleted ?? false);
 const cardTags = ref(props.card.tags);
+const documents = ref(props.card.documents);
 
 const cardNameEditMode = ref(false);
 const cardNameInput: Ref<HTMLTextAreaElement | null> = ref(null);
@@ -235,6 +247,7 @@ watch(
     dueDate.value = newData.card.dueDate;
     isDueDateRelative.value = newData.card.isDueDateCounterRelative;
     cardTags.value = newData.card.tags;
+    documents.value = newData.card.documents;
     isDueDateCompleted.value = newData.card.isDueDateCompleted ?? false;
   },
   { deep: true }
@@ -250,6 +263,7 @@ const cardHasNoExtraProperties = computed(() => {
     isDescriptionEmpty &&
     !dueDate.value &&
     (props.card.tags || []).length === 0 &&
+    (!documents.value || documents.value.length === 0) &&
     !props.card.name.startsWith("---")
   );
 });

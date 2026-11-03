@@ -54,6 +54,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
       @setCardTags="board.setCardTags"
       @addGlobalTag="board.addGlobalTag"
       @openTagEdit="editTagModalVisible = true"
+      @addCardDocument="board.addCardDocument"
+      @removeCardDocument="board.removeCardDocument"
+      @setCardDocumentPath="board.setCardDocumentPath"
+      @openDocument="openDocument"
     />
     <ModalColumnColors
       v-show="columnColorsModalVisible"
@@ -592,6 +596,7 @@ const openEditCardModal = (columnId: string, el: Card) => {
   nextTick(() => {
     editCardModalVisible.value = true;
     draggingEnabled.value = false;
+    emitter.emit("editCardModalOpened");
   });
 };
 
@@ -599,6 +604,16 @@ const closeEditCardModal = () => {
   editCardModalVisible.value = false;
   draggingEnabled.value = true;
   emitter.emit("columnDraggingOn");
+};
+
+// Opens a document linked to a card in the Markdown editor page
+const openDocument = (_columnId: string, cardId: string | undefined, documentId: string) => {
+  if (!boardContent.value || !cardId) return;
+  closeEditCardModal();
+  router.push({
+    path: "/document",
+    query: { board: boardContent.value.id, card: cardId, doc: documentId },
+  });
 };
 
 const openColumnColorsModal = (columnId: string) => {
