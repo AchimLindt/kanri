@@ -53,14 +53,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
     </div>
     <pre>
 Name: @vue/shared
-Version: 3.5.21
+Version: 3.5.39
 License: MIT
 Private: false
 Description: internal utils shared across @vue packages
 Repository: git+https://github.com/vuejs/core.git
 Homepage: https://github.com/vuejs/core/tree/main/packages/shared#readme
 Author: Evan You
-License Copyright:
+License Text:
 ===
 
 The MIT License (MIT)
@@ -88,14 +88,14 @@ THE SOFTWARE.
 ---
 
 Name: @vue/reactivity
-Version: 3.5.21
+Version: 3.5.39
 License: MIT
 Private: false
 Description: @vue/reactivity
 Repository: git+https://github.com/vuejs/core.git
 Homepage: https://github.com/vuejs/core/tree/main/packages/reactivity#readme
 Author: Evan You
-License Copyright:
+License Text:
 ===
 
 The MIT License (MIT)
@@ -123,14 +123,14 @@ THE SOFTWARE.
 ---
 
 Name: @vue/runtime-core
-Version: 3.5.21
+Version: 3.5.39
 License: MIT
 Private: false
 Description: @vue/runtime-core
 Repository: git+https://github.com/vuejs/core.git
 Homepage: https://github.com/vuejs/core/tree/main/packages/runtime-core#readme
 Author: Evan You
-License Copyright:
+License Text:
 ===
 
 The MIT License (MIT)
@@ -158,14 +158,14 @@ THE SOFTWARE.
 ---
 
 Name: @vue/runtime-dom
-Version: 3.5.21
+Version: 3.5.39
 License: MIT
 Private: false
 Description: @vue/runtime-dom
 Repository: git+https://github.com/vuejs/core.git
 Homepage: https://github.com/vuejs/core/tree/main/packages/runtime-dom#readme
 Author: Evan You
-License Copyright:
+License Text:
 ===
 
 The MIT License (MIT)
@@ -198,7 +198,7 @@ License: MIT
 Private: false
 Description: A faster, secure and convenient alternative for JSON.parse
 Repository: undefined
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -226,12 +226,12 @@ SOFTWARE.
 ---
 
 Name: ufo
-Version: 1.6.1
+Version: 1.6.4
 License: MIT
 Private: false
 Description: URL utils for humans
 Repository: undefined
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -259,12 +259,12 @@ SOFTWARE.
 ---
 
 Name: ofetch
-Version: 1.4.1
+Version: 1.5.1
 License: MIT
 Private: false
 Description: A better fetch API. Works on node, browser and workers.
 Repository: undefined
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -297,7 +297,7 @@ License: MIT
 Private: false
 Description: Awaitable hook system
 Repository: undefined
-License Copyright:
+License Text:
 ===
 
 The MIT License (MIT)
@@ -325,12 +325,12 @@ SOFTWARE.
 ---
 
 Name: unctx
-Version: 2.4.1
+Version: 2.5.0
 License: MIT
 Private: false
 Description: Composition-api in Vanilla js
 Repository: undefined
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -358,13 +358,13 @@ SOFTWARE.
 ---
 
 Name: nuxt
-Version: 4.1.2
+Version: 4.2.2
 License: MIT
 Private: false
 Description: Nuxt is a free and open-source framework with an intuitive and extendable way to create type-safe, performant and production-grade full-stack web applications and websites with Vue.js.
 Repository: git+https://github.com/nuxt/nuxt.git
 Homepage: https://nuxt.com
-License Copyright:
+License Text:
 ===
 
 The MIT License (MIT)
@@ -397,7 +397,7 @@ License: MIT
 Private: false
 Description: Lightweight and fast router for JavaScript based on Radix Tree
 Repository: undefined
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -425,12 +425,12 @@ SOFTWARE.
 ---
 
 Name: defu
-Version: 6.1.4
+Version: 6.1.7
 License: MIT
 Private: false
 Description: Recursively assign default properties. Lightweight and Fast!
 Repository: undefined
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -458,12 +458,12 @@ SOFTWARE.
 ---
 
 Name: h3
-Version: 1.15.4
+Version: 1.15.11
 License: MIT
 Private: false
 Description: Minimal H(TTP) framework built for high performance and portability.
 Repository: undefined
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -491,14 +491,14 @@ SOFTWARE.
 ---
 
 Name: pinia
-Version: 3.0.3
+Version: 3.0.4
 License: MIT
 Private: false
 Description: Intuitive, type safe and flexible Store for Vue
 Repository: git+https://github.com/vuejs/pinia.git
 Homepage: https://pinia.vuejs.org
 Author: Eduardo San Martin Morote &lt;posva13@gmail.com&gt;
-License Copyright:
+License Text:
 ===
 
 The MIT License (MIT)
@@ -526,12 +526,12 @@ SOFTWARE.
 ---
 
 Name: devalue
-Version: 5.3.2
+Version: 5.8.1
 License: MIT
 Private: false
 Description: Gets the job done when JSON.stringify can't
 Repository: undefined
-License Copyright:
+License Text:
 ===
 
 Copyright (c) 2018-19 [these people](https://github.com/rich-harris/devalue/graphs/contributors)
@@ -545,14 +545,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 ---
 
 Name: unhead
-Version: 2.0.14
+Version: 2.1.15
 License: MIT
 Private: false
 Description: Full-stack &lt;head&gt; manager built for any framework.
 Repository: git+https://github.com/unjs/unhead.git
 Homepage: https://unhead.unjs.io
 Author: Harlan Wilton &lt;harlan@harlanzw.com&gt; (https://harlanzw.com/)
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -580,14 +580,14 @@ SOFTWARE.
 ---
 
 Name: @unhead/vue
-Version: 2.0.14
+Version: 2.1.15
 License: MIT
 Private: false
 Description: Full-stack &lt;head&gt; manager built for Vue.
 Repository: git+https://github.com/unjs/unhead.git
 Homepage: https://unhead.unjs.io
 Author: Harlan Wilton &lt;harlan@harlanzw.com&gt;
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -615,14 +615,14 @@ SOFTWARE.
 ---
 
 Name: @pinia/nuxt
-Version: 0.11.2
+Version: 0.11.3
 License: MIT
 Private: false
 Description: Nuxt Module for pinia
 Repository: git+https://github.com/vuejs/pinia.git
 Homepage: https://pinia.vuejs.org/ssr/nuxt.html
 Author: Eduardo San Martin Morote &lt;posva13@gmail.com&gt;
-License Copyright:
+License Text:
 ===
 
 The MIT License (MIT)
@@ -650,13 +650,13 @@ SOFTWARE.
 ---
 
 Name: vue-router
-Version: 4.5.1
+Version: 4.6.4
 License: MIT
 Private: false
 Repository: git+https://github.com/vuejs/router.git
-Homepage: https://github.com/vuejs/router#readme
+Homepage: https://router.vuejs.org
 Author: Eduardo San Martin Morote &lt;posva13@gmail.com&gt;
-License Copyright:
+License Text:
 ===
 
 The MIT License (MIT)
@@ -689,7 +689,7 @@ License: MIT
 Private: false
 Description: Simple object hashing, serialization and comparison utils.
 Repository: undefined
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -717,11 +717,11 @@ SOFTWARE.
 ---
 
 Name: cookie-es
-Version: 2.0.0
+Version: 2.0.1
 License: MIT
 Private: false
 Repository: undefined
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -762,7 +762,7 @@ Private: false
 Description: A tiny (240B to 501B) and fast utility to "deep clone" Objects, Arrays, Dates, RegExps, and more!
 Repository: undefined
 Author: Luke Edwards &lt;luke.edwards05@gmail.com&gt; (https://lukeed.com)
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -778,14 +778,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 ---
 
 Name: @intlify/shared
-Version: 11.1.12
+Version: 11.4.6
 License: MIT
 Private: false
 Description: @intlify/shared
 Repository: git+https://github.com/intlify/vue-i18n.git
 Homepage: https://github.com/intlify/vue-i18n/tree/master/packages/shared#readme
 Author: kazuya kawaguchi &lt;kawakazu80@gmail.com&gt;
-License Copyright:
+License Text:
 ===
 
 The MIT License (MIT)
@@ -812,7 +812,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ---
 
 Name: @nuxtjs/i18n
-Version: 10.1.0
+Version: 10.4.0
 License: MIT
 Private: false
 Description: Internationalization for Nuxt
@@ -823,7 +823,7 @@ Contributors:
   Rafal Chlodnicki (@rchl)
   Kazuya Kawaguchi (@kazupon)
   Bobbie Goede (@BobbieGoede)
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -855,14 +855,14 @@ SOFTWARE.
 ---
 
 Name: @intlify/utils
-Version: 0.13.0
+Version: 0.14.1
 License: MIT
 Private: false
 Description: Collection of i18n utilities
 Repository: git+https://github.com/intlify/utils.git
 Homepage: https://github.com/intlify/utils#readme
 Author: kazuya kawaguchi &lt;kawakazu80@gmail.com&gt;
-License Copyright:
+License Text:
 ===
 
 The MIT License (MIT)
@@ -889,14 +889,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ---
 
 Name: @intlify/message-compiler
-Version: 11.1.12
+Version: 11.4.6
 License: MIT
 Private: false
 Description: @intlify/message-compiler
 Repository: git+https://github.com/intlify/vue-i18n.git
 Homepage: https://github.com/intlify/vue-i18n/tree/master/packages/message-compiler#readme
 Author: kazuya kawaguchi &lt;kawakazu80@gmail.com&gt;
-License Copyright:
+License Text:
 ===
 
 The MIT License (MIT)
@@ -923,14 +923,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ---
 
 Name: @intlify/core-base
-Version: 11.1.12
+Version: 11.4.6
 License: MIT
 Private: false
 Description: @intlify/core-base
 Repository: git+https://github.com/intlify/vue-i18n.git
 Homepage: https://github.com/intlify/vue-i18n/tree/master/packages/core-base#readme
 Author: kazuya kawaguchi &lt;kawakazu80@gmail.com&gt;
-License Copyright:
+License Text:
 ===
 
 The MIT License (MIT)
@@ -957,14 +957,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ---
 
 Name: vue-i18n
-Version: 11.1.12
+Version: 11.4.6
 License: MIT
 Private: false
 Description: Internationalization plugin for Vue.js
 Repository: git+https://github.com/intlify/vue-i18n.git
 Homepage: https://github.com/intlify/vue-i18n/tree/master/packages/vue-i18n#readme
 Author: kazuya kawaguchi &lt;kawakazu80@gmail.com&gt;
-License Copyright:
+License Text:
 ===
 
 The MIT License (MIT)
@@ -991,7 +991,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ---
 
 Name: @tauri-apps/api
-Version: 2.8.0
+Version: 2.11.1
 License: Apache-2.0 OR MIT
 Private: false
 Description: Tauri API definitions
@@ -999,7 +999,7 @@ Repository: git+https://github.com/tauri-apps/tauri.git
 Homepage: https://github.com/tauri-apps/tauri#readme
 Contributors:
   Tauri Programme within The Commons Conservancy
-License Copyright:
+License Text:
 ===
 
 
@@ -1183,12 +1183,12 @@ License Copyright:
 ---
 
 Name: @tauri-apps/plugin-log
-Version: 2.7.0
+Version: 2.8.0
 License: MIT OR Apache-2.0
 Private: false
 Description: Configurable logging for your Tauri app.
 Repository: undefined
-License Copyright:
+License Text:
 ===
 
 SPDXVersion: SPDX-2.1
@@ -1221,7 +1221,7 @@ Private: false
 Description: Tooltip and Popover Positioning Engine
 Repository: undefined
 Author: Federico Zivolo &lt;federico.zivolo@gmail.com&gt;
-License Copyright:
+License Text:
 ===
 
 The MIT License (MIT)
@@ -1255,7 +1255,7 @@ Description: A calendar and date picker plugin for Vue.js.
 Repository: undefined
 Homepage: https://vcalendar.io
 Author: Nathan Reyes &lt;nathanreyes@me.com&gt;
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -1278,7 +1278,7 @@ Description:  vue directive to make a scrollable element scroll by draging to th
 Repository: git+https://github.com/donmbelembe/vue-dragscroll.git
 Homepage: https://vue-dragscroll.clebinfosys.com/
 Author: Don mbelembe &lt;bizroy678@gmail.com&gt;
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -1311,7 +1311,7 @@ License: MIT
 Private: false
 Repository: https://github.com/tailwindlabs/heroicons.git
 Homepage: https://github.com/tailwindlabs/heroicons#readme
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -1344,7 +1344,7 @@ License: MIT
 Private: false
 Description: A clean and friendly icon family for Vue, too!
 Repository: undefined
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -1371,34 +1371,1906 @@ SOFTWARE.
 
 ---
 
-Name: @tauri-apps/plugin-autostart
-Version: 2.5.0
-License: MIT OR Apache-2.0
+Name: @marijn/find-cluster-break
+Version: 1.0.4
+License: MIT
 Private: false
-Repository: undefined
-License Copyright:
+Description: Find the position of grapheme cluster breaks in a string
+Repository: git+https://code.haverbeke.berlin/marijn/find-cluster-break.git
+Homepage: https://code.haverbeke.berlin/marijn/find-cluster-break
+Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt;
+License Text:
 ===
 
-SPDXVersion: SPDX-2.1
-DataLicense: CC0-1.0
-PackageName: tauri
-DataFormat: SPDXRef-1
-PackageSupplier: Organization: The Tauri Programme in the Commons Conservancy
-PackageHomePage: https://tauri.app
-PackageLicenseDeclared: Apache-2.0
-PackageLicenseDeclared: MIT
-PackageCopyrightText: 2019-2022, The Tauri Programme in the Commons Conservancy
-PackageSummary: &lt;text&gt;Tauri is a rust project that enables developers to make secure
-and small desktop applications using a web frontend.
-                &lt;/text&gt;
-PackageComment: &lt;text&gt;The package includes the following libraries; see
-Relationship information.
-                &lt;/text&gt;
-Created: 2019-05-20T09:00:00Z
-PackageDownloadLocation: git://github.com/tauri-apps/tauri
-PackageDownloadLocation: git+https://github.com/tauri-apps/tauri.git
-PackageDownloadLocation: git+ssh://github.com/tauri-apps/tauri.git
-Creator: Person: Daniel Thompson-Yvetot
+MIT License
+
+Copyright (C) 2024 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+---
+
+Name: @codemirror/state
+Version: 6.7.6
+License: MIT
+Private: false
+Description: Editor state data structures for the CodeMirror code editor
+Repository: git+https://code.haverbeke.berlin/codemirror/state.git
+Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; (http://marijnhaverbeke.nl)
+License Text:
+===
+
+MIT License
+
+Copyright (C) 2018-2021 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+---
+
+Name: style-mod
+Version: 4.1.4
+License: MIT
+Private: false
+Description: A minimal CSS module shim
+Repository: git+https://code.haverbeke.berlin/marijn/style-mod.git
+Homepage: https://code.haverbeke.berlin/marijn/style-mod
+Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt;
+License Text:
+===
+
+Copyright (C) 2018 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+---
+
+Name: crelt
+Version: 1.0.7
+License: MIT
+Private: false
+Description: Tiny DOM-element-creation utility
+Repository: git+https://code.haverbeke.berlin/marijn/crelt.git
+Homepage: https://code.haverbeke.berlin/marijn/crelt
+Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt;
+License Text:
+===
+
+Copyright (C) 2020 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+---
+
+Name: @codemirror/view
+Version: 6.43.15
+License: MIT
+Private: false
+Description: DOM view component for the CodeMirror code editor
+Repository: git+https://code.haverbeke.berlin/codemirror/view.git
+Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; (http://marijnhaverbeke.nl)
+License Text:
+===
+
+MIT License
+
+Copyright (C) 2018-2021 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+---
+
+Name: @lezer/common
+Version: 1.5.4
+License: MIT
+Private: false
+Description: Syntax tree data structure and parser interfaces for the lezer parser
+Repository: git+https://code.haverbeke.berlin/lezer/common.git
+Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt;
+License Text:
+===
+
+MIT License
+
+Copyright (C) 2018 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+---
+
+Name: @lezer/highlight
+Version: 1.2.5
+License: MIT
+Private: false
+Description: Highlighting system for Lezer parse trees
+Repository: git+https://code.haverbeke.berlin/lezer/highlight.git
+Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt;
+License Text:
+===
+
+MIT License
+
+Copyright (C) 2018 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+---
+
+Name: @codemirror/language
+Version: 6.13.1
+License: MIT
+Private: false
+Description: Language support infrastructure for the CodeMirror code editor
+Repository: git+https://code.haverbeke.berlin/codemirror/language.git
+Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; (http://marijnhaverbeke.nl)
+License Text:
+===
+
+MIT License
+
+Copyright (C) 2018-2021 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+---
+
+Name: @codemirror/commands
+Version: 6.11.1
+License: MIT
+Private: false
+Description: Collection of editing commands for the CodeMirror code editor
+Repository: git+https://code.haverbeke.berlin/codemirror/commands.git
+Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; (http://marijnhaverbeke.nl)
+License Text:
+===
+
+MIT License
+
+Copyright (C) 2018-2021 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+---
+
+Name: @codemirror/autocomplete
+Version: 6.20.4
+License: MIT
+Private: false
+Description: Autocompletion for the CodeMirror code editor
+Repository: git+https://code.haverbeke.berlin/codemirror/autocomplete.git
+Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; (http://marijnhaverbeke.nl)
+License Text:
+===
+
+MIT License
+
+Copyright (C) 2018-2021 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+---
+
+Name: @lezer/markdown
+Version: 1.8.1
+License: MIT
+Private: false
+Description: Incremental Markdown parser that consumes and emits Lezer trees
+Repository: git+https://code.haverbeke.berlin/lezer/markdown.git
+Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt;
+License Text:
+===
+
+MIT License
+
+Copyright (C) 2020 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+---
+
+Name: @lezer/lr
+Version: 1.4.11
+License: MIT
+Private: false
+Description: Incremental parser
+Repository: git+https://code.haverbeke.berlin/lezer/lr.git
+Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt;
+License Text:
+===
+
+MIT License
+
+Copyright (C) 2018 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+---
+
+Name: @lezer/html
+Version: 1.3.13
+License: MIT
+Private: false
+Description: lezer-based HTML grammar
+Repository: https://github.com/lezer-parser/html.git
+Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt;
+License Text:
+===
+
+MIT License
+
+Copyright (C) 2018 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+---
+
+Name: @lezer/css
+Version: 1.3.9
+License: MIT
+Private: false
+Description: lezer-based CSS grammar
+Repository: git+https://code.haverbeke.berlin/lezer/css.git
+Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt;
+License Text:
+===
+
+MIT License
+
+Copyright (C) 2018 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+---
+
+Name: @codemirror/lang-css
+Version: 6.3.1
+License: MIT
+Private: false
+Description: CSS language support for the CodeMirror code editor
+Repository: https://github.com/codemirror/lang-css.git
+Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; (http://marijnhaverbeke.nl)
+License Text:
+===
+
+MIT License
+
+Copyright (C) 2018-2021 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+---
+
+Name: @lezer/javascript
+Version: 1.5.6
+License: MIT
+Private: false
+Description: lezer-based JavaScript grammar
+Repository: git+https://code.haverbeke.berlin/lezer/javascript.git
+Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt;
+License Text:
+===
+
+MIT License
+
+Copyright (C) 2018 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+---
+
+Name: @codemirror/lang-javascript
+Version: 6.2.5
+License: MIT
+Private: false
+Description: JavaScript language support for the CodeMirror code editor
+Repository: git+https://github.com/codemirror/lang-javascript.git
+Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; (http://marijnhaverbeke.nl)
+License Text:
+===
+
+MIT License
+
+Copyright (C) 2018-2021 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+---
+
+Name: @codemirror/lang-html
+Version: 6.4.12
+License: MIT
+Private: false
+Description: HTML language support for the CodeMirror code editor
+Repository: git+https://code.haverbeke.berlin/codemirror/lang-html.git
+Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; (http://marijnhaverbeke.nl)
+License Text:
+===
+
+MIT License
+
+Copyright (C) 2018-2021 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+---
+
+Name: @codemirror/lang-markdown
+Version: 6.5.2
+License: MIT
+Private: false
+Description: Markdown language support for the CodeMirror code editor
+Repository: git+https://code.haverbeke.berlin/codemirror/lang-markdown.git
+Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; (http://marijnhaverbeke.nl)
+License Text:
+===
+
+MIT License
+
+Copyright (C) 2018-2021 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+---
+
+Name: @codemirror/lint
+Version: 6.9.7
+License: MIT
+Private: false
+Description: Linting support for the CodeMirror code editor
+Repository: git+https://code.haverbeke.berlin/codemirror/lint.git
+Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; (http://marijnhaverbeke.nl)
+License Text:
+===
+
+MIT License
+
+Copyright (C) 2018-2021 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+---
+
+Name: markdownlint
+Version: 0.42.0
+License: MIT
+Private: false
+Description: A Node.js style checker and lint tool for Markdown/CommonMark files
+Repository: undefined
+Homepage: https://github.com/DavidAnson/markdownlint
+Author: David Anson (https://dlaa.me/)
+License Text:
+===
+
+The MIT License (MIT)
+
+Copyright (c) David Anson
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+---
+
+Name: re2js
+Version: 2.8.6
+License: MIT
+Private: false
+Description: RE2JS is the JavaScript port of RE2, a regular expression engine that provides linear time matching
+Repository: undefined
+Homepage: https://github.com/le0pard/re2js#readme
+Author: Oleksii Vasyliev
+License Text:
+===
+
+MIT License
+
+Copyright (c) 2023 Oleksii Vasyliev
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+Name: markdownlint-rule-helpers
+Version: 0.31.0
+License: MIT
+Private: false
+Description: A collection of markdownlint helper functions for custom rules
+Repository: undefined
+Homepage: https://github.com/DavidAnson/markdownlint
+Author: David Anson (https://dlaa.me/)
+License Text:
+===
+
+The MIT License (MIT)
+
+Copyright (c) David Anson
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+---
+
+Name: micromark-util-character
+Version: 2.1.1
+License: MIT
+Private: false
+Description: micromark utility to handle character codes
+Repository: undefined
+Author: Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+Contributors:
+  Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+License Text:
+===
+
+(The MIT License)
+
+Copyright (c) Titus Wormer &lt;tituswormer@gmail.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: micromark-factory-space
+Version: 2.1.0
+License: MIT
+Private: false
+Description: micromark factory to parse markdown space (found in lots of places)
+Repository: undefined
+Author: Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+Contributors:
+  Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+License Text:
+===
+
+(The MIT License)
+
+Copyright (c) Titus Wormer &lt;tituswormer@gmail.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: micromark-factory-whitespace
+Version: 2.0.1
+License: MIT
+Private: false
+Description: micromark factory to parse markdown whitespace (found in lots of places)
+Repository: undefined
+Author: Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+Contributors:
+  Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+License Text:
+===
+
+(The MIT License)
+
+Copyright (c) Titus Wormer &lt;tituswormer@gmail.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: micromark-extension-directive
+Version: 4.0.0
+License: MIT
+Private: false
+Description: micromark extension to support generic directives (`:cite[smith04]`)
+Repository: undefined
+Author: Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+Contributors:
+  Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+License Text:
+===
+
+(The MIT License)
+
+Copyright (c) Titus Wormer &lt;tituswormer@gmail.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: decode-named-character-reference
+Version: 1.3.0
+License: MIT
+Private: false
+Description: Decode named character references
+Repository: undefined
+Author: Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+Contributors:
+  Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+License Text:
+===
+
+(The MIT License)
+
+Copyright (c) Titus Wormer &lt;tituswormer@gmail.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: micromark-extension-gfm-autolink-literal
+Version: 2.1.0
+License: MIT
+Private: false
+Description: micromark extension to support GFM autolink literals
+Repository: undefined
+Author: Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+Contributors:
+  Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+License Text:
+===
+
+(The MIT License)
+
+Copyright (c) 2020 Titus Wormer &lt;tituswormer@gmail.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: micromark-util-chunked
+Version: 2.0.1
+License: MIT
+Private: false
+Description: micromark utility to splice and push with giant arrays
+Repository: undefined
+Author: Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+Contributors:
+  Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+License Text:
+===
+
+(The MIT License)
+
+Copyright (c) Titus Wormer &lt;tituswormer@gmail.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: micromark-util-classify-character
+Version: 2.0.1
+License: MIT
+Private: false
+Description: micromark utility to classify whether a character is whitespace or punctuation
+Repository: undefined
+Author: Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+Contributors:
+  Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+License Text:
+===
+
+(The MIT License)
+
+Copyright (c) Titus Wormer &lt;tituswormer@gmail.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: micromark-util-resolve-all
+Version: 2.0.1
+License: MIT
+Private: false
+Description: micromark utility to resolve subtokens
+Repository: undefined
+Author: Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+Contributors:
+  Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+License Text:
+===
+
+(The MIT License)
+
+Copyright (c) Titus Wormer &lt;tituswormer@gmail.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: micromark-core-commonmark
+Version: 2.0.4
+License: MIT
+Private: false
+Description: The CommonMark markdown constructs
+Repository: undefined
+Author: Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+Contributors:
+  Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+License Text:
+===
+
+(The MIT License)
+
+Copyright (c) Titus Wormer &lt;tituswormer@gmail.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: micromark-util-subtokenize
+Version: 2.1.0
+License: MIT
+Private: false
+Description: micromark utility to tokenize subtokens
+Repository: undefined
+Author: Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+Contributors:
+  Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+License Text:
+===
+
+(The MIT License)
+
+Copyright (c) Titus Wormer &lt;tituswormer@gmail.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: micromark-factory-destination
+Version: 2.0.1
+License: MIT
+Private: false
+Description: micromark factory to parse destinations (found in resources, definitions)
+Repository: undefined
+Author: Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+Contributors:
+  Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+License Text:
+===
+
+(The MIT License)
+
+Copyright (c) Titus Wormer &lt;tituswormer@gmail.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: micromark-factory-label
+Version: 2.0.1
+License: MIT
+Private: false
+Description: micromark factory to parse labels (found in media, definitions)
+Repository: undefined
+Author: Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+Contributors:
+  Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+License Text:
+===
+
+(The MIT License)
+
+Copyright (c) Titus Wormer &lt;tituswormer@gmail.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: micromark-factory-title
+Version: 2.0.1
+License: MIT
+Private: false
+Description: micromark factory to parse markdown titles (found in resources, definitions)
+Repository: undefined
+Author: Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+Contributors:
+  Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+License Text:
+===
+
+(The MIT License)
+
+Copyright (c) Titus Wormer &lt;tituswormer@gmail.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: micromark-util-normalize-identifier
+Version: 2.0.1
+License: MIT
+Private: false
+Description: micromark utility normalize identifiers (as found in references, definitions)
+Repository: undefined
+Author: Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+Contributors:
+  Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+License Text:
+===
+
+(The MIT License)
+
+Copyright (c) Titus Wormer &lt;tituswormer@gmail.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: micromark-util-html-tag-name
+Version: 2.0.1
+License: MIT
+Private: false
+Description: micromark utility with list of html tag names
+Repository: undefined
+Author: Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+Contributors:
+  Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+License Text:
+===
+
+(The MIT License)
+
+Copyright (c) Titus Wormer &lt;tituswormer@gmail.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: micromark-util-edit-map
+Version: 1.0.0
+License: MIT
+Private: false
+Description: micromark utility to batch changes to lists of events
+Repository: undefined
+Author: Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+Contributors:
+  Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+License Text:
+===
+
+(The MIT License)
+
+Copyright (c) Titus Wormer &lt;tituswormer@gmail.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: micromark-extension-gfm-footnote
+Version: 2.1.0
+License: MIT
+Private: false
+Description: micromark extension to support GFM footnotes
+Repository: undefined
+Author: Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+Contributors:
+  Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+License Text:
+===
+
+(The MIT License)
+
+Copyright (c) 2021 Titus Wormer &lt;tituswormer@gmail.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: micromark-extension-gfm-table
+Version: 2.1.2
+License: MIT
+Private: false
+Description: micromark extension to support GFM tables
+Repository: undefined
+Author: Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+Contributors:
+  Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+License Text:
+===
+
+(The MIT License)
+
+Copyright (c) Titus Wormer &lt;tituswormer@gmail.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: micromark-extension-math
+Version: 3.1.0
+License: MIT
+Private: false
+Description: micromark extension to support math (`$C_L$`)
+Repository: undefined
+Author: Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+Contributors:
+  Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+License Text:
+===
+
+(The MIT License)
+
+Copyright (c) 2020 Titus Wormer &lt;tituswormer@gmail.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: micromark-util-combine-extensions
+Version: 2.0.1
+License: MIT
+Private: false
+Description: micromark utility to combine syntax or html extensions
+Repository: undefined
+Author: Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+Contributors:
+  Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+License Text:
+===
+
+(The MIT License)
+
+Copyright (c) Titus Wormer &lt;tituswormer@gmail.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: micromark
+Version: 4.0.3
+License: MIT
+Private: false
+Description: small commonmark compliant markdown parser with positional info and concrete tokens
+Repository: undefined
+Author: Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+Contributors:
+  Titus Wormer &lt;tituswormer@gmail.com&gt; (https://wooorm.com)
+License Text:
+===
+
+(The MIT License)
+
+Copyright (c) Titus Wormer &lt;tituswormer@gmail.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: ansi-regex
+Version: 6.2.2
+License: MIT
+Private: false
+Description: Regular expression for matching ANSI escape codes
+Repository: undefined
+Author: Sindre Sorhus &lt;sindresorhus@gmail.com&gt; (https://sindresorhus.com)
+License Text:
+===
+
+MIT License
+
+Copyright (c) Sindre Sorhus &lt;sindresorhus@gmail.com&gt; (https://sindresorhus.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: strip-ansi
+Version: 7.2.0
+License: MIT
+Private: false
+Description: Strip ANSI escape codes from a string
+Repository: undefined
+Author: Sindre Sorhus &lt;sindresorhus@gmail.com&gt; (https://sindresorhus.com)
+License Text:
+===
+
+MIT License
+
+Copyright (c) Sindre Sorhus &lt;sindresorhus@gmail.com&gt; (https://sindresorhus.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: get-east-asian-width
+Version: 1.6.0
+License: MIT
+Private: false
+Description: Determine the East Asian Width of a Unicode character
+Repository: undefined
+Author: Sindre Sorhus &lt;sindresorhus@gmail.com&gt; (https://sindresorhus.com)
+License Text:
+===
+
+MIT License
+
+Copyright (c) Sindre Sorhus &lt;sindresorhus@gmail.com&gt; (https://sindresorhus.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: string-width
+Version: 8.3.0
+License: MIT
+Private: false
+Description: Get the visual width of a string - the number of columns required to display it
+Repository: undefined
+Author: Sindre Sorhus &lt;sindresorhus@gmail.com&gt; (https://sindresorhus.com)
+License Text:
+===
+
+MIT License
+
+Copyright (c) Sindre Sorhus &lt;sindresorhus@gmail.com&gt; (https://sindresorhus.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: mdurl
+Version: 2.1.0
+License: MIT
+Private: false
+Description: URL utilities for markdown-it
+Repository: git+https://github.com/markdown-it/mdurl.git
+License Text:
+===
+
+Copyright (c) 2015 Vitaly Puzrin, Alex Kocharin.
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+--------------------------------------------------------------------------------
+
+.parse() is based on Joyent's node.js `url` code:
+
+Copyright Joyent, Inc. and other Node contributors. All rights reserved.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to
+deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+sell copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+IN THE SOFTWARE.
+
+---
+
+Name: uc.micro
+Version: 3.0.0
+License: MIT
+Private: false
+Description: Micro subset of unicode data files for markdown-it projects.
+Repository: undefined
+License Text:
+===
+
+Copyright Mathias Bynens &lt;https://mathiasbynens.be/&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: entities
+Version: 8.1.0
+License: BSD-2-Clause
+Private: false
+Description: Encode & decode XML and HTML entities with ease & speed
+Repository: https://github.com/fb55/entities.git
+Author: Felix Boehm &lt;me@feedic.com&gt;
+License Text:
+===
+
+Copyright (c) Felix Böhm
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+THIS IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS,
+EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+---
+
+Name: linkify-it
+Version: 6.1.0
+License: MIT
+Private: false
+Description: Links recognition library with FULL unicode support
+Repository: git+https://github.com/markdown-it/linkify-it.git
+License Text:
+===
+
+Copyright (c) 2015 Vitaly Puzrin.
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: punycode.js
+Version: 2.3.1
+License: MIT
+Private: false
+Description: A robust Punycode converter that fully complies to RFC 3492 and RFC 5891, and works on nearly all JavaScript platforms.
+Repository: https://github.com/mathiasbynens/punycode.js.git
+Homepage: https://mths.be/punycode
+Author: Mathias Bynens (https://mathiasbynens.be/)
+Contributors:
+  Mathias Bynens (https://mathiasbynens.be/)
+License Text:
+===
+
+Copyright Mathias Bynens &lt;https://mathiasbynens.be/&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: markdown-it
+Version: 15.0.3
+License: MIT
+Private: false
+Description: Markdown-it - modern pluggable markdown parser.
+Repository: undefined
+License Text:
+===
+
+Copyright (c) 2014 Vitaly Puzrin, Alex Kocharin.
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
 
 ---
 
@@ -1410,7 +3282,7 @@ Description: Persistent ordered mapping from strings
 Repository: git+https://github.com/marijnh/orderedmap.git
 Homepage: https://github.com/marijnh/orderedmap#readme
 Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt;
-License Copyright:
+License Text:
 ===
 
 Copyright (C) 2016 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
@@ -1436,12 +3308,12 @@ THE SOFTWARE.
 ---
 
 Name: prosemirror-model
-Version: 1.25.3
+Version: 1.25.9
 License: MIT
 Private: false
 Description: ProseMirror's document model
-Repository: git://github.com/prosemirror/prosemirror-model.git
-License Copyright:
+Repository: git+https://code.haverbeke.berlin/prosemirror/prosemirror-model.git
+License Text:
 ===
 
 Copyright (C) 2015-2017 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
@@ -1467,12 +3339,12 @@ THE SOFTWARE.
 ---
 
 Name: prosemirror-transform
-Version: 1.10.4
+Version: 1.12.0
 License: MIT
 Private: false
 Description: ProseMirror document transformations
 Repository: git://github.com/prosemirror/prosemirror-transform.git
-License Copyright:
+License Text:
 ===
 
 Copyright (C) 2015-2017 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
@@ -1498,12 +3370,12 @@ THE SOFTWARE.
 ---
 
 Name: prosemirror-state
-Version: 1.4.3
+Version: 1.4.4
 License: MIT
 Private: false
 Description: ProseMirror editor state
 Repository: git://github.com/prosemirror/prosemirror-state.git
-License Copyright:
+License Text:
 ===
 
 Copyright (C) 2015-2017 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
@@ -1529,48 +3401,15 @@ THE SOFTWARE.
 ---
 
 Name: prosemirror-view
-Version: 1.41.0
+Version: 1.41.9
 License: MIT
 Private: false
 Description: ProseMirror's view component
-Repository: git://github.com/prosemirror/prosemirror-view.git
-License Copyright:
+Repository: git+https://code.haverbeke.berlin/prosemirror/prosemirror-view.git
+License Text:
 ===
 
 Copyright (C) 2015-2017 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-
----
-
-Name: w3c-keyname
-Version: 2.2.8
-License: MIT
-Private: false
-Description: Get a KeyboardEvent.key-style string from an event
-Repository: git+https://github.com/marijnh/w3c-keyname.git
-Homepage: https://github.com/marijnh/w3c-keyname#readme
-Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt;
-License Copyright:
-===
-
-Copyright (C) 2016 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -1598,7 +3437,7 @@ License: MIT
 Private: false
 Description: Keymap plugin for ProseMirror
 Repository: git://github.com/prosemirror/prosemirror-keymap.git
-License Copyright:
+License Text:
 ===
 
 Copyright (C) 2015-2017 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
@@ -1629,7 +3468,7 @@ License: MIT
 Private: false
 Description: Editing commands for ProseMirror
 Repository: git://github.com/prosemirror/prosemirror-commands.git
-License Copyright:
+License Text:
 ===
 
 Copyright (C) 2015-2017 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
@@ -1660,7 +3499,7 @@ License: MIT
 Private: false
 Description: List-related schema elements and commands for ProseMirror
 Repository: git://github.com/prosemirror/prosemirror-schema-list.git
-License Copyright:
+License Text:
 ===
 
 Copyright (C) 2015-2017 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
@@ -1686,7 +3525,7 @@ THE SOFTWARE.
 ---
 
 Name: @tiptap/core
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: headless rich text editor
@@ -1696,7 +3535,7 @@ Homepage: https://tiptap.dev
 ---
 
 Name: @tiptap/extension-typography
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: typography extension for tiptap
@@ -1706,7 +3545,7 @@ Homepage: https://tiptap.dev
 ---
 
 Name: @tiptap/extension-blockquote
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: blockquote extension for tiptap
@@ -1716,7 +3555,7 @@ Homepage: https://tiptap.dev
 ---
 
 Name: @tiptap/extension-bold
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: bold extension for tiptap
@@ -1726,7 +3565,7 @@ Homepage: https://tiptap.dev
 ---
 
 Name: @tiptap/extension-bullet-list
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: bullet list extension for tiptap
@@ -1736,7 +3575,7 @@ Homepage: https://tiptap.dev
 ---
 
 Name: @tiptap/extension-code
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: code extension for tiptap
@@ -1746,7 +3585,7 @@ Homepage: https://tiptap.dev
 ---
 
 Name: @tiptap/extension-code-block
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: code block extension for tiptap
@@ -1756,7 +3595,7 @@ Homepage: https://tiptap.dev
 ---
 
 Name: @tiptap/extension-document
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: document extension for tiptap
@@ -1771,7 +3610,7 @@ License: MIT
 Private: false
 Description: Drop cursor plugin for ProseMirror
 Repository: git://github.com/prosemirror/prosemirror-dropcursor.git
-License Copyright:
+License Text:
 ===
 
 Copyright (C) 2015-2017 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
@@ -1797,7 +3636,7 @@ THE SOFTWARE.
 ---
 
 Name: @tiptap/extension-dropcursor
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: dropcursor extension for tiptap
@@ -1807,12 +3646,12 @@ Homepage: https://tiptap.dev
 ---
 
 Name: prosemirror-gapcursor
-Version: 1.3.2
+Version: 1.4.1
 License: MIT
 Private: false
 Description: ProseMirror plugin for cursors at normally impossible-to-reach positions
 Repository: git://github.com/prosemirror/prosemirror-gapcursor.git
-License Copyright:
+License Text:
 ===
 
 Copyright (C) 2015-2017 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
@@ -1838,7 +3677,7 @@ THE SOFTWARE.
 ---
 
 Name: @tiptap/extension-gapcursor
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: gapcursor extension for tiptap
@@ -1848,7 +3687,7 @@ Homepage: https://tiptap.dev
 ---
 
 Name: @tiptap/extension-hard-break
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: hard break extension for tiptap
@@ -1858,7 +3697,7 @@ Homepage: https://tiptap.dev
 ---
 
 Name: @tiptap/extension-heading
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: heading extension for tiptap
@@ -1874,7 +3713,7 @@ Private: false
 Description: Rope-based persistent sequence type
 Repository: git+https://github.com/marijnh/rope-sequence.git
 Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt;
-License Copyright:
+License Text:
 ===
 
 Copyright (C) 2016 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt;
@@ -1900,12 +3739,12 @@ THE SOFTWARE.
 ---
 
 Name: prosemirror-history
-Version: 1.4.1
+Version: 1.5.0
 License: MIT
 Private: false
 Description: Undo history for ProseMirror
 Repository: git://github.com/prosemirror/prosemirror-history.git
-License Copyright:
+License Text:
 ===
 
 Copyright (C) 2015-2017 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
@@ -1931,7 +3770,7 @@ THE SOFTWARE.
 ---
 
 Name: @tiptap/extension-history
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: history extension for tiptap
@@ -1941,7 +3780,7 @@ Homepage: https://tiptap.dev
 ---
 
 Name: @tiptap/extension-horizontal-rule
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: horizontal rule extension for tiptap
@@ -1951,7 +3790,7 @@ Homepage: https://tiptap.dev
 ---
 
 Name: @tiptap/extension-italic
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: italic extension for tiptap
@@ -1961,7 +3800,7 @@ Homepage: https://tiptap.dev
 ---
 
 Name: @tiptap/extension-list-item
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: list item extension for tiptap
@@ -1971,7 +3810,7 @@ Homepage: https://tiptap.dev
 ---
 
 Name: @tiptap/extension-ordered-list
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: ordered list extension for tiptap
@@ -1981,7 +3820,7 @@ Homepage: https://tiptap.dev
 ---
 
 Name: @tiptap/extension-paragraph
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: paragraph extension for tiptap
@@ -1991,7 +3830,7 @@ Homepage: https://tiptap.dev
 ---
 
 Name: @tiptap/extension-strike
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: strike extension for tiptap
@@ -2001,7 +3840,7 @@ Homepage: https://tiptap.dev
 ---
 
 Name: @tiptap/extension-text
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: text extension for tiptap
@@ -2011,7 +3850,7 @@ Homepage: https://tiptap.dev
 ---
 
 Name: @tiptap/starter-kit
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: starter kit for tiptap
@@ -2021,7 +3860,7 @@ Homepage: https://tiptap.dev
 ---
 
 Name: @tiptap/extension-text-align
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: text align extension for tiptap
@@ -2040,7 +3879,7 @@ Homepage: https://atomiks.github.io/tippyjs/
 Author: atomiks
 Contributors:
   Brett Zamir
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -2068,7 +3907,7 @@ SOFTWARE.
 ---
 
 Name: @tiptap/extension-bubble-menu
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: bubble-menu extension for tiptap
@@ -2078,7 +3917,7 @@ Homepage: https://tiptap.dev
 ---
 
 Name: @tiptap/vue-3
-Version: 2.26.1
+Version: 2.27.2
 License: MIT
 Private: false
 Description: Vue components for tiptap
@@ -2087,49 +3926,15 @@ Homepage: https://tiptap.dev
 
 ---
 
-Name: @vueuse/shared
-Version: 13.9.0
-License: MIT
-Private: false
-Repository: git+https://github.com/vueuse/vueuse.git
-Homepage: https://github.com/vueuse/vueuse/tree/main/packages/shared#readme
-Author: Anthony Fu &lt;https://github.com/antfu&gt;
-License Copyright:
-===
-
-MIT License
-
-Copyright (c) 2019-PRESENT Anthony Fu&lt;https://github.com/antfu&gt;
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
----
-
 Name: @vueuse/components
-Version: 13.9.0
+Version: 14.3.0
 License: MIT
 Private: false
 Description: Renderless components for VueUse
 Repository: git+https://github.com/vueuse/vueuse.git
 Homepage: https://github.com/vueuse/vueuse/tree/main/packages/components#readme
 Author: Jacob Clevenger &lt;https://github.com/wheatjs&gt;
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -2163,7 +3968,7 @@ Private: false
 Description: Drag and Drop library
 Repository: https://github.com/kutlugsahin/smooth-dnd.git
 Author: Kutlu Sahin &lt;kutlugsahin@gmail.com&gt;
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -2197,7 +4002,7 @@ Private: false
 Description: Vue 3 wrappers for smooth-dnd library
 Repository: git+https://github.com/gilnd/vue3-smooth-dnd
 Author: Gilbert Ndresaj
-License Copyright:
+License Text:
 ===
 
 The MIT License (MIT)
@@ -2230,7 +4035,7 @@ License: MIT
 Private: false
 Description: draggable component for vue
 Repository: https://github.com/SortableJS/Vue.Draggable.git
-License Copyright:
+License Text:
 ===
 
 The MIT License (MIT)
@@ -2258,14 +4063,14 @@ SOFTWARE.
 ---
 
 Name: vue
-Version: 3.5.21
+Version: 3.5.39
 License: MIT
 Private: false
 Description: The progressive JavaScript framework for building modern web UI.
 Repository: git+https://github.com/vuejs/core.git
-Homepage: https://github.com/vuejs/core/tree/main/packages/vue#readme
+Homepage: https://vuejs.org/
 Author: Evan You
-License Copyright:
+License Text:
 ===
 
 The MIT License (MIT)
@@ -2293,14 +4098,14 @@ THE SOFTWARE.
 ---
 
 Name: @vue/compiler-core
-Version: 3.5.21
+Version: 3.5.39
 License: MIT
 Private: false
 Description: @vue/compiler-core
 Repository: git+https://github.com/vuejs/core.git
 Homepage: https://github.com/vuejs/core/tree/main/packages/compiler-core#readme
 Author: Evan You
-License Copyright:
+License Text:
 ===
 
 The MIT License (MIT)
@@ -2328,14 +4133,14 @@ THE SOFTWARE.
 ---
 
 Name: @vue/compiler-dom
-Version: 3.5.21
+Version: 3.5.39
 License: MIT
 Private: false
 Description: @vue/compiler-dom
 Repository: git+https://github.com/vuejs/core.git
 Homepage: https://github.com/vuejs/core/tree/main/packages/compiler-dom#readme
 Author: Evan You
-License Copyright:
+License Text:
 ===
 
 The MIT License (MIT)
@@ -2368,7 +4173,7 @@ License: MIT
 Private: false
 Description: JavaScript library for reorderable drag-and-drop lists on modern browsers and touch devices. No jQuery required. Supports Meteor, AngularJS, React, Polymer, Vue, Knockout and any CSS library, e.g. Bootstrap.
 Repository: git://github.com/SortableJS/Sortable.git
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -2396,7 +4201,7 @@ SOFTWARE.
 ---
 
 Name: @vojtechlanka/vue-tags-input
-Version: 3.1.1
+Version: 3.1.2
 License: MIT
 Private: false
 Description: A tags input component for Vue3 based on @sipec/vue-tags-input which is fork from @JohMun/vue-tags-input.
@@ -2405,12 +4210,77 @@ Author: Johannes Munari &lt;johannesm@hotmail.de&gt;
 
 ---
 
+Name: w3c-keyname
+Version: 2.2.8
+License: MIT
+Private: false
+Description: Get a KeyboardEvent.key-style string from an event
+Repository: git+https://github.com/marijnh/w3c-keyname.git
+Homepage: https://github.com/marijnh/w3c-keyname#readme
+Author: Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt;
+License Text:
+===
+
+Copyright (C) 2016 by Marijn Haverbeke &lt;marijn@haverbeke.berlin&gt; and others
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+---
+
+Name: @tauri-apps/plugin-opener
+Version: 2.5.4
+License: MIT OR Apache-2.0
+Private: false
+Description: Open files and URLs using their default application.
+Repository: undefined
+License Text:
+===
+
+SPDXVersion: SPDX-2.1
+DataLicense: CC0-1.0
+PackageName: tauri
+DataFormat: SPDXRef-1
+PackageSupplier: Organization: The Tauri Programme in the Commons Conservancy
+PackageHomePage: https://tauri.app
+PackageLicenseDeclared: Apache-2.0
+PackageLicenseDeclared: MIT
+PackageCopyrightText: 2019-2022, The Tauri Programme in the Commons Conservancy
+PackageSummary: &lt;text&gt;Tauri is a rust project that enables developers to make secure
+and small desktop applications using a web frontend.
+                &lt;/text&gt;
+PackageComment: &lt;text&gt;The package includes the following libraries; see
+Relationship information.
+                &lt;/text&gt;
+Created: 2019-05-20T09:00:00Z
+PackageDownloadLocation: git://github.com/tauri-apps/tauri
+PackageDownloadLocation: git+https://github.com/tauri-apps/tauri.git
+PackageDownloadLocation: git+ssh://github.com/tauri-apps/tauri.git
+Creator: Person: Daniel Thompson-Yvetot
+
+---
+
 Name: @tauri-apps/plugin-dialog
-Version: 2.4.0
+Version: 2.7.1
 License: MIT OR Apache-2.0
 Private: false
 Repository: undefined
-License Copyright:
+License Text:
 ===
 
 SPDXVersion: SPDX-2.1
@@ -2437,12 +4307,12 @@ Creator: Person: Daniel Thompson-Yvetot
 ---
 
 Name: @tauri-apps/plugin-fs
-Version: 2.4.2
+Version: 2.5.1
 License: MIT OR Apache-2.0
 Private: false
 Description: Access the file system.
 Repository: undefined
-License Copyright:
+License Text:
 ===
 
 SPDXVersion: SPDX-2.1
@@ -2469,11 +4339,11 @@ Creator: Person: Daniel Thompson-Yvetot
 ---
 
 Name: @tauri-apps/plugin-os
-Version: 2.3.1
+Version: 2.3.2
 License: MIT OR Apache-2.0
 Private: false
 Repository: undefined
-License Copyright:
+License Text:
 ===
 
 SPDXVersion: SPDX-2.1
@@ -2499,49 +4369,15 @@ Creator: Person: Daniel Thompson-Yvetot
 
 ---
 
-Name: @paralleldrive/cuid2
-Version: 2.2.2
-License: MIT
-Private: false
-Repository: git+https://github.com/ericelliott/cuid2.git
-Homepage: https://github.com/ericelliott/cuid2#readme
-Author: Eric Elliott
-License Copyright:
-===
-
-MIT License
-
-Copyright (c) 2022 Eric Elliott
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
----
-
 Name: @noble/hashes
-Version: 1.8.0
+Version: 2.2.0
 License: MIT
 Private: false
 Description: Audited & minimal 0-dependency JS implementation of SHA, RIPEMD, BLAKE, HMAC, HKDF, PBKDF & Scrypt
 Repository: git+https://github.com/paulmillr/noble-hashes.git
 Homepage: https://paulmillr.com/noble/
 Author: Paul Miller (https://paulmillr.com)
-License Copyright:
+License Text:
 ===
 
 The MIT License (MIT)
@@ -2568,15 +4404,86 @@ THE SOFTWARE.
 
 ---
 
-Name: @vueuse/core
-Version: 13.9.0
+Name: bignumber.js
+Version: 9.3.1
 License: MIT
 Private: false
-Description: Collection of essential Vue Composition Utilities
+Description: A library for arbitrary-precision decimal and non-decimal arithmetic
+Repository: https://github.com/MikeMcl/bignumber.js.git
+Author: Michael Mclaughlin &lt;M8ch88l@gmail.com&gt;
+License Text:
+===
+
+The MIT License (MIT)
+=====================
+
+Copyright © `&lt;2025&gt;` `Michael Mclaughlin`
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation
+files (the “Software”), to deal in the Software without
+restriction, including without limitation the rights to use,
+copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+Name: @paralleldrive/cuid2
+Version: 3.3.0
+License: MIT
+Private: false
+Repository: git+https://github.com/ericelliott/cuid2.git
+Homepage: https://github.com/ericelliott/cuid2#readme
+Author: Eric Elliott
+License Text:
+===
+
+MIT License
+
+Copyright (c) 2022 Eric Elliott
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+Name: @vueuse/shared
+Version: 14.3.0
+License: MIT
+Private: false
 Repository: git+https://github.com/vueuse/vueuse.git
-Homepage: https://github.com/vueuse/vueuse#readme
+Homepage: https://github.com/vueuse/vueuse/tree/main/packages/shared#readme
 Author: Anthony Fu &lt;https://github.com/antfu&gt;
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -2603,20 +4510,54 @@ SOFTWARE.
 
 ---
 
-Name: zod
-Version: 3.25.76
+Name: @vueuse/core
+Version: 14.3.0
 License: MIT
 Private: false
-Description: TypeScript-first schema declaration and validation library with static type inference
-Repository: git+https://github.com/colinhacks/zod.git
-Homepage: https://zod.dev
-Author: Colin McDonnell &lt;zod@colinhacks.com&gt;
-License Copyright:
+Description: Collection of essential Vue Composition Utilities
+Repository: git+https://github.com/vueuse/vueuse.git
+Homepage: https://github.com/vueuse/vueuse#readme
+Author: Anthony Fu &lt;https://github.com/antfu&gt;
+License Text:
 ===
 
 MIT License
 
-Copyright (c) 2025 Colin McDonnell
+Copyright (c) 2019-PRESENT Anthony Fu&lt;https://github.com/antfu&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+Name: mitt
+Version: 3.0.1
+License: MIT
+Private: false
+Description: Tiny 200b functional Event Emitter / pubsub.
+Repository: undefined
+Homepage: https://github.com/developit/mitt
+License Text:
+===
+
+MIT License
+
+Copyright (c) 2021 Jason Miller
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -2639,14 +4580,14 @@ SOFTWARE.
 ---
 
 Name: @floating-ui/utils
-Version: 0.2.10
+Version: 0.2.11
 License: MIT
 Private: false
 Description: Utilities for Floating UI
 Repository: https://github.com/floating-ui/floating-ui.git
 Homepage: https://floating-ui.com
 Author: atomiks
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -2673,14 +4614,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ---
 
 Name: @floating-ui/core
-Version: 1.7.3
+Version: 1.7.5
 License: MIT
 Private: false
 Description: Positioning library for floating elements: tooltips, popovers, dropdowns, and more
 Repository: https://github.com/floating-ui/floating-ui.git
 Homepage: https://floating-ui.com
 Author: atomiks
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -2707,14 +4648,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ---
 
 Name: @floating-ui/dom
-Version: 1.7.4
+Version: 1.7.6
 License: MIT
 Private: false
 Description: Floating UI for the web
 Repository: https://github.com/floating-ui/floating-ui.git
 Homepage: https://floating-ui.com
 Author: atomiks
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -2741,14 +4682,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ---
 
 Name: @floating-ui/vue
-Version: 1.1.9
+Version: 1.1.11
 License: MIT
 Private: false
 Description: Floating UI for Vue
 Repository: https://github.com/floating-ui/floating-ui.git
 Homepage: https://floating-ui.com/docs/vue
 Author: lozinsky
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -2783,7 +4724,7 @@ Description: Vue port for Radix UI Primitives.
 Repository: git+https://github.com/unovue/radix-vue.git
 Homepage: https://github.com/unovue/radix-vue
 Author: Radix Vue Contributors (https://github.com/unovue/radix-vue)
-License Copyright:
+License Text:
 ===
 
 MIT License
@@ -2810,13 +4751,12 @@ SOFTWARE.
 
 ---
 
-Name: @tauri-apps/plugin-store
-Version: 2.4.0
+Name: @tauri-apps/plugin-autostart
+Version: 2.5.1
 License: MIT OR Apache-2.0
 Private: false
-Description: Simple, persistent key-value store.
 Repository: undefined
-License Copyright:
+License Text:
 ===
 
 SPDXVersion: SPDX-2.1
@@ -2842,19 +4782,52 @@ Creator: Person: Daniel Thompson-Yvetot
 
 ---
 
-Name: mitt
-Version: 3.0.1
+Name: @tauri-apps/plugin-store
+Version: 2.4.3
+License: MIT OR Apache-2.0
+Private: false
+Description: Simple, persistent key-value store.
+Repository: undefined
+License Text:
+===
+
+SPDXVersion: SPDX-2.1
+DataLicense: CC0-1.0
+PackageName: tauri
+DataFormat: SPDXRef-1
+PackageSupplier: Organization: The Tauri Programme in the Commons Conservancy
+PackageHomePage: https://tauri.app
+PackageLicenseDeclared: Apache-2.0
+PackageLicenseDeclared: MIT
+PackageCopyrightText: 2019-2022, The Tauri Programme in the Commons Conservancy
+PackageSummary: &lt;text&gt;Tauri is a rust project that enables developers to make secure
+and small desktop applications using a web frontend.
+                &lt;/text&gt;
+PackageComment: &lt;text&gt;The package includes the following libraries; see
+Relationship information.
+                &lt;/text&gt;
+Created: 2019-05-20T09:00:00Z
+PackageDownloadLocation: git://github.com/tauri-apps/tauri
+PackageDownloadLocation: git+https://github.com/tauri-apps/tauri.git
+PackageDownloadLocation: git+ssh://github.com/tauri-apps/tauri.git
+Creator: Person: Daniel Thompson-Yvetot
+
+---
+
+Name: zod
+Version: 3.25.76
 License: MIT
 Private: false
-Description: Tiny 200b functional Event Emitter / pubsub.
-Repository: undefined
-Homepage: https://github.com/developit/mitt
-License Copyright:
+Description: TypeScript-first schema declaration and validation library with static type inference
+Repository: git+https://github.com/colinhacks/zod.git
+Homepage: https://zod.dev
+Author: Colin McDonnell &lt;zod@colinhacks.com&gt;
+License Text:
 ===
 
 MIT License
 
-Copyright (c) 2021 Jason Miller
+Copyright (c) 2025 Colin McDonnell
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

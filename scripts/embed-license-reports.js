@@ -62,7 +62,8 @@ function replacePreBlock(vueFilePath, escapedText) {
   const indent = before.slice(lineStart).match(/^\s*/)?.[0] ?? "";
 
   const replacement = `\n${indent}<pre>\n${escapedText}\n${indent}</pre>`;
-  const updated = original.replace(preRegex, replacement);
+  // replacer function: a plain string would interpret "$`", "$'" and "$&" inside the license texts
+  const updated = original.replace(preRegex, () => replacement);
   writeFileSync(vueFilePath, updated);
   return { changed: original !== updated };
 }
@@ -85,7 +86,7 @@ function replaceMainInVue(vueFilePath, newMainHtml) {
   if (!mainRegex.test(original)) {
     throw new Error(`No <main>...</main> block found in ${vueFilePath}`);
   }
-  const updated = original.replace(mainRegex, newMainHtml);
+  const updated = original.replace(mainRegex, () => newMainHtml);
   writeFileSync(vueFilePath, updated);
   return { changed: original !== updated };
 }
