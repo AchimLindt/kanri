@@ -1,4 +1,4 @@
-<!-- SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev> -->
+<!-- SPDX-FileCopyrightText: Copyright (c) 2022-2026 trobonox <hello@trobo.dev>, AchimLindt -->
 <!-- -->
 <!-- SPDX-License-Identifier: GPL-3.0-or-later -->
 <!--
@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
 
 <template>
-  <DropdownMenuRoot>
+  <DropdownMenuRoot @update:open="(open: boolean) => emit('update:open', open)">
     <DropdownMenuTrigger asChild>
       <slot name="trigger" />
     </DropdownMenuTrigger>
@@ -47,6 +47,11 @@ withDefaults(
     sideOffset: 5,
   }
 );
+
+// optional, e.g. to load the menu content when it opens
+const emit = defineEmits<{
+  (e: "update:open", open: boolean): void;
+}>();
 
 const globalSettingsStore = useSettingsStore();
 

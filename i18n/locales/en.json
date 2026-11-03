@@ -137,7 +137,11 @@
       "statusError": "Could not save",
       "lintCount": "{count} hint | {count} hints",
       "previewToggle": "Preview",
-      "loadError": "The document could not be opened."
+      "loadError": "The document could not be opened.",
+      "history": "History",
+      "historySaveNow": "Save current version",
+      "historyHint": "Restoring replaces the editor text. The current text is saved as a version first.",
+      "historyEmpty": "No saved versions yet"
     }
   },
   "components": {

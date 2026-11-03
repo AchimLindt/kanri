@@ -48,6 +48,47 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
         <span v-if="lintCount > 0" class="text-dim-2 shrink-0 text-sm">
           {{ $t("pages.document.lintCount", lintCount) }}
         </span>
+        <Dropdown align="end" @update:open="onHistoryOpenChange">
+          <template #trigger>
+            <button
+              class="bg-elevation-1 bg-elevation-2-hover transition-button flex shrink-0 flex-row items-center gap-2 rounded-md px-3 py-1"
+              :title="$t('pages.document.history')"
+            >
+              <ClockIcon class="size-5" />
+              <span class="hidden lg:block">{{ $t("pages.document.history") }}</span>
+            </button>
+          </template>
+          <template #content>
+            <DropdownMenuItem
+              class="bg-elevation-2-hover flex w-full cursor-pointer items-center gap-2 rounded-md px-4 py-1.5 pr-6 text-left"
+              @click="saveSnapshotNow"
+            >
+              {{ $t("pages.document.historySaveNow") }}
+            </DropdownMenuItem>
+            <DropdownMenuSeparator class="bg-elevation-2 m-[5px] h-px" />
+            <div class="text-dim-3 max-w-72 px-4 py-1 text-xs">
+              {{ $t("pages.document.historyHint") }}
+            </div>
+            <template v-if="snapshotsLoaded">
+              <DropdownMenuItem
+                v-for="snapshot in snapshots"
+                :key="snapshot.name"
+                class="bg-elevation-2-hover flex w-full cursor-pointer items-center justify-between gap-4 rounded-md px-4 py-1.5 text-left"
+                @click="restoreSnapshot(snapshot.name)"
+              >
+                <span>{{ formatSnapshotDate(snapshot.date) }}</span>
+                <span class="text-dim-3 text-sm">{{ formatSnapshotSize(snapshot.size) }}</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                v-if="snapshots.length === 0"
+                disabled
+                class="text-dim-3 rounded-md px-4 py-1.5 pr-6 text-left"
+              >
+                {{ $t("pages.document.historyEmpty") }}
+              </DropdownMenuItem>
+            </template>
+          </template>
+        </Dropdown>
         <div class="flex shrink-0 flex-row items-center gap-2">
           <span class="text-sm">{{ $t("pages.document.previewToggle") }}</span>
           <SwitchRoot
@@ -94,17 +135,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
 </template>
 
 <script setup lang="ts">
+import { ClockIcon } from "@heroicons/vue/24/outline";
 import { ArrowLeftIcon } from "@heroicons/vue/24/solid";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { readTextFile, writeTextFile } from "@tauri-apps/plugin-fs";
 import { useBoard } from "@/composables/useBoard";
+import { type DocumentSnapshot, useDocumentHistory } from "@/composables/useDocumentHistory";
+import { SNAPSHOT_INTERVAL_MS } from "@/utils/documentHistory";
 import { documentFileName } from "@/utils/documentPaths";
 
 const SAVE_DELAY_MS = 1000;
 
 const route = useRoute();
 const router = useRouter();
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const settings = useSettingsStore();
 
@@ -129,7 +173,24 @@ let lastSavedContent = "";
 // CodeMirror works with "\n"; files with "\r\n" are written back with "\r\n"
 let fileLineBreak = "\n";
 
+// version history (spec docs/specs/document-history.md)
+const history = useDocumentHistory(documentPath);
+// the first write of this editor session always snapshots the text on disk
+let firstWriteDone = false;
+const historyOpen = ref(false);
+const snapshots = ref<DocumentSnapshot[]>([]);
+const snapshotsLoaded = ref(false);
+
 const fileName = computed(() => documentFileName(documentPath.value));
+
+const snapshotDateFormat = computed(
+  () => new Intl.DateTimeFormat(locale.value, { dateStyle: "medium", timeStyle: "short" })
+);
+const snapshotSizeFormat = computed(
+  () => new Intl.NumberFormat(locale.value, { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+);
+const formatSnapshotDate = (date: Date) => snapshotDateFormat.value.format(date);
+const formatSnapshotSize = (size: number) => `${snapshotSizeFormat.value.format(size / 1024)} KB`;
 
 const saveStatusText = computed(() => {
   switch (saveStatus.value) {
@@ -216,6 +277,8 @@ const flushSave = (): Promise<void> => {
     if (!loaded.value || content.value === lastSavedContent) return;
     const text = content.value;
     saveStatus.value = "saving";
+    // the version on disk is kept before it is overwritten; never blocks the write
+    await snapshotBeforeWrite();
     try {
       await writeTextFile(
         documentPath.value,
@@ -233,6 +296,48 @@ const flushSave = (): Promise<void> => {
   return currentSave;
 };
 
+// snapshot rules 1 and 2: first write of the session, or newest snapshot older than the interval
+const snapshotBeforeWrite = async () => {
+  try {
+    if (!firstWriteDone) {
+      firstWriteDone = true;
+      await history.createSnapshot(lastSavedContent);
+      return;
+    }
+    const newest = await history.newestSnapshotDate();
+    if (!newest || Date.now() - newest.getTime() >= SNAPSHOT_INTERVAL_MS) {
+      await history.createSnapshot(lastSavedContent);
+    }
+  } catch (err) {
+    console.warn("Could not save document version:", err);
+  }
+};
+
+const onHistoryOpenChange = async (open: boolean) => {
+  historyOpen.value = open;
+  if (!open) return;
+  snapshots.value = await history.listSnapshots();
+  snapshotsLoaded.value = true;
+};
+
+// rule 4: manual snapshot of the editor text
+const saveSnapshotNow = async () => {
+  if (!loaded.value) return;
+  await history.createSnapshot(content.value);
+};
+
+// rule 3: the editor text is kept as a snapshot before it is replaced; undoable with Ctrl+Z
+const restoreSnapshot = async (name: string) => {
+  if (!loaded.value) return;
+  try {
+    const text = await history.readSnapshot(name);
+    await history.createSnapshot(content.value);
+    content.value = text;
+  } catch (err) {
+    console.error("Could not restore document version:", err);
+  }
+};
+
 const goBack = async () => {
   await flushSave();
   // a failed write keeps the page open so no text is lost silently; the status shows the error
@@ -248,8 +353,9 @@ const keyDownListener = (e: KeyboardEvent) => {
     return;
   }
 
-  // Escape that the editor already handled (e.g. collapsing a selection) does not leave the page
-  if (e.key === "Escape" && !e.defaultPrevented) {
+  // Escape that the editor already handled (e.g. collapsing a selection) does not leave the page;
+  // radix menus close on Escape without marking the event as handled
+  if (e.key === "Escape" && !e.defaultPrevented && !historyOpen.value) {
     goBack();
   }
 };

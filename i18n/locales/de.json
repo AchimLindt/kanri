@@ -131,7 +131,11 @@
       "statusError": "Speichern fehlgeschlagen",
       "lintCount": "{count} Hinweis | {count} Hinweise",
       "previewToggle": "Vorschau",
-      "loadError": "Das Dokument konnte nicht geöffnet werden."
+      "loadError": "Das Dokument konnte nicht geöffnet werden.",
+      "history": "Verlauf",
+      "historySaveNow": "Aktuelle Version sichern",
+      "historyHint": "Wiederherstellen ersetzt den Editortext. Der aktuelle Text wird vorher als Version gesichert.",
+      "historyEmpty": "Noch keine gesicherten Versionen"
     }
   },
   "components": {
