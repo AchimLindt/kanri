@@ -12,22 +12,24 @@ Zweck: schnelle Orientierung für Änderungen im privaten Fork. Bei Abweichungen
 ## 1. Was Kanri ist
 
 Offline-Kanban-Desktop-App: **Tauri 2** (Rust-Shell, `src-tauri/`) + **Nuxt 4 / Vue 3** SPA (`ssr: false`).
-Die gesamte Fachlogik liegt im Frontend; Rust ist nur die Hülle (Fenster, Plugins: store, fs, dialog, log, opener, autostart, os, notification).
+Die gesamte Fachlogik liegt im Frontend; Rust ist nur die Hülle (Fenster, Tray-Icon, Plugins: store, fs, dialog, log, opener, autostart, os, notification, global-shortcut).
 Persistenz: eine JSON-Datei `.kanri.dat` im App-Data-Verzeichnis über `@tauri-apps/plugin-store` (`LazyStore`).
 
 ```
 src-tauri/            Rust-Shell, tauri.conf.json, capabilities
 app.vue               Root, leitet console.* an Tauri-Log weiter
 layouts/default.vue   Lädt alle Stores, setzt Theme-CSS-Variablen, Sidebar; Teleport-Ziel ".default-layout"
+layouts/capture.vue   Layout des Schnellerfassungs-Fensters (ohne Sidebar, ohne Store)
 pages/                index (Board-Übersicht), kanban/[id] (Board-Ansicht), kanban/archive/[id] (Archiv, Route /kanban/:id/archive),
-                      document (Markdown-Editor), search (Volltextsuche), today (Tagesansicht), settings, import, licenses/*
+                      document (Markdown-Editor), search (Volltextsuche), today (Tagesansicht), capture (Schnellerfassungs-Fenster),
+                      settings, import, licenses/*
 components/           kanban/*, modal/*, document/*, icon/*, generische (Dropdown, Modal, Tooltip, HexColorInput, ...)
 composables/          useBoard (Board-Fassade), useBackgroundImage, useContextMenuClasses, useDocumentHistory, useSearch,
-                      useCardArchive, useReminders
+                      useCardArchive, useReminders, useWindowLifecycle, useQuickCapture
 stores/               Pinia: boards, settings, theme, layout, tauriStore
 types/                kanban-types.d.ts (Domänentypen), json-schemas.ts (zod, für Import)
 utils/                colorUtils, drag-n-drop, emitter (mitt), exampleData, idGenerator, sorting, themes, iconManager,
-                      documentPaths, markdownLint, cardLinks, search, cardArchive, reminders
+                      documentPaths, markdownLint, cardLinks, search, cardArchive, reminders, quickCapture, themeCssVars
 i18n/locales/*.json   11 Sprachen, Fallback en
 assets/css/           global.css, scrollbars.css (Theme-Klassen liegen in layouts/default.vue <style>)
 ```
@@ -81,8 +83,8 @@ CardSource { path, row }                     (Herkunft: Markdown-Datei und Zeile
 Bindet `boardId` (Ref) und reicht an den Store durch: `board` (computed), `isPinned`, `init()`, alle Column-/Card-Actions ohne `boardId`-Parameter, plus `setCardName/Description/Color/Tasks/Tags` (via `mutateCard`), `setCardDueDate` (delegiert an die gleichnamige Store-Action) und `setCardReminderLeadTime`. Neue Store-Actions hier spiegeln.
 
 ### Weitere Stores
-- `settings`: Locale, Animationen, Zoom (`columnZoomLevel` -1..2), Add-to-top-Button, Kartenzähler, Sortierung, `markdownDocumentsFolder` (Startordner der Dokument-Dialoge, `""` = System-Default), `markdownPreviewEnabled` (Vorschau im Editor), `searchDocumentContentsEnabled` (Volltextsuche liest Dokumentinhalte), `archiveAfterDays` (Default 120, `normalizeArchiveAfterDays`), Zeitstempel `documentHistoryLastCleanup` und `cardArchiveLastRun` der täglichen Läufe, `reminderLeadTime` (Default `"1d"`), `startPage` (`"boards" | "today"`), `todaySectionsCollapsed` (Abschnitt → eingeklappt). Jede Action schreibt direkt in den Tauri-Store (kein Auto-Save). Nicht persistiert: `loaded` (true nach `loadSettings`; `boards.initialized` ist kein Ersatz, weil `pages/index.vue` `boards.init()` vor dem Layout aufruft).
-- `theme`: `activeTheme` (dark/light/catppuccin/custom/auto), `colors: Theme`. `layouts/default.vue` mappt `colors` auf CSS-Variablen (`--elevation-1`, `--text-dim-1`, …) und definiert dort im `<style>` die Utility-Klassen `bg-elevation-1/2/3`, `bg-elevation-2-hover`, `border-elevation-*`, `text-dim-*`, `bg-accent`, `text-buttons`, `bg-primary-darker`.
+- `settings`: Locale, Animationen, Zoom (`columnZoomLevel` -1..2), Add-to-top-Button, Kartenzähler, Sortierung, `markdownDocumentsFolder` (Startordner der Dokument-Dialoge, `""` = System-Default), `markdownPreviewEnabled` (Vorschau im Editor), `searchDocumentContentsEnabled` (Volltextsuche liest Dokumentinhalte), `archiveAfterDays` (Default 120, `normalizeArchiveAfterDays`), Zeitstempel `documentHistoryLastCleanup` und `cardArchiveLastRun` der täglichen Läufe, `reminderLeadTime` (Default `"1d"`), `startPage` (`"boards" | "today"`), `todaySectionsCollapsed` (Abschnitt → eingeklappt), `minimizeToTray` (Default an), `startMinimized`, `quickCaptureShortcut` (Default `CommandOrControl+Alt+K`, `""` = keins), `quickCaptureBoardId`/`quickCaptureColumnId` (Inbox der Schnellerfassung). Jede Action schreibt direkt in den Tauri-Store (kein Auto-Save). Nicht persistiert: `quickCaptureShortcutError` (Registrierung des Kürzels fehlgeschlagen), `loaded` (true nach `loadSettings`; `boards.initialized` ist kein Ersatz, weil `pages/index.vue` `boards.init()` vor dem Layout aufruft).
+- `theme`: `activeTheme` (dark/light/catppuccin/custom/auto), `colors: Theme`. `layouts/default.vue` mappt `colors` per `themeCssVars` (`utils/themeCssVars.ts`) auf CSS-Variablen (`--elevation-1`, `--text-dim-1`, …) und definiert dort im `<style>` die Utility-Klassen `bg-elevation-1/2/3`, `bg-elevation-2-hover`, `border-elevation-*`, `text-dim-*`, `bg-accent`, `text-buttons`, `bg-primary-darker`.
 - `layout`: Sidebar-Flags, Changelog-Anzeige. `tauriStore`: hält die `LazyStore`-Instanz.
 - ESLint-Regel `custom/no-store-outside-stores`: `useTauriStore()` nur in `stores/`.
 
@@ -159,12 +161,19 @@ Für Tailwind-Klassen-Farben (`bg-*-600`) wird pauschal heller Text angenommen (
 - Sidebar: Eintrag `/today` (`CalendarDaysIcon`) mit rotem Badge (überfällig + heute fällig). `pages/index.vue` leitet beim ersten Besuch der Sitzung auf `/today` um, wenn `settings.startPage === "today"`.
 - Tagesansicht: Abschnitte Überfällig/Heute/Nächste 7 Tage/Später (einklappbar, Zustand in `todaySectionsCollapsed`), Zeile mit Link `/kanban/<boardId>?card=<cardId>`, Checkbox „Fälligkeit erledigt", Menü „+1 Tag"/„+1 Woche"/„Datum wählen…" (natives `<input type="date">` mit explizitem Übernehmen). Alle Änderungen laufen über Store-Actions.
 
+## 6e. Tray und Schnellerfassung (`pages/capture.vue`)
+
+- Spec: `docs/specs/tray-quick-capture.md`. Rust (`src-tauri/src/lib.rs`): Tray-Icon (Linksklick zeigt das Hauptfenster, Menü „Open"/„Quick capture"/„Quit", Texte englisch), Command `launched_by_autostart` (Autostart-Eintrag übergibt `--autostart`), Exit der App beim Zerstören des Hauptfensters (sonst hielte das versteckte Capture-Fenster den Prozess am Leben), Window-State-Denylist für `capture`. Tray-Aktionen, die Frontend-Logik brauchen, laufen als Events an das Hauptfenster (`quick-capture:open`, `app:quit-requested`).
+- **Fenster-Lebenszyklus** (`composables/useWindowLifecycle.ts`): Das Hauptfenster startet unsichtbar (`tauri.conf.json` `visible: false`); `layouts/default.vue` zeigt es nach dem Laden der Einstellungen (`showMainWindowOnStartup`, bleibt bei `startMinimized` + Autostart verborgen). Es gibt genau **einen** Close-Handler (`setupMainWindowLifecycle`): Seiten, die vor dem Schließen etwas erledigen müssen, registrieren `onBeforeWindowClose(fn)` statt eines eigenen `onCloseRequested` (siehe §9); danach wird bei `minimizeToTray` versteckt, sonst geschlossen.
+- **Schnellerfassung**: zweites WebView-Fenster `capture` (Route `/capture`, `layouts/capture.vue`), zur Laufzeit aus dem Hauptfenster angelegt und danach nur gezeigt/versteckt (`openQuickCapture` in `composables/useQuickCapture.ts`, positioniert auf dem Monitor des Mauszeigers). Es ist eine eigene Nuxt-/Pinia-Instanz und greift nie auf Stores zu: Zielliste, Inbox, Sprache und Theme-Farben bekommt es per Tauri-Event vom Hauptfenster, neue Karten legt das Hauptfenster an (`useQuickCaptureHost` im Layout, `createCard(…, addToTop = true)`). Theme-Klassen aus `layouts/default.vue` gibt es dort nicht; `layouts/capture.vue` definiert die benötigten selbst. Reine Logik (Kürzel-Validierung, Titel/Beschreibung, Inbox, Platzierung) in `utils/quickCapture.ts`.
+- Globales Tastenkürzel (`tauri-plugin-global-shortcut` 2.3.2): registriert im Layout nach `boards.init()`, bei Änderung von `settings.quickCaptureShortcut` neu; Fehlschlag setzt `settings.quickCaptureShortcutError` (Hinweis auf der Settings-Seite).
+
 ## 7. Startseite, Import/Export, Settings
 
 - `pages/index.vue`: optionale Umleitung auf die Tagesansicht beim ersten Besuch (`startPage`), Board-Liste mit `KanbanBoardPreview` (Mini-Rendering der Spalten/Karten inkl. `card.color`), Sortierung (`utils/sorting.ts`), NewBoard-Modal (`utils/exampleData.ts`), Pins.
 - `pages/import.vue`: Import von Kanri-Vollexport, einzelnem Board, KanbanElectron und Trello, jeweils via zod-Schema; Export eines Boards in `[id].vue` (`exportBoardToJson`, `JSON.stringify(board)`).
 - `pages/settings.vue`: Theme-Wahl (`CustomThemeEditor` mit `HexColorInput` + `<input type="color">`), Sprache, Verhalten, Standardordner für Markdown-Dokumente, Archivierungsfrist (Zahlenfeld, Übernahme bei `change`), Reminder-Vorlauf und Startseite (native `<select>`).
-- **Capabilities** (`src-tauri/capabilities/main.json`): für Dokumente zusätzlich `fs:allow-exists`, `opener:allow-open-path` (Scope `**/*.md`, `**/*.markdown`) und `http(s)://**` bei `opener:allow-open-url`; Karten-Links (`http`, `https`, `mailto`) deckt bereits `opener:default` ab (`allow-default-urls`, Glob-Scope, `*` matcht auch `/`); für die Versionshistorie `fs:allow-appdata-read/write/meta-recursive`, `fs:allow-mkdir`, `fs:allow-read-dir`, `fs:allow-remove`, `fs:allow-stat`; für Reminder `notification:default` (Plugin `tauri-plugin-notification` 2.4.0, die letzte Version für Tauri 2.11). Dateizugriff auf per Dialog gewählte Pfade kommt über den Dialog-Scope, `tauri-plugin-persisted-scope` hält ihn über Neustarts.
+- **Capabilities** (`src-tauri/capabilities/main.json`): für Dokumente zusätzlich `fs:allow-exists`, `opener:allow-open-path` (Scope `**/*.md`, `**/*.markdown`) und `http(s)://**` bei `opener:allow-open-url`; Karten-Links (`http`, `https`, `mailto`) deckt bereits `opener:default` ab (`allow-default-urls`, Glob-Scope, `*` matcht auch `/`); für die Versionshistorie `fs:allow-appdata-read/write/meta-recursive`, `fs:allow-mkdir`, `fs:allow-read-dir`, `fs:allow-remove`, `fs:allow-stat`; für Reminder `notification:default` (Plugin `tauri-plugin-notification` 2.4.0, die letzte Version für Tauri 2.11); für Tray und Schnellerfassung `core:window:allow-unminimize/set-focus/set-position/center/destroy`, `core:webview:allow-create-webview-window` und `global-shortcut:allow-register/unregister/is-registered/unregister-all` (Fenster-Befehle werden gegen die Capability des aufrufenden Fensters geprüft). Das Capture-Fenster hat eine eigene, schmale Capability `src-tauri/capabilities/capture.json` (ohne Store und Dateisystem). Dateizugriff auf per Dialog gewählte Pfade kommt über den Dialog-Scope, `tauri-plugin-persisted-scope` hält ihn über Neustarts.
 
 ## 8. Toolchain & Qualitätssicherung
 
@@ -181,4 +190,6 @@ Für Tailwind-Klassen-Farben (`bg-*-600`) wird pauschal heller Text angenommen (
 - `Card.id` kann in Altdaten fehlen → Vergleiche über `id` defensiv halten.
 - Auto-Save ist deep-reaktiv: große Arrays ersetzen ist ok, aber Mutationen außerhalb des Stores (z. B. direkt am `props.card`) werden ebenfalls persistiert, nur ohne `lastEdited`.
 - Zoom-Level (-1..2) beeinflusst fast jede Klasse in Column/Card; neue UI-Elemente in Spalte/Karte sollten ein `computed` für die Größe bekommen.
+- `getCurrentWindow().onCloseRequested` nicht in Seiten verwenden: `@tauri-apps/api` zerstört das Fenster nach jedem Listener, der sein eigenes Event nicht verhindert, ein zweiter Listener würde also „Schließen in den Tray" aushebeln. Stattdessen `onBeforeWindowClose` (`composables/useWindowLifecycle.ts`).
+- Das Hauptfenster ist beim Start unsichtbar und wird erst vom Layout gezeigt; eine Seite mit eigenem Layout im Hauptfenster müsste `showMainWindowOnStartup` ebenfalls aufrufen.
 - Die Upstream-CONTRIBUTING lehnt KI-generierte Beiträge ab; Änderungen in diesem Fork sind nicht für Upstream-PRs gedacht.
