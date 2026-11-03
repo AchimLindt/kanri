@@ -25,7 +25,7 @@ composables/          useBoard (Board-Fassade), useBackgroundImage, useContextMe
 stores/               Pinia: boards, settings, theme, layout, tauriStore
 types/                kanban-types.d.ts (Domänentypen), json-schemas.ts (zod, für Import)
 utils/                colorUtils, drag-n-drop, emitter (mitt), exampleData, idGenerator, sorting, themes, iconManager,
-                      documentPaths, markdownLint
+                      documentPaths, markdownLint, cardLinks
 i18n/locales/*.json   11 Sprachen, Fallback en
 assets/css/           global.css, scrollbars.css (Theme-Klassen liegen in layouts/default.vue <style>)
 ```
@@ -37,9 +37,11 @@ Board { id, title, columns: Column[], background?: {src, blur, brightness}|null,
         globalTags?: Tag[]|null, lastEdited?, createdAt? }
 Column { id, title, cards: Card[], defaultCardColor?, backgroundColor?, collapsed? }
 Card { id?, name, description? (HTML aus tiptap), color?, dueDate?, isDueDateCounterRelative?,
-       isDueDateCompleted?, tasks?: Task[], tags?: Tag[]|null, documents?: CardDocument[]|null }
+       isDueDateCompleted?, tasks?: Task[], tags?: Tag[]|null, documents?: CardDocument[]|null,
+       links?: CardLink[]|null }
 Tag { id?, text, color?, style? }            Task { id?, finished, name }
 CardDocument { id, path }                    (absoluter Pfad einer .md-Datei)
+CardLink { id, url, title? }                 (http/https/mailto-URL, optionaler Anzeigename)
 ```
 
 - **IDs**: `generateUniqueID()` (cuid2). `Card.id` ist historisch optional; `Column.vue` ergänzt fehlende IDs beim Mount.
@@ -47,6 +49,7 @@ CardDocument { id, path }                    (absoluter Pfad einer .md-Datei)
 - **Sondername** `---`: Karte wird als Trennlinie gerendert.
 - **`Column.collapsed`**: `true` = Spalte eingeklappt (nur Header sichtbar), fehlend/`undefined` = ausgeklappt. Gesetzt über `setColumnCollapsed`, persistiert per Auto-Save (Spec: `docs/specs/column-collapse.md`).
 - **`Card.documents`**: Verweise auf Markdown-Dateien im Dateisystem; die Board-Daten enthalten nur Pfade, nie den Text. Ein Pfad je Karte höchstens einmal (Vergleich über `normalizeDocumentPath` aus `utils/documentPaths.ts`). Duplizieren kopiert die Verweise, Löschen/Entfernen fasst die Dateien nie an (Spec: `docs/specs/card-documents.md`).
+- **`Card.links`**: Web-Links, die per `openUrl` im Standardbrowser geöffnet werden. Die URL wird vor dem Speichern mit `normalizeLinkUrl` (`utils/cardLinks.ts`) normalisiert: ohne Schema `https://` davor, nur `http`, `https`, `mailto`; beim Öffnen wird das Schema erneut geprüft. Doppelte URLs sind erlaubt. Anzeigename über `linkDisplayName` (Titel, sonst Host + Pfad). Duplizieren kopiert die Links (Spec: `docs/specs/card-links.md`).
 - **zod-Schemas** (`types/json-schemas.ts`) spiegeln die Typen und werden nur beim **Import** (`pages/import.vue`) angewendet. zod strippt unbekannte Keys → neue Felder müssen dort ergänzt werden, sonst gehen sie beim Re-Import verloren. `kanriJsonSchema` = komplettes `.kanri.dat`.
 - Der Tauri-Store speichert die Objekte wie sie sind; neue optionale Felder sind damit automatisch rückwärtskompatibel (alte Daten haben `undefined`).
 
@@ -61,6 +64,7 @@ CardDocument { id, path }                    (absoluter Pfad einer .md-Datei)
   - Spalten: `addColumn`, `removeColumn`, `reorderColumns(boardId, nextColumns)`, `setColumnTitle`, `updateColumn`
   - Karten: `createCard(boardId, colId, card, addToTop)`, `duplicateCard`, `deleteCard`, `deleteAllColumnCards`, `mutateCard(boardId, colId, cardId, fn)`, `reorderCards(boardId, colId, nextCards)`, `moveCard(srcBoard, dstBoard, srcCol, dstCol, cardId)`
   - Karten-Dokumente: `addCardDocument` (gibt die id zurück, ignoriert doppelte Pfade), `removeCardDocument`, `setCardDocumentPath`; Getter `findCardDocument(boardId, cardId, docId)` für die Editor-Seite
+  - Karten-Links: `addCardLink` (gibt die id zurück), `updateCardLink`, `removeCardLink`; Lookup über den internen Helfer `_findCard(boardId, colId, cardId)`. Validierung passiert vorher im Dialog
 - **Karten-Bewegungen landen an genau drei Stellen**: `createCard` (neu), `reorderCards` (Drag & Drop, siehe §5), `moveCard` (Kontextmenü „Move to", auch board-übergreifend).
 
 ### `composables/useBoard.ts` – Fassade für eine Board-Seite
@@ -94,6 +98,7 @@ pages/kanban/[id].vue                       Seite: Header (Titel, Buttons, Dropd
 - **Modals**: `components/Modal.vue` (fixed overlay, Esc schließt, Enter → `enterKeyPressed`). Die Seite rendert alle Modals dauerhaft mit `v-show`; Inhalt wird über Props/Emitter befüllt. Confirm-Dialoge nutzen `useConfirmDialog` (vueuse) + `emitter.emit("openModalWithCustomDescription")`.
 - **Dropdown.vue** (radix DropdownMenu) teleportiert nach `.default-layout`; Items sind `DropdownMenuItem` mit Klassen `bg-elevation-2-hover ... rounded-md px-4 py-1.5`.
 - **Dokumente** (`EditCard.vue` → `[id].vue`): Abschnitt „Dokumente" mit Liste, Kontextmenü und Datei-Dialogen; `exists()` wird bei jedem Öffnen des Dialogs geprüft (Signal `editCardModalOpened` über den Emitter, weil das Modal per `v-show` gemountet bleibt). `openDocument` schließt den Dialog und navigiert nach `/document?board=&card=&doc=`. Das Kontextmenü im Modal braucht einen z-index über dem des Modals (`z-[10000001]`).
+- **Links** (`EditCard.vue`): Abschnitt „Links" unter „Dokumente" mit Liste (Klick = `openUrl`, Dialog bleibt offen), Kontextmenü (Öffnen, URL kopieren, Bearbeiten, Entfernen ohne Rückfrage) und einem Formular aus URL- und Titelfeld, das im Bearbeiten-Modus „Speichern" zeigt. Kopieren über `navigator.clipboard.writeText` (im WebView verfügbar, `*.localhost` ist sicherer Kontext) mit `execCommand("copy")`-Fallback, kein Clipboard-Plugin. Die Kachel zeigt `PhLink` + Anzahl neben dem Dokument-Indikator.
 - **Emitter** (`utils/emitter.ts`, mitt, typisiert): seitenweite Signale (`columnActionDone`, `enableColumnTitleEditing`, `columnDraggingOn/Off`, Modal-Steuerung). Neue Events im `Events`-Typ ergänzen; Listener in `onBeforeUnmount` wieder abmelden.
 
 ## 5. Drag & Drop (vue3-smooth-dnd)
@@ -125,7 +130,7 @@ Für Tailwind-Klassen-Farben (`bg-*-600`) wird pauschal heller Text angenommen (
 - `pages/index.vue`: Board-Liste mit `KanbanBoardPreview` (Mini-Rendering der Spalten/Karten inkl. `card.color`), Sortierung (`utils/sorting.ts`), NewBoard-Modal (`utils/exampleData.ts`), Pins.
 - `pages/import.vue`: Import von Kanri-Vollexport, einzelnem Board, KanbanElectron und Trello, jeweils via zod-Schema; Export eines Boards in `[id].vue` (`exportBoardToJson`, `JSON.stringify(board)`).
 - `pages/settings.vue`: Theme-Wahl (`CustomThemeEditor` mit `HexColorInput` + `<input type="color">`), Sprache, Verhalten, Standardordner für Markdown-Dokumente.
-- **Capabilities** (`src-tauri/capabilities/main.json`): für Dokumente zusätzlich `fs:allow-exists`, `opener:allow-open-path` (Scope `**/*.md`, `**/*.markdown`) und `http(s)://**` bei `opener:allow-open-url`; für die Versionshistorie `fs:allow-appdata-read/write/meta-recursive`, `fs:allow-mkdir`, `fs:allow-read-dir`, `fs:allow-remove`, `fs:allow-stat`. Dateizugriff auf per Dialog gewählte Pfade kommt über den Dialog-Scope, `tauri-plugin-persisted-scope` hält ihn über Neustarts.
+- **Capabilities** (`src-tauri/capabilities/main.json`): für Dokumente zusätzlich `fs:allow-exists`, `opener:allow-open-path` (Scope `**/*.md`, `**/*.markdown`) und `http(s)://**` bei `opener:allow-open-url`; Karten-Links (`http`, `https`, `mailto`) deckt bereits `opener:default` ab (`allow-default-urls`, Glob-Scope, `*` matcht auch `/`); für die Versionshistorie `fs:allow-appdata-read/write/meta-recursive`, `fs:allow-mkdir`, `fs:allow-read-dir`, `fs:allow-remove`, `fs:allow-stat`. Dateizugriff auf per Dialog gewählte Pfade kommt über den Dialog-Scope, `tauri-plugin-persisted-scope` hält ihn über Neustarts.
 
 ## 8. Toolchain & Qualitätssicherung
 
@@ -137,7 +142,7 @@ Für Tailwind-Klassen-Farben (`bg-*-600`) wird pauschal heller Text angenommen (
 ## 9. Bekannte Fallstricke
 
 - `Column.vue`/`Card.vue` kopieren Props in lokale Refs; direkte Mutation von Props vermeiden, Änderungen immer über Store-Actions.
-- Arrays an Karten (`tasks`, `tags`, `documents`) in Store-Actions in place mutieren (`push`, `splice`), nicht durch eine gefilterte Kopie ersetzen: Kachel und Karten-Dialog halten das ursprüngliche Array in lokalen Refs, eine neue Array-Instanz erreicht sie erst beim nächsten Öffnen (Bug beim Entfernen von Dokumenten, behoben 2026-11-03).
+- Arrays an Karten (`tasks`, `tags`, `documents`, `links`) in Store-Actions in place mutieren (`push`, `splice`), nicht durch eine gefilterte Kopie ersetzen: Kachel und Karten-Dialog halten das ursprüngliche Array in lokalen Refs, eine neue Array-Instanz erreicht sie erst beim nächsten Öffnen (Bug beim Entfernen von Dokumenten, behoben 2026-11-03).
 - Tailwind-Klassen dynamisch zusammenzusetzen (`"bg-" + name`) funktioniert nicht (JIT). Vollständige Klassennamen verwenden.
 - `Card.id` kann in Altdaten fehlen → Vergleiche über `id` defensiv halten.
 - Auto-Save ist deep-reaktiv: große Arrays ersetzen ist ok, aber Mutationen außerhalb des Stores (z. B. direkt am `props.card`) werden ebenfalls persistiert, nur ohne `lastEdited`.
