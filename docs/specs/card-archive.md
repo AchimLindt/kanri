@@ -181,7 +181,7 @@ Reine Helfer in `utils/cardArchive.ts` (ohne Store/DOM/Tauri, Node-Smoke-Test): 
 
 - Automatisches Löschen archivierter Karten, Aufbewahrungsfristen für das Archiv.
 - Mehrere Erledigt-Spalten je Board; Archivierung nach Fälligkeit oder aus anderen Spalten.
-- Erneuter Archivierungslauf während die App läuft (nur beim Start, höchstens alle 24 h).
+- ~~Erneuter Archivierungslauf während die App läuft (nur beim Start, höchstens alle 24 h).~~ Überholt durch `docs/specs/reminders.md` §2.3: Die Minuten-Schleife der Reminder ruft `runScheduledCardArchive()` jede Minute auf; die Intervallprüfung lässt den Lauf weiterhin höchstens einmal je 24 h zu, jetzt auch ohne Neustart.
 - Archiv über alle Boards hinweg, Bearbeiten archivierter Karten, Mehrfachauswahl auf der Archiv-Seite.
 - Karten-Dialog für Suchtreffer im Archiv; Hervorhebung des Treffers auf der Archiv-Seite.
 - Wiederherstellen an die ursprüngliche Position innerhalb der Spalte.

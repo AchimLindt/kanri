@@ -12,7 +12,7 @@ Zweck: schnelle Orientierung für Änderungen im privaten Fork. Bei Abweichungen
 ## 1. Was Kanri ist
 
 Offline-Kanban-Desktop-App: **Tauri 2** (Rust-Shell, `src-tauri/`) + **Nuxt 4 / Vue 3** SPA (`ssr: false`).
-Die gesamte Fachlogik liegt im Frontend; Rust ist nur die Hülle (Fenster, Plugins: store, fs, dialog, log, opener, autostart, os).
+Die gesamte Fachlogik liegt im Frontend; Rust ist nur die Hülle (Fenster, Plugins: store, fs, dialog, log, opener, autostart, os, notification).
 Persistenz: eine JSON-Datei `.kanri.dat` im App-Data-Verzeichnis über `@tauri-apps/plugin-store` (`LazyStore`).
 
 ```
@@ -20,14 +20,14 @@ src-tauri/            Rust-Shell, tauri.conf.json, capabilities
 app.vue               Root, leitet console.* an Tauri-Log weiter
 layouts/default.vue   Lädt alle Stores, setzt Theme-CSS-Variablen, Sidebar; Teleport-Ziel ".default-layout"
 pages/                index (Board-Übersicht), kanban/[id] (Board-Ansicht), kanban/archive/[id] (Archiv, Route /kanban/:id/archive),
-                      document (Markdown-Editor), search (Volltextsuche), settings, import, licenses/*
+                      document (Markdown-Editor), search (Volltextsuche), today (Tagesansicht), settings, import, licenses/*
 components/           kanban/*, modal/*, document/*, icon/*, generische (Dropdown, Modal, Tooltip, HexColorInput, ...)
 composables/          useBoard (Board-Fassade), useBackgroundImage, useContextMenuClasses, useDocumentHistory, useSearch,
-                      useCardArchive
+                      useCardArchive, useReminders
 stores/               Pinia: boards, settings, theme, layout, tauriStore
 types/                kanban-types.d.ts (Domänentypen), json-schemas.ts (zod, für Import)
 utils/                colorUtils, drag-n-drop, emitter (mitt), exampleData, idGenerator, sorting, themes, iconManager,
-                      documentPaths, markdownLint, cardLinks, search, cardArchive
+                      documentPaths, markdownLint, cardLinks, search, cardArchive, reminders
 i18n/locales/*.json   11 Sprachen, Fallback en
 assets/css/           global.css, scrollbars.css (Theme-Klassen liegen in layouts/default.vue <style>)
 ```
@@ -40,11 +40,13 @@ Board { id, title, columns: Column[], background?: {src, blur, brightness}|null,
 Column { id, title, cards: Card[], defaultCardColor?, backgroundColor?, collapsed?, isDoneColumn? }
 Card { id?, name, description? (HTML aus tiptap), color?, dueDate?, isDueDateCounterRelative?,
        isDueDateCompleted?, tasks?: Task[], tags?: Tag[]|null, documents?: CardDocument[]|null,
-       links?: CardLink[]|null, completedAt? (ISO) }
+       links?: CardLink[]|null, completedAt? (ISO), reminderLeadTime?, remindersSent?, source? }
 ArchivedCard { card: Card, columnId, columnTitle, archivedAt (ISO) }
 Tag { id?, text, color?, style? }            Task { id?, finished, name }
 CardDocument { id, path }                    (absoluter Pfad einer .md-Datei)
 CardLink { id, url, title? }                 (http/https/mailto-URL, optionaler Anzeigename)
+RemindersSent { lead?, due?, overdue? }      (ISO-Zeitstempel der gesendeten Erinnerung je Stufe)
+CardSource { path, row }                     (Herkunft: Markdown-Datei und Zeile eines Action Points)
 ```
 
 - **IDs**: `generateUniqueID()` (cuid2). `Card.id` ist historisch optional; `Column.vue` ergänzt fehlende IDs beim Mount.
@@ -54,6 +56,8 @@ CardLink { id, url, title? }                 (http/https/mailto-URL, optionaler 
 - **`Card.documents`**: Verweise auf Markdown-Dateien im Dateisystem; die Board-Daten enthalten nur Pfade, nie den Text. Ein Pfad je Karte höchstens einmal (Vergleich über `normalizeDocumentPath` aus `utils/documentPaths.ts`). Duplizieren kopiert die Verweise, Löschen/Entfernen fasst die Dateien nie an (Spec: `docs/specs/card-documents.md`).
 - **`Card.links`**: Web-Links, die per `openUrl` im Standardbrowser geöffnet werden. Die URL wird vor dem Speichern mit `normalizeLinkUrl` (`utils/cardLinks.ts`) normalisiert: ohne Schema `https://` davor, nur `http`, `https`, `mailto`; beim Öffnen wird das Schema erneut geprüft. Doppelte URLs sind erlaubt. Anzeigename über `linkDisplayName` (Titel, sonst Host + Pfad). Duplizieren kopiert die Links (Spec: `docs/specs/card-links.md`).
 - **Erledigt-Spalte und Archiv** (Spec: `docs/specs/card-archive.md`): `Column.isDoneColumn` markiert höchstens eine Spalte je Board (`setDoneColumn`). `Card.completedAt` ist genau dann gesetzt, wenn die Karte in der Erledigt-Spalte liegt (gesetzt beim Eintritt zusammen mit `isDueDateCompleted = true`, gelöscht beim Eintritt in eine andere Spalte); künftige Features (Reminder) nutzen das als „erledigt"-Signal. `Board.archivedCards` hält archivierte Karten unverändert samt Herkunftsspalte (ID und Titel zum Archivierungszeitpunkt); sie liegen außerhalb von `columns`, Code, der „alle Karten eines Boards" braucht (Suche, Dokument-Historie, künftige Auswertungen), muss das Archiv separat einbeziehen. Archivierte Karten werden nie automatisch gelöscht.
+- **Reminder** (Spec: `docs/specs/reminders.md`): `Card.reminderLeadTime` (`"none" | "1d" | "3d" | "7d"`) überschreibt die globale Einstellung, fehlt = global. `Card.remindersSent` vermerkt je Stufe (`lead`, `due`, `overdue`), wann benachrichtigt wurde; jede Änderung des Fälligkeitsdatums über `setCardDueDate` löscht es. Fälligkeit gilt tagesgenau in lokaler Zeit; „erledigt" ist `isDueDateCompleted` oder `completedAt`.
+- **`Card.source`**: Herkunft einer Karte (`{ path, row }`), gesetzt vom Summarize-Meeting-Skill des Nutzers außerhalb der App (schreibt bei geschlossenem Kanri direkt in `.kanri.dat`); Kanri zeigt es nicht an, erhält es bei Export/Import und kopiert es beim Duplizieren nicht mit (eine Herkunft je Karte).
 - **zod-Schemas** (`types/json-schemas.ts`) spiegeln die Typen und werden nur beim **Import** (`pages/import.vue`) angewendet. zod strippt unbekannte Keys → neue Felder müssen dort ergänzt werden, sonst gehen sie beim Re-Import verloren. `kanriJsonSchema` = komplettes `.kanri.dat`.
 - Der Tauri-Store speichert die Objekte wie sie sind; neue optionale Felder sind damit automatisch rückwärtskompatibel (alte Daten haben `undefined`).
 
@@ -69,14 +73,15 @@ CardLink { id, url, title? }                 (http/https/mailto-URL, optionaler 
   - Karten: `createCard(boardId, colId, card, addToTop)`, `duplicateCard`, `deleteCard`, `deleteAllColumnCards`, `mutateCard(boardId, colId, cardId, fn)`, `reorderCards(boardId, colId, nextCards)`, `moveCard(srcBoard, dstBoard, srcCol, dstCol, cardId)`
   - Karten-Dokumente: `addCardDocument` (gibt die id zurück, ignoriert doppelte Pfade), `removeCardDocument`, `setCardDocumentPath`; Getter `findCardDocument(boardId, cardId, docId)` für die Editor-Seite
   - Karten-Links: `addCardLink` (gibt die id zurück), `updateCardLink`, `removeCardLink`; Lookup über den internen Helfer `_findCard(boardId, colId, cardId)`. Validierung passiert vorher im Dialog
+  - Fälligkeit/Reminder: `setCardDueDate` (löscht `remindersSent` bei geändertem Datum, weggelassene Flags bleiben), `setCardDueDateCompleted`, `setCardReminderLeadTime` (`null` = global), `markReminderSent` (ohne `lastEdited`); `duplicateCard` entfernt an der Kopie `source` und `remindersSent`
   - Erledigt-Spalte/Archiv: `setDoneColumn(boardId, colId|null)`, `archiveCard`, `archiveAllColumnCards` (ohne Trennkarten), `restoreArchivedCard` (ursprüngliche Spalte, sonst erste; gibt die Zielspalte zurück), `deleteArchivedCard`, `archiveExpiredCards(days, now)` für den Automatiklauf; intern `_archiveCardsAt` (Spalte → Archiv, in Spaltenreihenfolge) und der Eintritts-Hook `_applyDoneColumnState`
 - **Karten-Bewegungen landen an genau drei Stellen**: `createCard` (neu), `reorderCards` (Drag & Drop, siehe §5), `moveCard` (Kontextmenü „Move to", auch board-übergreifend). Dort hängen die Spalten-Hooks `_applyColumnDefaultCardColor` und `_applyDoneColumnState`; ein weiterer Eintrittsweg ist `restoreArchivedCard` (ruft `_applyDoneColumnState` ebenfalls). Neue Hooks an allen diesen Stellen ergänzen.
 
 ### `composables/useBoard.ts` – Fassade für eine Board-Seite
-Bindet `boardId` (Ref) und reicht an den Store durch: `board` (computed), `isPinned`, `init()`, alle Column-/Card-Actions ohne `boardId`-Parameter, plus `setCardName/Description/Color/Tasks/DueDate/Tags` (alle via `mutateCard`). Neue Store-Actions hier spiegeln.
+Bindet `boardId` (Ref) und reicht an den Store durch: `board` (computed), `isPinned`, `init()`, alle Column-/Card-Actions ohne `boardId`-Parameter, plus `setCardName/Description/Color/Tasks/Tags` (via `mutateCard`), `setCardDueDate` (delegiert an die gleichnamige Store-Action) und `setCardReminderLeadTime`. Neue Store-Actions hier spiegeln.
 
 ### Weitere Stores
-- `settings`: Locale, Animationen, Zoom (`columnZoomLevel` -1..2), Add-to-top-Button, Kartenzähler, Sortierung, `markdownDocumentsFolder` (Startordner der Dokument-Dialoge, `""` = System-Default), `markdownPreviewEnabled` (Vorschau im Editor), `searchDocumentContentsEnabled` (Volltextsuche liest Dokumentinhalte), `archiveAfterDays` (Default 120, `normalizeArchiveAfterDays`), Zeitstempel `documentHistoryLastCleanup` und `cardArchiveLastRun` der täglichen Läufe. Jede Action schreibt direkt in den Tauri-Store (kein Auto-Save).
+- `settings`: Locale, Animationen, Zoom (`columnZoomLevel` -1..2), Add-to-top-Button, Kartenzähler, Sortierung, `markdownDocumentsFolder` (Startordner der Dokument-Dialoge, `""` = System-Default), `markdownPreviewEnabled` (Vorschau im Editor), `searchDocumentContentsEnabled` (Volltextsuche liest Dokumentinhalte), `archiveAfterDays` (Default 120, `normalizeArchiveAfterDays`), Zeitstempel `documentHistoryLastCleanup` und `cardArchiveLastRun` der täglichen Läufe, `reminderLeadTime` (Default `"1d"`), `startPage` (`"boards" | "today"`), `todaySectionsCollapsed` (Abschnitt → eingeklappt). Jede Action schreibt direkt in den Tauri-Store (kein Auto-Save). Nicht persistiert: `loaded` (true nach `loadSettings`; `boards.initialized` ist kein Ersatz, weil `pages/index.vue` `boards.init()` vor dem Layout aufruft).
 - `theme`: `activeTheme` (dark/light/catppuccin/custom/auto), `colors: Theme`. `layouts/default.vue` mappt `colors` auf CSS-Variablen (`--elevation-1`, `--text-dim-1`, …) und definiert dort im `<style>` die Utility-Klassen `bg-elevation-1/2/3`, `bg-elevation-2-hover`, `border-elevation-*`, `text-dim-*`, `bg-accent`, `text-buttons`, `bg-primary-darker`.
 - `layout`: Sidebar-Flags, Changelog-Anzeige. `tauriStore`: hält die `LazyStore`-Instanz.
 - ESLint-Regel `custom/no-store-outside-stores`: `useTauriStore()` nur in `stores/`.
@@ -143,15 +148,23 @@ Für Tailwind-Klassen-Farben (`bg-*-600`) wird pauschal heller Text angenommen (
 
 - Spec: `docs/specs/card-archive.md`. Route `/kanban/:id/archive` über `definePageMeta({ path })`: eine Datei `pages/kanban/[id]/archive.vue` würde `[id].vue` zur Elternroute machen (bräuchte `<NuxtPage>`). Wer weitere Unterseiten eines Boards braucht, folgt diesem Muster.
 - Liste aus `board.archivedCards`, sortiert und gefiltert über die reinen Helfer in `utils/cardArchive.ts` (`sortArchivedCards`, `archivedCardMatches` mit `stripHtml` aus `utils/search.ts`, `resolveRestoreColumn`); Wiederherstellen/Löschen über `useBoard`, Löschen mit `ModalConfirmation` + `useConfirmDialog`.
-- Automatik: `runScheduledCardArchive` (`composables/useCardArchive.ts`) in `layouts/default.vue` nach `boards.init()`, ohne `await`, höchstens einmal je 24 h (`CARD_ARCHIVE_INTERVAL_MS`), Muster wie `runScheduledDocumentHistoryCleanup`. Läuft nur beim App-Start, nicht periodisch.
+- Automatik: `runScheduledCardArchive` (`composables/useCardArchive.ts`) in `layouts/default.vue` nach `boards.init()`, ohne `await`, höchstens einmal je 24 h (`CARD_ARCHIVE_INTERVAL_MS`), Muster wie `runScheduledDocumentHistoryCleanup`. Seit dem Reminder-Feature ruft die Minuten-Schleife des Layouts die Funktion zusätzlich jede Minute auf; die eigene Intervallprüfung lässt sie trotzdem nur einmal je 24 h laufen, jetzt auch ohne Neustart.
 - Die Volltextsuche indexiert archivierte Karten (`archived`-Flag an Index-Eintrag und Treffer, Badge „Archiv", Klick → Archiv-Seite); die Dokument-Historie zählt Dokumente archivierter Karten als referenziert.
+
+## 6d. Reminder und Tagesansicht (`pages/today.vue`)
+
+- Spec: `docs/specs/reminders.md`. `utils/reminders.ts` (rein): Tagesrechnung in lokaler Zeit (`startOfLocalDay`, `addDays`, `dayDifference`), `dueStage(card, now, defaultLeadTime)` → `overdue`/`due`/`lead`/`null`, `isReminderPending` (`lead`/`due` einmal, `overdue` einmal je Kalendertag), `remindersDue`, `collectDueCards`/`groupDueCards` für die Tagesansicht, `countAttentionCards` für das Badge, `postponeDueDate` (überfällige Karten ab heute). Berücksichtigt nur offene Karten mit `id` und gültigem Datum in `columns` (keine Trennkarten, kein Archiv).
+- `composables/useReminders.ts`: `useReminders()` muss im Setup laufen (`useI18n`) und liefert `runReminderCheck`; Berechtigung (`@tauri-apps/plugin-notification`) beim ersten Check, ohne Berechtigung wird nichts gesendet und nichts vermerkt, Fehler werden nur geloggt. Die modulweite Uhr `useReminderClock()` (jede Minute auf „jetzt" gesetzt) treibt `useReminderBadgeCount()` und die Tagesansicht über Mitternacht; `consumeFirstStartPageVisit()` ist das Modul-Flag der Startseiten-Umleitung.
+- `layouts/default.vue`: nach `boards.init()` sofort `runReminderCheck()`, dann `setInterval` alle 60 s mit `runReminderCheck()` und `runScheduledCardArchive()`; `clearInterval` in `onBeforeUnmount`.
+- Sidebar: Eintrag `/today` (`CalendarDaysIcon`) mit rotem Badge (überfällig + heute fällig). `pages/index.vue` leitet beim ersten Besuch der Sitzung auf `/today` um, wenn `settings.startPage === "today"`.
+- Tagesansicht: Abschnitte Überfällig/Heute/Nächste 7 Tage/Später (einklappbar, Zustand in `todaySectionsCollapsed`), Zeile mit Link `/kanban/<boardId>?card=<cardId>`, Checkbox „Fälligkeit erledigt", Menü „+1 Tag"/„+1 Woche"/„Datum wählen…" (natives `<input type="date">` mit explizitem Übernehmen). Alle Änderungen laufen über Store-Actions.
 
 ## 7. Startseite, Import/Export, Settings
 
-- `pages/index.vue`: Board-Liste mit `KanbanBoardPreview` (Mini-Rendering der Spalten/Karten inkl. `card.color`), Sortierung (`utils/sorting.ts`), NewBoard-Modal (`utils/exampleData.ts`), Pins.
+- `pages/index.vue`: optionale Umleitung auf die Tagesansicht beim ersten Besuch (`startPage`), Board-Liste mit `KanbanBoardPreview` (Mini-Rendering der Spalten/Karten inkl. `card.color`), Sortierung (`utils/sorting.ts`), NewBoard-Modal (`utils/exampleData.ts`), Pins.
 - `pages/import.vue`: Import von Kanri-Vollexport, einzelnem Board, KanbanElectron und Trello, jeweils via zod-Schema; Export eines Boards in `[id].vue` (`exportBoardToJson`, `JSON.stringify(board)`).
-- `pages/settings.vue`: Theme-Wahl (`CustomThemeEditor` mit `HexColorInput` + `<input type="color">`), Sprache, Verhalten, Standardordner für Markdown-Dokumente, Archivierungsfrist (Zahlenfeld, Übernahme bei `change`).
-- **Capabilities** (`src-tauri/capabilities/main.json`): für Dokumente zusätzlich `fs:allow-exists`, `opener:allow-open-path` (Scope `**/*.md`, `**/*.markdown`) und `http(s)://**` bei `opener:allow-open-url`; Karten-Links (`http`, `https`, `mailto`) deckt bereits `opener:default` ab (`allow-default-urls`, Glob-Scope, `*` matcht auch `/`); für die Versionshistorie `fs:allow-appdata-read/write/meta-recursive`, `fs:allow-mkdir`, `fs:allow-read-dir`, `fs:allow-remove`, `fs:allow-stat`. Dateizugriff auf per Dialog gewählte Pfade kommt über den Dialog-Scope, `tauri-plugin-persisted-scope` hält ihn über Neustarts.
+- `pages/settings.vue`: Theme-Wahl (`CustomThemeEditor` mit `HexColorInput` + `<input type="color">`), Sprache, Verhalten, Standardordner für Markdown-Dokumente, Archivierungsfrist (Zahlenfeld, Übernahme bei `change`), Reminder-Vorlauf und Startseite (native `<select>`).
+- **Capabilities** (`src-tauri/capabilities/main.json`): für Dokumente zusätzlich `fs:allow-exists`, `opener:allow-open-path` (Scope `**/*.md`, `**/*.markdown`) und `http(s)://**` bei `opener:allow-open-url`; Karten-Links (`http`, `https`, `mailto`) deckt bereits `opener:default` ab (`allow-default-urls`, Glob-Scope, `*` matcht auch `/`); für die Versionshistorie `fs:allow-appdata-read/write/meta-recursive`, `fs:allow-mkdir`, `fs:allow-read-dir`, `fs:allow-remove`, `fs:allow-stat`; für Reminder `notification:default` (Plugin `tauri-plugin-notification` 2.4.0, die letzte Version für Tauri 2.11). Dateizugriff auf per Dialog gewählte Pfade kommt über den Dialog-Scope, `tauri-plugin-persisted-scope` hält ihn über Neustarts.
 
 ## 8. Toolchain & Qualitätssicherung
 
